@@ -160,6 +160,11 @@ label {
 .formBtn {
     width: 25%;
 }
+.upload_pic{
+    padding: 5px;
+    margin-left: 100px;
+    margin-top: 5px;
+}
 
 .table-bordered>thead>tr>th,
 .table-bordered>tbody>tr>th,
