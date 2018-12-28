@@ -1,4 +1,11 @@
-<script src="<?php echo base_url(); ?>assets/js/adm_scripts/caste.js"></script>  
+<script src="<?php echo base_url(); ?>assets/js/adm_scripts/admission.js"></script>  
+  <style type="text/css">
+   .file {
+  visibility: hidden;
+  position: absolute;
+} 
+
+  </style>
 
    <section class="content-header">
       <h1>
@@ -24,9 +31,7 @@
               <!-- /.box-header -->
               <!-- form start -->
               <!--<form role="form" name="cityForm" id="cityForm"> -->
-              <?php 
-              $attr = array("id"=>"registrationForm","name"=>"registrationForm");
-              echo form_open('',$attr); ?>
+              <form class="form-area" name="AdmissionForm" id="AdmissionForm" enctype="multipart/form-data" method="post">
                 <div class="box-body">
                  
  
@@ -38,6 +43,7 @@
 
                     
                   </div>
+                  <p id="adm_info_error" class="form_error"></p>
                    <p class="formSubTitle"><span class="glyphicon glyphicon-pencil"></span> Admission Info</p>
                    <div class="row">
                    <div class="col-md-12">
@@ -47,11 +53,12 @@
 
                            <div class="row">
                       <div class="col-md-4 col-sm-12 col-xs-12">
+                        <div id="reg_no_err">
                         <div class="form-group">
                           <label for="reg_no">Reg. No</label>
                           <input type="text" class="form-control forminputs removeerr" id="reg_no" name="reg_no" placeholder="Enter Registration No" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->reg_no; } ?>" />
 
-                         
+                         </div>
                          
                          
                         </div>
@@ -71,7 +78,7 @@
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                   </div>
-                  <input class="form-control pull-right datemask" id="dtadm" name="dtadm" type="text" value="<?php if($bodycontent['mode']=="EDIT"){echo date("d/m/Y",strtotime($bodycontent['studentEditdata']->admission_dt));}else{echo date('d/m/Y');}  ?>">
+                  <input class="form-control pull-right datemask" id="admdt" name="admdt" type="text" value="<?php if($bodycontent['mode']=="EDIT"){echo date("d/m/Y",strtotime($bodycontent['studentEditdata']->admission_dt));}  ?>">
                   
 
                 </div>
@@ -110,7 +117,7 @@
                   <div class="col-md-4 col-sm-12 col-xs-12">
                         <div class="form-group">
                           <label for="reg_no">Gender</label>
-                         <select id="category" name="category" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                         <select id="gender" name="gender" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
                           <?php 
                           if($bodycontent['genderList'])
@@ -206,8 +213,10 @@
                             <div class="row">
                       <div class="col-md-12 col-sm-12 col-xs-12">
 
-                            <div class="student_picture" style="width: 130px;height:160px;border: 2px solid green;margin-left:80px; ">
-                              
+                            <div class="student_picture" style="width: 145px;height:164px;border: 2px solid #6d78cb;margin-left:80px;margin-bottom:13px; ">
+                              <img id="profile_img" src="<?php echo base_url(); ?>assets/images/profile_pic_avter.png" alt="Profile Picture" / style="width:141px;height:160px;">
+
+                              <input type="hidden" id="derault_profile_src" name="derault_profile_src" value="<?php echo base_url(); ?>assets/images/profile_pic_avter.png">
                             </div>
                             
 
@@ -215,12 +224,39 @@
                         </div>
 
                           <div class="row">
-                      <div class="col-md-12 col-sm-12 col-xs-12">
+                      <div class="col-md-offset-2 col-md-10 col-sm-12 col-xs-12">
+<!-- Upload Profile picture  -->
+                        <?php $rowno=1;?>
 
-                           
-                            <button class="btn btn-primary upload_pic">Upload Picture </button>
 
-                        </div>
+             
+ <div class="form-group">
+    
+    
+          <input type="hidden" name="prvFilename[]" id="prvFilename_0_<?php echo $rowno; ?>" class="form-control prvFilename" value="" readonly >
+
+          <input type="hidden" name="randomFileName[]" id="randomFileName_0_<?php echo $rowno; ?>" class="form-control randomFileName" value="" readonly >
+
+          <input type="hidden" name="docDetailIDs[]" id="docDetailIDs_0_<?php echo $rowno; ?>" class="form-control randomFileName" value="0" readonly >
+      
+        <input type="file" name="fileName[]" class="file fileName" id="fileName_0_<?php echo $rowno; ?>" accept=".jpg , .jpeg , .png" />
+        <div class="input-group col-xs-12">
+             <!--  <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span> -->
+          <input type="text" name="userFileName[]" id="userFileName_0_<?php echo $rowno; ?>" class="form-control input-xs userFileName" readonly placeholder="Upload Picture" >
+
+            <input type="hidden" name="isChangedFile[]" id="isChangedFile_0_<?php echo $rowno; ?>" value="Y" >
+            <span class="input-group-btn">
+              <button class="browse btn btn-primary input-xs" type="button" id="uploadBtn_0_<?php echo $rowno; ?>">
+                  <i class="fa fa-folder-open" aria-hidden="true"></i>
+            </button>
+              </span>
+        </div>
+     
+</div>
+
+<!-- End of Upload Profile picture  -->
+                   
+                     </div>
                         </div>
 
 
@@ -344,6 +380,308 @@
                    
                     </div>
 
+                       <div class="row">
+                      <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">Guardian</label>
+                         <input type="text" class="form-control forminputs removeerr" id="guardian_name" name="guardian_name" placeholder="Enter Guardian Name" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->guardian_name; } ?>" />
+
+
+                        </div>
+                      </div>
+
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                          <div class="form-group">
+                          <label for="reg_no">Relation</label>
+                         <select id="guardian_relation" name="guardian_relation" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                         <option value="0">Select</option> 
+                          <?php 
+                          if($bodycontent['relationList'])
+                          {
+                          foreach($bodycontent['relationList'] as $value)
+                          { ?>
+                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->relationship_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->relation; ?></option>
+                      <?php   }
+                          }
+                          ?>
+
+                        </select>
+
+                        </div>
+                          
+                        </div>
+
+                   
+                    </div>
+
+                    <p class="formSubTitle"><span class="glyphicon glyphicon-pencil"></span> Present Address</p>
+
+                     <div class="row">
+                      <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">Area</label>
+                         <input type="text" class="form-control forminputs removeerr" id="present_area" name="present_area" placeholder="Enter Area" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->present_area; } ?>" />
+
+
+                        </div>
+                      </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                          <label for="reg_no">Town</label>
+                         <input type="text" class="form-control forminputs removeerr" id="present_town" name="present_town" placeholder="Enter Town" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->present_town; } ?>" />
+
+
+                    </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">P.O</label>
+                         <input type="text" class="form-control forminputs removeerr" id="present_po" name="present_po" placeholder="Enter Post Office" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->present_po; } ?>" />
+
+
+                        </div>
+                      </div>
+            
+                     <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">P.S</label>
+                         <input type="text" class="form-control forminputs removeerr" id="present_ps" name="present_ps" placeholder="Enter Police Station" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->present_ps; } ?>" />
+
+
+                        </div>
+                      </div>
+
+
+                    </div>
+
+                    <div class="row">
+                     
+                     <div class="col-md-3 col-sm-12 col-xs-12">
+                          <div class="form-group">
+                            <label for="reg_no">Pin Code</label>
+                           <input type="text" class="form-control forminputs removeerr" id="present_pin" name="present_pin" placeholder="Enter Pin Code" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->present_pin; } ?>" />
+
+
+                          </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">State</label>
+                         <select id="present_state" name="present_state" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                         <option value="0">Select</option> 
+                          <?php 
+                          if($bodycontent['stateList'])
+                          {
+                          foreach($bodycontent['stateList'] as $value)
+                          { ?>
+                            <option value="<?php echo $value->id; ?>" <?php if($value->id=='41'){echo "selected";}else{echo "";};?> <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->present_state_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->name; ?></option>
+                      <?php   }
+                          }
+                          ?>
+
+                        </select>
+
+                        </div>
+                      </div>
+
+
+                      <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">District</label>
+                          <div id="present_dist_dropdown">
+                         <select id="present_dist" name="present_dist" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                         <option value="0">Select</option> 
+                          <?php 
+                          if($bodycontent['districtList'])
+                          {
+                          foreach($bodycontent['districtList'] as $value)
+                          { ?>
+                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->present_dist_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->name; ?></option>
+                      <?php   }
+                          }
+                          ?>
+
+                        </select>
+                      </div>
+
+                        </div>
+                      </div>
+
+                  </div>
+
+                   <p class="formSubTitle"><span class="glyphicon glyphicon-pencil"></span> Permament Address</p>
+                   <input type="checkbox" name="adr_check" id="adr_check" value="Permanemt">&nbsp;Same As Present Address(Tick If Yes)<br>
+
+                   <div class="row">
+                      <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">Area</label>
+                         <input type="text" class="form-control forminputs removeerr" id="area" name="area" placeholder="Enter Area" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->area; } ?>" />
+
+
+                        </div>
+                      </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                          <label for="reg_no">Town</label>
+                         <input type="text" class="form-control forminputs removeerr" id="town" name="town" placeholder="Enter Town" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->town; } ?>" />
+
+
+                    </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">P.O</label>
+                         <input type="text" class="form-control forminputs removeerr" id="post_office" name="post_office" placeholder="Enter Post Office" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->post_office; } ?>" />
+
+
+                        </div>
+                      </div>
+            
+                     <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">P.S</label>
+                         <input type="text" class="form-control forminputs removeerr" id="police_station" name="police_station" placeholder="Enter Police Station" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->police_station; } ?>" />
+
+
+                        </div>
+                      </div>
+                      </div>
+
+                        <div class="row">
+                         <div class="col-md-3 col-sm-12 col-xs-12">
+                          <div class="form-group">
+                            <label for="reg_no">Pin Code</label>
+                           <input type="text" class="form-control forminputs removeerr" id="pin_code" name="pin_code" placeholder="Enter Pin Code" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->pin_code; } ?>" />
+
+
+                          </div>
+                        </div>
+
+                       <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">State</label>
+                         <select id="state" name="state" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                         <option value="0">Select</option> 
+                          <?php 
+                          if($bodycontent['stateList'])
+                          {
+                          foreach($bodycontent['stateList'] as $value)
+                          { ?>
+                            <option value="<?php echo $value->id; ?>" <?php if($value->id=='41'){echo "selected";}else{echo "";};?> <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->present_state_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->name; ?></option>
+                      <?php   }
+                          }
+                          ?>
+
+                        </select>
+
+                        </div>
+                      </div>
+
+                      <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">District</label>
+                         <select id="district" name="district" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                         <option value="0">Select</option> 
+                          <?php 
+                          if($bodycontent['districtList'])
+                          {
+                          foreach($bodycontent['districtList'] as $value)
+                          { ?>
+                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->present_dist_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->name; ?></option>
+                      <?php   }
+                          }
+                          ?>
+
+                        </select>
+
+                        </div>
+                      </div>
+
+
+
+                    </div>
+                    <p class="formSubTitle"><span class="glyphicon glyphicon-pencil"></span> Academic Details</p>
+                      <div class="row">
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">Session</label>
+                         <select id="academic_session" name="academic_session" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                         <option value="0">Select</option> 
+                          <?php 
+                          if($bodycontent['sessionList'])
+                          {
+                          foreach($bodycontent['sessionList'] as $value)
+                          { ?>
+                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->acdm_session_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->start_yr."-".$value->end_yr; ?></option>
+                      <?php   }
+                          }
+                          ?>
+
+                        </select>
+
+                        </div>
+                      </div>
+
+                           <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">Class</label>
+                         <select id="acdm_class" name="acdm_class" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                         <option value="0">Select</option> 
+                          <?php 
+                          if($bodycontent['classList'])
+                          {
+                          foreach($bodycontent['classList'] as $value)
+                          { ?>
+                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->class_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->classname; ?></option>
+                      <?php   }
+                          }
+                          ?>
+
+                        </select>
+
+                        </div>
+                      </div>
+
+                      <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">Section</label>
+                         <select id="acdm_section" name="acdm_section" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                         <option value="0">Select</option> 
+                          <?php 
+                          if($bodycontent['sectionList'])
+                          {
+                          foreach($bodycontent['sectionList'] as $value)
+                          { ?>
+                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->section_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->section; ?></option>
+                      <?php   }
+                          }
+                          ?>
+
+                        </select>
+
+                        </div>
+                      </div>
+
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="reg_no">Roll</label>
+                        <input type="text" class="form-control forminputs removeerr" id="acdm_roll" name="acdm_roll" placeholder="Enter Roll" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->rollno; } ?>" />
+
+                        </div>
+                          
+                        </div>
+                   
+                      </div>
+
+                       <p class="formSubTitle"><span class="glyphicon glyphicon-pencil"></span> Academic Historical data</p>
+
+
 
 
 
@@ -353,7 +691,7 @@
                   <p id="admmsg" class="form_error"></p>
 
                   <div class="btnDiv">
-                      <button type="submit" class="btn btn-primary formBtn" id="cassavebtn"><?php echo $bodycontent['btnText']; ?></button>
+                      <button type="submit" class="btn btn-primary formBtn" id="admsavebtn"><?php echo $bodycontent['btnText']; ?></button>
                       <!-- <button type="button" class="btn btn-danger formBtn" onclick="window.location.href='<?php echo base_url();?>district'">Go to List</button> -->
 					  
 					           <span class="btn btn-primary formBtn loaderbtn" id="loaderbtn" style="display:none;"><i class="fa fa-spinner rotating" aria-hidden="true"></i> <?php echo $bodycontent['btnTextLoader']; ?></span>
@@ -365,7 +703,8 @@
                 <!-- <div class="box-footer">
                   <button type="submit" class="btn btn-primary">Save</button>
                 </div> -->
-              <?php echo form_close(); ?>
+              
+            </form>
 
               <div class="response_msg" id="adm_response_msg">
                

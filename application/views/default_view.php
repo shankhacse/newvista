@@ -107,6 +107,10 @@
 <script src="<?php echo base_url(); ?>assets/js/searchable_dropdown.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/customJs/function.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/customJs/change_department.js"></script>
+<!-- InputMask -->
+<script src="<?php echo base_url();?>assets/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="<?php echo base_url();?>assets/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="<?php echo base_url();?>assets/plugins/input-mask/jquery.inputmask.extensions.js"></script>
 <!-- AdminLTE for demo purposes 
 <script src="<?php echo base_url();?>assets/diagnostic_theme/dist/js/demo.js"></script>
 -->
