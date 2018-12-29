@@ -2,6 +2,38 @@
 
 class studentmodel extends CI_Model{
 
+	public function getStudentDataEditbyId($student_id){
+		$data = [];
+		$where = array('student_master.student_id' =>$student_id);
+		$query = $this->db->select("student_master.*,
+									academic_details.*,
+									
+
+			")
+				->from('student_master')
+				->join('academic_details','academic_details.student_id = student_master.student_id','INNER')
+				->join('class_master','class_master.id = academic_details.class_id','INNER')
+				->join('section_master','section_master.id = academic_details.section_id','INNER')
+				->where($where)
+			    ->order_by('student_master.name')
+				->get();
+			
+			if($query->num_rows()> 0)
+				{
+		           $row = $query->row();
+		           return $data = $row;
+		             
+		        }
+				else
+				{
+		            return $data;
+		        }
+			
+	        
+	       
+		
+	}
+
 
 	public function getAllStudentList(){
 		$data = [];

@@ -1,6 +1,10 @@
 $(document).ready(function(){
    
-	var basepath = $("#basepath").val();
+    var basepath = $("#basepath").val();
+	var mode = $("#mode").val();
+    if (mode=='EDIT') {
+        $('#reg_no').attr('readonly', true);
+    }
 	    $( ".datepicker" ).datepicker({
        
        changeMonth: true,

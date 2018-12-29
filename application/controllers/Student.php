@@ -41,7 +41,7 @@ class Student extends CI_Controller {
 				$result['mode'] = "ADD";
 				$result['btnText'] = "Save";
 				$result['btnTextLoader'] = "Saving...";
-				$casteID = 0;
+				$studentID = 0;
 				$result['studentEditdata'] = [];
 				
 				
@@ -52,12 +52,9 @@ class Student extends CI_Controller {
 				$result['mode'] = "EDIT";
 				$result['btnText'] = "Update";
 				$result['btnTextLoader'] = "Updating...";
-				$casteID = $this->uri->segment(3);
-				$whereAry = array(
-					'student_master.student_id' => $casteID
-				);
-				// getSingleRowByWhereCls(tablename,where params)
-				$result['studentEditdata'] = $this->commondatamodel->getSingleRowByWhereCls('student_master',$whereAry); 
+				$studentID = $this->uri->segment(3);
+				
+				$result['studentEditdata'] = $this->studentmodel->getStudentDataEditbyId($studentID); 
 				
 				
 			}
