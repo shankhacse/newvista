@@ -4,7 +4,7 @@
   visibility: hidden;
   position: absolute;
 } 
-
+.req-star-mark{color: red;}
   </style>
 
    <section class="content-header">
@@ -37,7 +37,7 @@
  
 
                   <div class="form-group">
-                    <input type="hidden" name="studentID" id="studentID" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->id;}else{echo "0";}?>" />
+                    <input type="hidden" name="studentID" id="studentID" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->student_id;}else{echo "0";}?>" />
 
                     <input type="hidden" name="mode" id="mode" value="<?php echo $bodycontent['mode']; ?>" />
 
@@ -55,7 +55,7 @@
                       <div class="col-md-4 col-sm-12 col-xs-12">
                         <div id="reg_no_err">
                         <div class="form-group">
-                          <label for="reg_no">Reg. No</label>
+                          <label for="reg_no">Reg. No<span class="req-star-mark">*</span></label>
                           <input type="text" class="form-control forminputs removeerr" id="reg_no" name="reg_no" placeholder="Enter Registration No" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->reg_no; } ?>" />
 
                          </div>
@@ -65,14 +65,14 @@
                       </div>
                        <div class="col-md-4 col-sm-12 col-xs-12">
                         <div class="form-group">
-                          <label for="form_sl_no">Form Sl No.</label>
+                          <label for="form_sl_no">Form Sl No.<span class="req-star-mark">*</span></label>
                         <input type="text" class="form-control forminputs removeerr" id="form_sl_no" name="form_sl_no" placeholder="Enter Form Serial" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->name; } ?>" />
                         </div>
                       </div>
 
                        <div class="col-md-4 col-sm-12 col-xs-12">
                     <div class="form-group">
-                <label>Date of Admission</label>
+                <label>Date of Admission<span class="req-star-mark">*</span></label>
 
                 <div class="input-group date">
                   <div class="input-group-addon">
@@ -92,7 +92,7 @@
                      <div class="row">
                       <div class="col-md-4 col-sm-12 col-xs-12">
                         <div class="form-group">
-                          <label for="student_name">Student Name</label>
+                          <label for="student_name">Student Name<span class="req-star-mark">*</span></label>
                           <input type="text" class="form-control forminputs removeerr" id="student_name" name="student_name" placeholder="Enter Student Name" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->name; } ?>" />
 
                         </div>
@@ -100,13 +100,13 @@
 
                           <div class="col-md-4 col-sm-12 col-xs-12">
                          <div class="form-group">
-                            <label>Date of Birth</label>
+                            <label>Date of Birth<span class="req-star-mark">*</span></label>
 
                             <div class="input-group date">
                               <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                               </div>
-                              <input class="form-control pull-right datemask" id="studentdob" name="studentdob" type="text" value="<?php if($bodycontent['mode']=="EDIT"){echo date("d/m/Y",strtotime($bodycontent['studentEditdata']->date_of_birth));}?>" >
+                              <input class="form-control pull-right datemask" id="studentdob" name="studentdob" type="text" value="<?php if($bodycontent['mode']=="EDIT"){echo date("d/m/Y",strtotime($bodycontent['studentEditdata']->dob));}?>" >
                             </div>
                           
                             <!-- /.input group -->
@@ -116,7 +116,7 @@
 
                   <div class="col-md-4 col-sm-12 col-xs-12">
                         <div class="form-group">
-                          <label for="reg_no">Gender</label>
+                          <label for="reg_no">Gender<span class="req-star-mark">*</span></label>
                          <select id="gender" name="gender" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
                           <?php 
@@ -277,7 +277,7 @@
                       <div class="row">
                       <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group">
-                          <label for="reg_no">Father Name</label>
+                          <label for="reg_no">Father Name<span class="req-star-mark">*</span></label>
                          <input type="text" class="form-control forminputs removeerr" id="father_name" name="father_name" placeholder="Enter Father Name" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->father_name; } ?>" />
 
 
@@ -286,7 +286,7 @@
 
                         <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group">
-                          <label for="reg_no">Father Contact No</label>
+                          <label for="reg_no">Father Contact No <span class="req-star-mark">*</span></label></label>
                         <input type="text" class="form-control forminputs removeerr" id="father_contact_no" name="father_contact_no" placeholder="Enter Father Contact " autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->father_contact_no; } ?>" />
 
                         </div>
@@ -383,7 +383,7 @@
                        <div class="row">
                       <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group">
-                          <label for="reg_no">Guardian</label>
+                          <label for="reg_no">Guardian<span class="req-star-mark">*</span></label>
                          <input type="text" class="form-control forminputs removeerr" id="guardian_name" name="guardian_name" placeholder="Enter Guardian Name" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->guardian_name; } ?>" />
 
 
@@ -392,7 +392,7 @@
 
                         <div class="col-md-3 col-sm-12 col-xs-12">
                           <div class="form-group">
-                          <label for="reg_no">Relation</label>
+                          <label for="reg_no">Relation<span class="req-star-mark">*</span></label>
                          <select id="guardian_relation" name="guardian_relation" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
                           <?php 
@@ -586,6 +586,7 @@
                       <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group">
                           <label for="reg_no">District</label>
+                          <div id="district_dropdown">
                          <select id="district" name="district" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
                           <?php 
@@ -599,6 +600,7 @@
                           ?>
 
                         </select>
+                      </div>
 
                         </div>
                       </div>
@@ -610,7 +612,7 @@
                       <div class="row">
                         <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group">
-                          <label for="reg_no">Session</label>
+                          <label for="reg_no">Session<span class="req-star-mark">*</span></label>
                          <select id="academic_session" name="academic_session" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
                           <?php 

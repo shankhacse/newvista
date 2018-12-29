@@ -174,7 +174,8 @@ $('input[type="checkbox"][name="adr_check"]').change(function() {
                 success: function(result) {
 					if (result.msg_status == 200) {
     
-							$("#reg_no").css("background-color","#FFF");	
+							$("#reg_no").css("background-color","#FFF");
+                            $("#admsavebtn").show();	
                     } 
 					else {
                         
@@ -184,6 +185,7 @@ $('input[type="checkbox"][name="adr_check"]').change(function() {
 								.addClass("form_error")
 						        .css("display", "block");
 						         $("#reg_no").css("background-color","#FFD2D2");
+                                 $("#admsavebtn").hide();
                     }
 					
                    
@@ -216,6 +218,7 @@ $('input[type="checkbox"][name="adr_check"]').change(function() {
 					if (result.msg_status == 200) {
     				 
     				 $("#form_sl_no").css("background-color","#FFF");
+                      $("#admsavebtn").show();
 
 								
                     } 
@@ -227,7 +230,7 @@ $('input[type="checkbox"][name="adr_check"]').change(function() {
 								.addClass("form_error")
 						        .css("display", "block");
 						        $("#form_sl_no").css("background-color","#FFD2D2");
-
+                                 $("#admsavebtn").hide();
 
                     }
 					
@@ -237,6 +240,141 @@ $('input[type="checkbox"][name="adr_check"]').change(function() {
                     var msg = '';
                 }
             });
+
+    });
+
+
+     /* On select present state  select present district */
+    $(document).on("change", "#present_state", function() {
+        var val=$('select[name=present_state]').val();
+
+       
+    $.ajax({
+    type: "POST",
+    url: basepath+'student/getPresentDistrict',
+    data: {stateid:val},
+    
+    success: function(data){
+        $("#present_dist_dropdown").html(data);
+        $('.selectpicker').selectpicker();
+    },
+    error: function (jqXHR, exception) {
+                  var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                   // alert(msg);  
+                }
+
+
+
+    });/*end ajax call*/
+
+    });
+
+
+       /* On select present state  select present district */
+    $(document).on("change", "#state", function() {
+        var val=$('select[name=state]').val();
+
+       
+    $.ajax({
+    type: "POST",
+    url: basepath+'student/getDistrict',
+    data: {stateid:val},
+    
+    success: function(data){
+        $("#district_dropdown").html(data);
+        $('.selectpicker').selectpicker();
+    },
+    error: function (jqXHR, exception) {
+                  var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                   // alert(msg);  
+                }
+
+
+
+    });/*end ajax call*/
+
+    });
+
+
+   /*student list */
+
+  
+    $(document).on("submit","#StudentListForm",function(event){
+        event.preventDefault();
+
+           var formDataserialize = $("#StudentListForm" ).serialize();
+            formDataserialize = decodeURI(formDataserialize);
+            console.log(formDataserialize);
+            var formData = {formDatas: formDataserialize};
+            
+            $(".dashboardloader").css("display","block");
+
+            $.ajax({
+                type: "POST",
+                url: basepath+'student/StudentListData',
+                data: formData,
+                dataType: 'html',
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+                success: function (result) {
+                   
+                    $("#loadStudentList").html(result);
+                    $('.dataTables').DataTable();
+                   
+                    $(".dashboardloader").css("display","none");
+                    
+                }, 
+                error: function (jqXHR, exception) {
+                      var msg = '';
+                        if (jqXHR.status === 0) {
+                            msg = 'Not connect.\n Verify Network.';
+                        } else if (jqXHR.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (jqXHR.status == 500) {
+                            msg = 'Internal Server Error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = 'Time out error.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        } else {
+                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                        }
+                       // alert(msg);  
+                    }
+                }); /*end ajax call*/
+
+       
 
     });
 
@@ -270,6 +408,14 @@ function validateAdmission()
     var student_name = $("#student_name").val();
     var studentdob = $("#studentdob").val();
     var gender = $("#gender").val();
+    var father_name = $("#father_name").val();
+    var father_contact_no = $("#father_contact_no").val();
+    var guardian_name = $("#guardian_name").val();
+    var guardian_relation = $("#guardian_relation").val();
+    var academic_session = $("#academic_session").val();
+    var acdm_class = $("#acdm_class").val();
+    var acdm_section = $("#acdm_section").val();
+    var acdm_roll = $("#acdm_roll").val();
 
 
 
@@ -334,7 +480,88 @@ function validateAdmission()
         .css("display", "block");
         return false;
     }
+
+    if(father_name=="")
+    {
+        $("#father_name").focus();
+        $("#admmsg")
+        .text("Error : Enter father name")
+        .addClass("form_error")
+        .css("display", "block");
+        return false;
+    }
+
+    if(father_contact_no=="")
+    {
+        $("#father_contact_no").focus();
+        $("#admmsg")
+        .text("Error : Enter father contact no")
+        .addClass("form_error")
+        .css("display", "block");
+        return false;
+    }
+
+    if(guardian_name=="")
+    {
+        $("#guardian_name").focus();
+        $("#admmsg")
+        .text("Error : Enter guardian name")
+        .addClass("form_error")
+        .css("display", "block");
+        return false;
+    }
+
+    if(guardian_relation=="0")
+    {
+        $("#guardian_relation").focus();
+        $("#admmsg")
+        .text("Error : Select relation with guardian")
+        .addClass("form_error")
+        .css("display", "block");
+        return false;
+    }
+
+
+    if(academic_session=="0")
+    {
+        $("#academic_session").focus();
+        $("#admmsg")
+        .text("Error : Select academic session")
+        .addClass("form_error")
+        .css("display", "block");
+        return false;
+    }
+
+    if(acdm_class=="0")
+    {
+        $("#acdm_class").focus();
+        $("#admmsg")
+        .text("Error : Select Class")
+        .addClass("form_error")
+        .css("display", "block");
+        return false;
+    }
+
+    if(acdm_section=="0")
+    {
+        $("#acdm_section").focus();
+        $("#admmsg")
+        .text("Error : Select section")
+        .addClass("form_error")
+        .css("display", "block");
+        return false;
+    }
+
+    if(acdm_roll=="")
+    {
+        $("#acdm_roll").focus();
+        $("#admmsg")
+        .text("Error : Enter Roll")
+        .addClass("form_error")
+        .css("display", "block");
+        return false;
+    }
  
  
-    //return true;
+    return true;
 }

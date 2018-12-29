@@ -15,8 +15,12 @@ class Student extends CI_Controller {
 		if($this->session->userdata('user_data'))
 		{
 			$header = "";
-			$result['sectionList'] = $this->sectionmodel->getAllSectionList(); 
-			$page = "dashboard/admin_dashboard/section/section_list_view";
+			$page = "dashboard/admin_dashboard/student/student_list_view";
+			$result = [];
+			$header = "";
+			$result['classList']=$this->commondatamodel->getAllDropdownData('class_master');
+			$result['sectionList']=$this->commondatamodel->getAllDropdownData('section_master');
+			$result['studentList']=$this->commondatamodel->getAllDropdownData('student_master');
 			createbody_method($result, $page, $header, $session);
 			
 		}
@@ -83,20 +87,43 @@ class Student extends CI_Controller {
 	}
 
 
-/* get district by state*/
+/* get present district by state*/
+public function getPresentDistrict()
+	{
+		$session = $this->session->userdata('user_data');
+		if($this->session->userdata('user_data'))
+		{
+			$stateid = trim($this->input->post('stateid'));
+			$where_dist = array('district.state_id' => $stateid, ); 
+			$result['districtList']=$this->commondatamodel->getAllRecordWhere('district',$where_dist);
+			 
+//pre($result['districtList']);
+			$page = "dashboard/admin_dashboard/student/present_district_view";
+			//$partial_view = $this->load->view($page,$result);
+			echo $this->load->view($page, $result, TRUE);
+			//echo $partial_view;
+		}
+		else
+		{
+			redirect('login','refresh');
+		}
+	}
+
+	/* get  district by state*/
 public function getDistrict()
 	{
 		$session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
 		{
-			$state = trim($this->input->post('state'));
-			$where_dist = array('district.state_id' => $state, ); 
+			$stateid = trim($this->input->post('stateid'));
+			$where_dist = array('district.state_id' => $stateid, ); 
 			$result['districtList']=$this->commondatamodel->getAllRecordWhere('district',$where_dist);
 			 
-
-			$page = "dashboard/admin_dashboard/student/present_district_view";
-			$partial_view = $this->load->view($page,$result);
-			echo $partial_view;
+//pre($result['districtList']);
+			$page = "dashboard/admin_dashboard/student/district_view";
+			//$partial_view = $this->load->view($page,$result);
+			echo $this->load->view($page, $result, TRUE);
+			//echo $partial_view;
 		}
 		else
 		{
@@ -361,6 +388,61 @@ public function checkFromSl()
 		else
 		{
 			redirect('login','refresh');
+		}
+	}
+
+
+
+
+
+
+   public function studentListData()
+	{ 
+		$session = $this->session->userdata('user_data');
+		if($this->session->userdata('user_data'))
+		{       
+			
+			$header = "";
+			$formData = $this->input->post('formDatas');
+			parse_str($formData, $dataArry);
+			
+
+			$result=[];
+			
+			if (($dataArry['sel_reg']!="")) {
+				$student_id = $dataArry['sel_reg'];
+				
+				
+			$result['studentList'] = $this->studentmodel->getStudentbyStudentId($student_id); 	
+           
+			}elseif($dataArry['sel_class']!="" && $dataArry['sel_section']!=""){
+				$sel_class=$dataArry['sel_class'];
+				$sel_section=$dataArry['sel_section'];
+
+				$result['studentList'] = $this->studentmodel->getStudentListbyClassSection($sel_class,$sel_section); 
+
+			}elseif($dataArry['sel_class']!=""){
+				$sel_class=$dataArry['sel_class'];
+				
+
+				$result['studentList'] = $this->studentmodel->getStudentListbyClass($sel_class); 
+
+			}
+			else{
+				$result['studentList']=[];
+			}
+
+   	
+			$page = "dashboard/admin_dashboard/student/student_list_data";
+			
+			$partial_view = $this->load->view($page, $result, TRUE);
+
+			echo $partial_view;
+			
+		}
+		else
+		{
+			redirect('adminpanel','refresh');
 		}
 	}
 

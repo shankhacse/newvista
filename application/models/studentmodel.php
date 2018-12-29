@@ -24,6 +24,104 @@ class studentmodel extends CI_Model{
 		
 	}
 
+		public function getStudentbyStudentId($student_id){
+		$data = [];
+		$where = array('student_master.student_id' =>$student_id);
+		$query = $this->db->select("student_master.*,
+									academic_details.rollno,
+									class_master.classname,
+									section_master.section
+
+			")
+				->from('student_master')
+				->join('academic_details','academic_details.student_id = student_master.student_id','INNER')
+				->join('class_master','class_master.id = academic_details.class_id','INNER')
+				->join('section_master','section_master.id = academic_details.section_id','INNER')
+				->where($where)
+			    ->order_by('student_master.name')
+				->get();
+			
+			if($query->num_rows()> 0)
+			{
+	          foreach($query->result() as $rows)
+				{
+					$data[] = $rows;
+				}
+	             
+	        }
+			
+	        return $data;
+	       
+		
+	}
+
+	public function getStudentListbyClassSection($sel_class,$sel_section){
+		$data = [];
+		$where = array(
+						'academic_details.class_id' =>$sel_class,
+						'academic_details.section_id' =>$sel_section
+					);
+		$query = $this->db->select("student_master.*,
+									academic_details.rollno,
+									class_master.classname,
+									section_master.section
+
+			")
+				->from('student_master')
+				->join('academic_details','academic_details.student_id = student_master.student_id','INNER')
+				->join('class_master','class_master.id = academic_details.class_id','INNER')
+				->join('section_master','section_master.id = academic_details.section_id','INNER')
+				->where($where)
+			    ->order_by('student_master.name')
+				->get();
+			
+			if($query->num_rows()> 0)
+			{
+	          foreach($query->result() as $rows)
+				{
+					$data[] = $rows;
+				}
+	             
+	        }
+			
+	        return $data;
+	       
+		
+	}
+
+		public function getStudentListbyClass($sel_class){
+		$data = [];
+		$where = array(
+						'academic_details.class_id' =>$sel_class
+					);
+		$query = $this->db->select("student_master.*,
+									academic_details.rollno,
+									class_master.classname,
+									section_master.section
+
+			")
+				->from('student_master')
+				->join('academic_details','academic_details.student_id = student_master.student_id','INNER')
+				->join('class_master','class_master.id = academic_details.class_id','INNER')
+				->join('section_master','section_master.id = academic_details.section_id','INNER')
+				->where($where)
+			    ->order_by('student_master.name')
+				->get();
+			
+			if($query->num_rows()> 0)
+			{
+	          foreach($query->result() as $rows)
+				{
+					$data[] = $rows;
+				}
+	             
+	        }
+			
+	        return $data;
+	       
+		
+	}
+
 
 		public function inserIntoStudent($data,$sesion_data)
 	{
@@ -98,6 +196,7 @@ class studentmodel extends CI_Model{
 			 $insert_into_academic = array(
 			 	'student_id' => $student_insert_ID, 
 			 	'acdm_session_id' => $data['acdm_session_id'], 
+			 	'class_id' => $data['class_id'], 
 			 	'section_id' => $data['section_id'], 
 			 	'rollno' => $data['rollno'], 
 			 	'created_by' => $sesion_data['userid'] 
