@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class religionmodel extends CI_Model{
+class Religionmodel extends CI_Model{
 
 
 	public function getAllReligionList(){

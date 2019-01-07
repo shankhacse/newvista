@@ -13,7 +13,8 @@ class Login extends CI_Controller {
        $this->load->helper('form');
        $this->load->library('form_validation');
        $schoolList['schoollist']= $this->login->getAllSchool();
-      
+       $schoolList['acdsessionList']= $this->login->getAllAcademinSession();
+     
        $page="login/login";
        $this->load->view($page,$schoolList);
     }
@@ -25,12 +26,14 @@ class Login extends CI_Controller {
         $this->form_validation->set_rules('school_id', 'School', 'required');
         $this->form_validation->set_rules('username', 'Username', 'required');
         $this->form_validation->set_rules('userpassword', 'Password', 'required');
+        $this->form_validation->set_rules('acd_session_id', 'Academic Session ', 'required');
         $this->form_validation->set_error_delimiters('<div class="error-login">', '</div>');
         
         if ($this->form_validation->run() == FALSE)
            {
                    //redirect('login');
                     $schoolList['schoollist']= $this->login->getAllSchool();
+                    $schoolList['acdsessionList']= $this->login->getAllAcademinSession();
                     $page="login/login";
                     $this->load->view($page,$schoolList);    
            }
@@ -39,12 +42,15 @@ class Login extends CI_Controller {
                 $username = $this->input->post('username');
                 $school = $this->input->post('school_id');
                 $password = $this->input->post('userpassword');
+                $acd_session_id = $this->input->post('acd_session_id');
                 $user_id = $this->login->checkLogin($username,$password,$school);
                 if($user_id!=""){
                     $user = $this->login->get_user($user_id);
                     $user_session = [
                     "userid"=>$user->user_id,
                     "username"=>$user->username, 
+                    "acd_session_id"=>$acd_session_id, 
+                    "school_id"=>$school 
                     
                 ];
                  $this->setSessionData($user_session);

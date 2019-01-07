@@ -1,13 +1,13 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class classmodel extends CI_Model{
+class Classmodel extends CI_Model{
 
 
 	public function getAllClassList(){
 		$data = [];
 		$query = $this->db->select("*")
 				->from('class_master')
-			    ->order_by('class_master.classname')
+			    ->order_by('class_master.id')
 				->get();
 			
 			if($query->num_rows()> 0)

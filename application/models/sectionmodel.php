@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class sectionmodel extends CI_Model{
+class Sectionmodel extends CI_Model{
 
 
 	public function getAllSectionList(){

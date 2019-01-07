@@ -20,7 +20,7 @@ width:100%;
 padding : 50px 0;
 height:100%;
 }
-.banner-sec{background:url(../../../assets/images/pexels-photo.jpg)  no-repeat left bottom; background-size:cover; min-height:500px; border-radius: 0 10px 10px 0; padding:0;}
+.banner-sec{background:url(<?php echo base_url();?>/assets/images/pexels-photo.jpg)  no-repeat left bottom; background-size:cover; min-height:500px; border-radius: 0 10px 10px 0; padding:0;}
 .container{background:#fff; border-radius: 10px; box-shadow:15px 20px 0px rgba(0,0,0,0.1);}
 .carousel-inner{border-radius:0 10px 10px 0;}
 .carousel-caption{text-align:left; left:5%;}
@@ -60,7 +60,7 @@ height:100%;
                         
                         <label for="school" class="text-uppercase">School</label>
                         <select class="form-control" name="school_id" id="school_id">
-                          <option value="">Select..</option>
+                          <option value="">Select</option>
                           <?php
                          
                         
@@ -86,6 +86,25 @@ height:100%;
                         <?php echo form_error('userpassword'); ?>
                         </div>
 
+                          <div class="form-group">
+                        
+                        <label for="school" class="text-uppercase">Academic Session</label>
+                        <select class="form-control" name="acd_session_id" id="acd_session_id">
+                        <option value="">Select</option>
+                          <?php
+                         
+                        
+                         foreach ($acdsessionList as $acdsessionlist) { ?>
+                           <option value="<?php echo $acdsessionlist->id; ?>"><?php echo $acdsessionlist->start_yr."-".$acdsessionlist->end_yr; ?></option>
+                             
+                       <?php  }
+                        ?>   
+                                                                          
+                        </select>
+                        <?php echo form_error('acd_session_id'); ?>
+
+                      </div>
+
 
                         <div class="form-check">
                             <!--    <label class="form-check-label">
@@ -107,7 +126,7 @@ height:100%;
 <!--                  </ol>-->
             <div class="carousel-inner" role="listbox">
 <!--    <div class="carousel-item ">-->
-      <img class="d-block img-fluid" src="../../../assets/images/pexels-photo.jpg" alt="First slide">
+     <!--  <img class="d-block img-fluid" src="../../../assets/images/pexels-photo.jpg" alt="First slide"> -->
       <div class="carousel-caption d-none d-md-block">
         <div class="banner-text">
             <h2>This is Heaven</h2>

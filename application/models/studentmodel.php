@@ -1,12 +1,18 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class studentmodel extends CI_Model{
+class Studentmodel extends CI_Model{
 
-	public function getStudentDataEditbyId($student_id){
+	public function getStudentDataEditbyId($student_id,$acd_session_id){
 		$data = [];
-		$where = array('student_master.student_id' =>$student_id);
+		$where = array(
+						'student_master.student_id' =>$student_id,
+						'academic_details.acdm_session_id' =>$acd_session_id,
+						
+					);
 		$query = $this->db->select("student_master.*,
 									academic_details.*,
+									uploaded_documents_all.*,
+									uploaded_documents_all.id as docid
 									
 
 			")
@@ -14,10 +20,11 @@ class studentmodel extends CI_Model{
 				->join('academic_details','academic_details.student_id = student_master.student_id','INNER')
 				->join('class_master','class_master.id = academic_details.class_id','INNER')
 				->join('section_master','section_master.id = academic_details.section_id','INNER')
+				->join('uploaded_documents_all','uploaded_documents_all.upload_from_module_id = student_master.student_id and uploaded_documents_all.upload_from_module="Admission"','left')
 				->where($where)
-			    ->order_by('student_master.name')
+			    ->limit(1)
 				->get();
-			
+			#q();
 			if($query->num_rows()> 0)
 				{
 		           $row = $query->row();
@@ -30,6 +37,39 @@ class studentmodel extends CI_Model{
 		        }
 			
 	        
+	       
+		
+	}
+
+	/* Student academic details data */
+	public function getStudentAcademicHistory($student_id){
+		$data = [];
+		$where = array('academic_details.student_id' =>$student_id);
+		$query = $this->db->select("
+									academic_details.*,
+									class_master.classname,
+									section_master.section,
+									academic_session_master.start_yr,
+									academic_session_master.end_yr
+									")
+				->from('academic_details')
+				->join('class_master','class_master.id = academic_details.class_id','INNER')
+				->join('academic_session_master','academic_session_master.id = academic_details.acdm_session_id','INNER')
+				->join('section_master','section_master.id = academic_details.section_id','INNER')
+				->where($where)
+			    ->order_by('academic_details.id')
+				->get();
+			
+			if($query->num_rows()> 0)
+			{
+	          foreach($query->result() as $rows)
+				{
+					$data[] = $rows;
+				}
+	             
+	        }
+			
+	        return $data;
 	       
 		
 	}
@@ -155,7 +195,7 @@ class studentmodel extends CI_Model{
 	}
 
 
-		public function inserIntoStudent($data,$sesion_data)
+	public function inserIntoStudent($data,$sesion_data)
 	{
 		try
 		{
@@ -163,7 +203,8 @@ class studentmodel extends CI_Model{
 			$insert_student_data = array();
 			$insert_user_activity = array();
 			$is_file_uploaded = "N";
-			if(isset($data['docFile']['fileName']))
+			
+			/*if(isset($data['docFile']['fileName']))
 			{
 				if(sizeof($data['docFile']['fileName']['name'])>0)
 				{
@@ -173,10 +214,18 @@ class studentmodel extends CI_Model{
 				{
 					$is_file_uploaded = "N";
 				}
-			}
+			}*/
             
 
-			
+            if ($data['docFile']['fileName']['error'][0]==4) {
+            	$is_file_uploaded = "N";
+            }else{
+            	$is_file_uploaded = "Y";
+
+            }
+			//echo "<br>Error:".$data['docFile']['fileName']['error'][0];
+           // echo "<br>File Upload:".$is_file_uploaded;
+		
 
 			$insert_student_data = array(
 				'reg_no' => $data['reg_no'],   
@@ -284,6 +333,130 @@ class studentmodel extends CI_Model{
 	}
 
 
+	public function updateStudent($data,$sesion_data)
+	{
+		try
+		{
+        	$this->db->trans_begin();
+			$insert_trainer_data = array();
+			$insert_user_activity = array();
+			$is_file_uploaded = "N";
+
+		/*	if(isset($data['docFile']['fileName']))
+			{
+				if(sizeof($data['docFile']['fileName']['name'])>0)
+				{
+					$is_file_uploaded = "Y";
+				}
+				else
+				{
+					$is_file_uploaded = "N";
+				}
+			}*/
+
+			if ($data['docFile']['fileName']['error'][0]==4) {
+            	$is_file_uploaded = "N";
+            }else{
+            	$is_file_uploaded = "Y";
+
+            }
+
+
+			$upd_where = array("student_master.student_id" => $data['studentID']);
+
+				$insert_student_data = array(
+				
+				'admission_dt' => $data['admission_dt'], 
+				'dob' => $data['dob'], 
+				'name' => $data['name'], 
+				'gender_id' => $data['gender_id'], 
+				'blood_gr_id' => $data['blood_gr_id'], 
+				'caste_id' => $data['caste_id'], 
+				'religion_id' => $data['religion_id'], 
+				'father_name' => $data['father_name'], 
+				'father_contact_no' => $data['father_contact_no'], 
+				'father_occupation_id' => $data['father_occupation_id'], 
+				'fathers_income' => $data['fathers_income'], 
+				'mother_name' => $data['mother_name'], 
+				'mother_contact_no' => $data['mother_contact_no'], 
+				'mother_occupation_id' => $data['mother_occupation_id'], 
+				'mother_income' => $data['mother_income'], 
+				'guardian_name' => $data['guardian_name'], 
+				'relationship_id' => $data['relationship_id'], 
+				'present_area' => $data['present_area'], 
+				'present_town' => $data['present_town'], 
+				'present_po' => $data['present_po'], 
+				'present_ps' => $data['present_ps'], 
+				'present_pin' => $data['present_pin'], 
+				'present_state_id' => $data['present_state_id'], 
+				'present_dist_id' => $data['present_dist_id'], 
+				'area' => $data['area'], 
+				'town' => $data['town'], 
+				'post_office' => $data['post_office'], 
+				'police_station' => $data['police_station'], 
+				'pin_code' => $data['pin_code'], 
+				'state_id' => $data['state_id'], 
+				'dist_id' => $data['dist_id'], 
+
+				 
+				 
+				'created_by' => $sesion_data['userid'],  
+				'is_active' => 1,  
+				  
+			);
+
+			
+			$this->db->where($upd_where);
+            $this->db->update('student_master',$insert_student_data);
+
+			$insert_where = array(
+				"masterID" => $data['studentID'],
+				"From" => "Admission",
+			);
+			
+			if($is_file_uploaded=="Y")
+			{
+				$detail_insert = $this->insertIntoUploadFile($data,$sesion_data,$insert_where);
+				$file_uploaded_array = array('is_file_uploaded' => $is_file_uploaded);
+				$this->db->where($upd_where);
+                $this->db->update('student_master',$file_uploaded_array);
+			}
+			
+			$insert_user_activity = array(
+				"activity_date" => date('Y-m-d'),  
+				"activity_module" => 'Registration',
+				
+				"action" => "Update",
+				"from_method" => "student/saveStudent",
+				"user_id" => $sesion_data['userid'],
+				
+				"ip_address" => getUserIPAddress(),
+				"user_browser" => getUserBrowserName(),
+				"user_platform" => getUserPlatform()
+			);
+			
+			$user_activity = $this->db->insert('activity_log', $insert_user_activity);
+		
+		if($this->db->trans_status() === FALSE) 
+		{
+            $this->db->trans_rollback();
+            return false;
+        } 
+		else 
+			{
+	            $this->db->trans_commit();
+	            return true;
+	        }
+        }
+		catch (Exception $err) 
+		{
+            echo $err->getTraceAsString();
+        }
+	}
+
+
+
+
 
 	public function insertIntoUploadFile($data,$session_data,$where_data)
 	{ 
@@ -304,7 +477,7 @@ class studentmodel extends CI_Model{
 		//$dir = APPPATH . 'assets/application_extension/';
 		//$dir1 = $_SERVER['DOCUMENT_ROOT'].'/img';
 
-		//$dir1 = $_SERVER['DOCUMENT_ROOT'].'/newvista/assets/documents/admission_upload'; //server
+		//$dir1 = $_SERVER['DOCUMENT_ROOT'].'/newvista/assets/documents/profile_picture'; //server
 
 		$dir1 = $_SERVER['DOCUMENT_ROOT'].'/newvista/assets/documents/profile_picture'; //local
 		
@@ -318,6 +491,7 @@ class studentmodel extends CI_Model{
 			'max_size' => '5120', // Can be set to particular file size , here it is 2 MB(2048 Kb)
 			'max_filename' => '255',
 			'encrypt_name' => TRUE,
+			
 			);
 
 		$this->load->library('upload', $config);

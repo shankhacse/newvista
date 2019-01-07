@@ -83,6 +83,20 @@ class Login_model extends CI_Model{
         }
         return $data;
     }
+
+    public function getAllAcademinSession(){
+    $data=array();   
+    $query = $this->db->select("*")
+                ->from("academic_session_master")
+             ->get();
+       
+        if($query->num_rows()>0){
+            foreach($query->result() as $row){
+                $data[]=$row;
+            }
+        }
+        return $data;
+    }
     
    
     

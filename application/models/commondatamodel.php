@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class commondatamodel extends CI_Model{
+class Commondatamodel extends CI_Model{
 	
 	public function insertSingleTableData($table,$data){
             $lastinsert_id = 0;
@@ -150,7 +150,33 @@ class commondatamodel extends CI_Model{
 				->from($table)
 				->where($where);
 		$query = $this->db->get();
-		//echo $this->db->last_query();
+		#echo $this->db->last_query();
+
+		if($query->num_rows()> 0)
+		{
+            foreach ($query->result() as $rows)
+			{
+				$data[] = $rows;
+            }
+            return $data;
+             
+        }
+		else
+		{
+             return $data;
+         }
+	}
+
+
+		
+	public function getAllRecordWhereNotIn($table,$ignorarray=[])
+	{  
+		$data = array();
+		$this->db->select("*")
+				->from($table)
+				->where_not_in('id',$ignorarray);
+		$query = $this->db->get();
+		echo $this->db->last_query();
 
 		if($query->num_rows()> 0)
 		{

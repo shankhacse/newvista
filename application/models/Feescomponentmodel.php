@@ -1,13 +1,15 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Occupationmodel extends CI_Model{
+class Feescomponentmodel extends CI_Model{
 
 
-	public function getAllOccupatioList(){
-		$data = [];
+	public function getAllFeescomponentList($school_id){
+        $data = [];
+        $where = array('fees_structure.school_id' =>$school_id);
 		$query = $this->db->select("*")
-				->from('occupation_master')
-			    ->order_by('occupation_master.occupation')
+				->from('fees_structure')
+				->where($where)
+			    ->order_by('fees_structure.id')
 				->get();
 			
 			if($query->num_rows()> 0)

@@ -33,6 +33,7 @@ class Student extends CI_Controller {
 	public function addstudent()
 	{   
 		$session = $this->session->userdata('user_data');
+
 		if($this->session->userdata('user_data'))
 		{
 			//echo "seg:".$this->uri->segment(3);exit;
@@ -54,7 +55,10 @@ class Student extends CI_Controller {
 				$result['btnTextLoader'] = "Updating...";
 				$studentID = $this->uri->segment(3);
 				
-				$result['studentEditdata'] = $this->studentmodel->getStudentDataEditbyId($studentID); 
+				$result['studentEditdata'] = $this->studentmodel->getStudentDataEditbyId($studentID,$session['acd_session_id']);
+
+//pre($result['studentEditdata']);exit;
+				$result['studentAcademicData'] = $this->studentmodel->getStudentAcademicHistory($studentID);
 				
 				
 			}
@@ -70,7 +74,10 @@ class Student extends CI_Controller {
 
 			$where_dist = array('district.state_id' => 41, ); /*41:west bengal*/
 			$result['districtList']=$this->commondatamodel->getAllRecordWhere('district',$where_dist);
-			$result['sessionList']=$this->commondatamodel->getAllDropdownData('academic_session_master');
+
+			$where_acd_session = array('academic_session_master.id' =>$session['acd_session_id'] );
+			$result['sessionList']=$this->commondatamodel->getAllRecordWhere('academic_session_master',$where_acd_session);
+
 			$result['sectionList']=$this->commondatamodel->getAllDropdownData('section_master');
 			$header = "";
 
@@ -164,7 +171,7 @@ public function saveStudent()
 			 }
 			$gender = $this->input->post('gender');
 			
-			$docType = $this->input->post('docType');
+			$docType = 1;
 			$userFilename = $this->input->post('userFileName');
 			$fileDesc = $this->input->post('fileDesc');
 

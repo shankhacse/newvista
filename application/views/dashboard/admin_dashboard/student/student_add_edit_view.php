@@ -66,7 +66,7 @@
                        <div class="col-md-4 col-sm-12 col-xs-12">
                         <div class="form-group">
                           <label for="form_sl_no">Form Sl No.<span class="req-star-mark">*</span></label>
-                        <input type="text" class="form-control forminputs removeerr" id="form_sl_no" name="form_sl_no" placeholder="Enter Form Serial" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->name; } ?>" />
+                        <input type="text" class="form-control forminputs removeerr" id="form_sl_no" name="form_sl_no" placeholder="Enter Form Serial" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->form_sl_no; } ?>" />
                         </div>
                       </div>
 
@@ -120,11 +120,12 @@
                          <select id="gender" name="gender" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
                           <?php 
+                          pre($bodycontent['genderList']);
                           if($bodycontent['genderList'])
                           {
                           foreach($bodycontent['genderList'] as $value)
                           { ?>
-                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->gender==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->gender; ?></option>
+                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->gender_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->gender; ?></option>
                       <?php   }
                           }
                           ?>
@@ -149,7 +150,7 @@
                           {
                           foreach($bodycontent['bloodgroupList'] as $value)
                           { ?>
-                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->group==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->group; ?></option>
+                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->blood_gr_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->group; ?></option>
                       <?php   }
                           }
                           ?>
@@ -169,7 +170,7 @@
                           {
                           foreach($bodycontent['casteList'] as $value)
                           { ?>
-                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->caste==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->caste; ?></option>
+                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->caste_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->caste; ?></option>
                       <?php   }
                           }
                           ?>
@@ -190,7 +191,7 @@
                           {
                           foreach($bodycontent['religionList'] as $value)
                           { ?>
-                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->religion==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->religion; ?></option>
+                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->religion_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->religion; ?></option>
                       <?php   }
                           }
                           ?>
@@ -214,7 +215,17 @@
                       <div class="col-md-12 col-sm-12 col-xs-12">
 
                             <div class="student_picture" style="width: 145px;height:164px;border: 2px solid #6d78cb;margin-left:80px;margin-bottom:13px; ">
-                              <img id="profile_img" src="<?php echo base_url(); ?>assets/images/profile_pic_avter.png" alt="Profile Picture" / style="width:141px;height:160px;">
+                              <img id="profile_img" src="<?php if($bodycontent['mode']=="EDIT"){
+
+                                if($bodycontent['studentEditdata']->is_file_uploaded=='Y'){
+echo base_url()."assets/documents/profile_picture/".$bodycontent['studentEditdata']->random_file_name;
+                                  }else{
+                                    echo base_url()."assets/images/profile_pic_avter.png";
+                                  }
+
+                              }else{
+                                echo base_url()."assets/images/profile_pic_avter.png";
+                              }?>" alt="Profile Picture" style="width:141px;height:160px;">
 
                               <input type="hidden" id="derault_profile_src" name="derault_profile_src" value="<?php echo base_url(); ?>assets/images/profile_pic_avter.png">
                             </div>
@@ -229,7 +240,7 @@
                         <?php $rowno=1;?>
 
 
-             
+<!--              
  <div class="form-group">
     
     
@@ -241,7 +252,7 @@
       
         <input type="file" name="fileName[]" class="file fileName" id="fileName_0_<?php echo $rowno; ?>" accept=".jpg , .jpeg , .png" />
         <div class="input-group col-xs-12">
-             <!--  <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span> -->
+             
           <input type="text" name="userFileName[]" id="userFileName_0_<?php echo $rowno; ?>" class="form-control input-xs userFileName" readonly placeholder="Upload Picture" >
 
             <input type="hidden" name="isChangedFile[]" id="isChangedFile_0_<?php echo $rowno; ?>" value="Y" >
@@ -252,6 +263,34 @@
               </span>
         </div>
      
+</div> -->
+
+
+
+ <div class="form-group">
+    
+       <label for="subcode">Maximum file size 500KB </label>
+          <input type="hidden" name="prvFilename[]" id="prvFilename_0_<?php echo $rowno; ?>" class="form-control prvFilename" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->user_file_name;}else{echo "";}?>" readonly >
+
+          <input type="hidden" name="randomFileName[]" id="randomFileName_0_<?php echo $rowno; ?>" class="form-control randomFileName" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->random_file_name;}else{echo "";}?>" readonly >
+
+          <input type="hidden" name="docDetailIDs[]" id="docDetailIDs_0_<?php echo $rowno; ?>" class="form-control randomFileName" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->docid;}else{echo "0";}?>" readonly >
+      
+        <input type="file" name="fileName[]" class="file fileName" id="fileName_0_<?php echo $rowno; ?>" accept=".jpg , .jpeg , .png" />
+        <div class="input-group col-xs-12">
+             <!--  <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span> -->
+          <input type="text" name="userFileName[]" id="userFileName_0_<?php echo $rowno; ?>" class="form-control input-xs userFileName" readonly placeholder="Upload Document" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->user_file_name;}?>" >
+
+            <input type="hidden" name="isChangedFile[]" id="isChangedFile_0_<?php echo $rowno; ?>" value="<?php if($bodycontent['mode']=="EDIT"){echo "N";}else{echo "N";}?>" >
+            <span class="input-group-btn">
+              <button class="browse btn btn-primary input-xs" type="button" id="uploadBtn_0_<?php echo $rowno; ?>">
+                  <i class="fa fa-folder-open" aria-hidden="true"></i>
+            </button>
+              </span>
+        </div>
+     
+
+
 </div>
 
 <!-- End of Upload Profile picture  -->
@@ -680,8 +719,49 @@
                         </div>
                    
                       </div>
+                      <?php if($bodycontent['mode']=="EDIT"){?>
 
                        <p class="formSubTitle"><span class="glyphicon glyphicon-pencil"></span> Academic Historical data</p>
+
+                  <div class="row">
+                       <div class="col-md-12">
+                                 
+                  
+                                      <table class="table table-bordered table-striped table-condensed">
+                                        <thead style="background-color: #669dbd;color: #fff;">
+                                          <tr>
+                                            <th>Sl. No.</th>
+                                            <th>Academic Session</th>
+                                            <th>Class</th>
+                                            <th>Section</th>
+                                            <th>Roll</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <?php  
+                                          $acdsl=1;
+                                          if($bodycontent['studentAcademicData']) {
+                                             foreach($bodycontent['studentAcademicData'] as $value){
+
+                                            ?>
+                                          <tr>
+                                            <td><?php echo $acdsl++;?></td>
+                                            <td><?php echo $value->start_yr."-".$value->end_yr?></td>
+                                            <td><?php echo $value->classname;?></td>
+                                            <td><?php echo $value->section?></td>
+                                            <td><?php echo $value->rollno?></td>
+                                          </tr>
+                                        <?php }}?>
+
+                                        </tbody>
+                                      </table>
+                                 
+
+                              </div>
+
+                          </div>
+
+                        <?php }?>
 
 
 

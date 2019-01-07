@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class relationshipmodel extends CI_Model{
+class Relationshipmodel extends CI_Model{
 
 
 	public function getAllRelationList(){

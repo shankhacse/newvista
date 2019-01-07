@@ -4,6 +4,7 @@ $(document).ready(function(){
 	var mode = $("#mode").val();
     if (mode=='EDIT') {
         $('#reg_no').attr('readonly', true);
+        $('#form_sl_no').attr('readonly', true);
     }
 	    $( ".datepicker" ).datepicker({
        
