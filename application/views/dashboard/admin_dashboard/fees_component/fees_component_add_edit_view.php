@@ -1,5 +1,5 @@
 <script src="<?php echo base_url(); ?>assets/js/adm_scripts/feescomponent.js"></script>   
-
+<link rel="stylesheet" href="<?php echo base_url();?>assets/css/admin_style.css" />  
    <section class="content-header">
       <h1>
         Dashboard
@@ -28,9 +28,19 @@
               $attr = array("id"=>"feesComponentForm","name"=>"feesComponentForm");
               echo form_open('',$attr); ?>
                 <div class="box-body">
+                    <?php
+               $selected_month_dtl="";
+                  foreach($bodycontent['feesComponentEditMonthdata'] as $role_dtls)
+               {
+                 $selected_month_dtl.= $role_dtls->month_id.",";
+               }
+                $selected_month_dtl = rtrim($selected_month_dtl,",!");
+
+
+              ?>
                  
  
-
+<input type="hidden" id="selected_month_ids" name="selected_month_ids" value="<?php echo $selected_month_dtl ;?>"/>
                   <div class="form-group">
                     <input type="hidden" name="feesComID" id="feesComID" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['feesComponentEditdata']->id;}else{echo "0";}?>" />
 
@@ -44,8 +54,42 @@
                    
 
                     <label for="account">Account</label>
-                    <input type="text" class="form-control forminputs typeahead" id="acconut" name="acconut" placeholder="Enter Account" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['feesComponentEditdata']->account_id;}?>" >
+
+                    <select id="acconut" name="acconut" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                     <option value="">Select</option> 
+                      <?php 
+                      if($bodycontent['accountList'])
+                      {
+                        foreach($bodycontent['accountList'] as $accountlist)
+                        { ?>
+                            <option value="<?php echo $accountlist->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['feesComponentEditdata']->account_id==$accountlist->id){echo "selected";}else{echo "";} ?> ><?php echo $accountlist->account_name; ?></option>
+                      <?php   }
+                      }
+                      ?>
+
+                    </select>
+                
                   </div>
+
+                     <div class="form-group">
+                          <label for="reg_no">Month</label>
+                          <select id="sel_month" name="sel_month[]" class="form-control selectpicker"  data-show-subtext="true" data-actions-box="true" data-live-search="true" multiple="multiple" >
+                           
+                        
+                          <?php 
+                          if($bodycontent['monthList'])
+                          {
+                          foreach($bodycontent['monthList'] as $value)
+                          { ?>
+                            <option value="<?php echo $value->id; ?>"><?php echo $value->month_code; ?></option>
+                      <?php   }
+                          }
+                          ?>
+
+                        </select>
+                      
+
+                        </div>
 
                   <p id="feescommsg" class="form_error"></p>
 

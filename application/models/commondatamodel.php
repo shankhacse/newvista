@@ -396,6 +396,14 @@ class Commondatamodel extends CI_Model{
             
             
         }
+
+
+        public function insertSingleTableDataRerurnInsertId($table,$data){
+		
+			$this->db->insert($table, $data);
+		    $insert_ID = $this->db->insert_id();
+            return $insert_ID;
+	    }
 	
 
 	

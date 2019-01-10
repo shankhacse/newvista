@@ -1,4 +1,7 @@
-  <script src="<?php echo base_url(); ?>assets/js/adm_scripts/classlist.js"></script>     
+  <script src="<?php echo base_url(); ?>assets/js/adm_scripts/classlist.js"></script>   
+  <style type="text/css">
+  .monthstyle{background-color: #ef7a25 !important;}
+</style>   
    <section class="content-header">
       <h1>
         Dashboard
@@ -25,7 +28,8 @@
                 <thead>
                 <tr>
                   <th style="width:10%;">Sl</th>
-                  <th>Fees Description</th>
+                  <th style="width:20%;">Fees Description</th>
+                  <th >Active For Months</th>
                   <th>Account</th>
                  
                   <th style="text-align:right;width:5%;">Action</th>
@@ -42,11 +46,18 @@
 
 					<tr>
 						<td><?php echo $i++; ?></td>
-            <td><?php echo $value->fees_desc; ?></td>
-            <td><?php echo $value->account_id; ?></td>
+            <td><?php echo $value['FeesComponentData']->fees_desc; ?></td>
+            <td><?php 
+
+                  foreach ($value['monthData'] as $monthdata) { ?>
+                   
+                  <span class="label label-warning monthstyle"><?php echo $monthdata->month_code; ?></span>
+                <?php  }
+             ?></td>
+            <td><?php echo $value['FeesComponentData']->account_name; ?></td>
 				
 						<td align="center"> 
-							<a href="<?php echo base_url(); ?>feescomponent/addFeesComponent/<?php echo $value->id; ?>" class="btn btn-primary btn-xs" data-title="Edit">
+							<a href="<?php echo base_url(); ?>feescomponent/addFeesComponent/<?php echo $value['FeesComponentData']->id; ?>" class="btn btn-primary btn-xs" data-title="Edit">
 								<span class="glyphicon glyphicon-pencil"></span>
 							</a>
 						

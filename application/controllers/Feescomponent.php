@@ -16,7 +16,9 @@ class Feescomponent extends CI_Controller {
 		{
             $header = "";
             
-			$result['feescomponentList'] = $this->feescommodel->getAllFeescomponentList($session['school_id']); 
+			//$result['feescomponentList'] = $this->feescommodel->getAllFeescomponentList($session['school_id']);
+			$result['feescomponentList'] = $this->feescommodel->getAllFeescomponentListWithMonth($session['school_id']);
+
 			$page = "dashboard/admin_dashboard/fees_component/fees_component_list_view.php";
 			createbody_method($result, $page, $header, $session);
 			
@@ -41,6 +43,7 @@ class Feescomponent extends CI_Controller {
 				$result['btnTextLoader'] = "Saving...";
 				$feesComID = 0;
 				$result['feesComponentEditdata'] = [];
+				$result['feesComponentEditMonthdata'] = [];
 				
 				
 			
@@ -56,6 +59,8 @@ class Feescomponent extends CI_Controller {
 				);
 				// getSingleRowByWhereCls(tablename,where params)
 				$result['feesComponentEditdata'] = $this->commondatamodel->getSingleRowByWhereCls('fees_structure',$whereAry); 
+				$where_fees_strucrure_month = array('fees_strucrure_month_dtl.fees_structure_id' =>$feesComID);
+				$result['feesComponentEditMonthdata']= $this->commondatamodel->getAllRecordWhere('fees_strucrure_month_dtl',$where_fees_strucrure_month);
 
 				
 				
@@ -63,7 +68,7 @@ class Feescomponent extends CI_Controller {
 			$where_ac_master = array('account_master.school_id' => $session['school_id']);
 			$result['accountList']=$this->commondatamodel->getAllRecordWhere('account_master',$where_ac_master);
 			$header = "";
-
+			$result['monthList']=$this->commondatamodel->getAllDropdownData('month_master'); 
 			$page = "dashboard/admin_dashboard/fees_component/fees_component_add_edit_view.php";
 			createbody_method($result, $page, $header,$session);
 		}
@@ -91,6 +96,9 @@ class Feescomponent extends CI_Controller {
 		
 			$fees_desc = trim(htmlspecialchars($dataArry['fees_desc']));
 			$acconut = trim(htmlspecialchars($dataArry['acconut']));
+			$sel_month = $dataArry['sel_month'];
+			/*pre($sel_month);
+			exit;*/
 			if ($acconut=='') {
 				$acconut=NULL;
 			}
@@ -132,6 +140,39 @@ class Feescomponent extends CI_Controller {
 					@updateData_WithUserActivity('update table name','update table data','update table where condition','user activity table name','user activity table data');
 					*/
 					$update = $this->commondatamodel->updateData_WithUserActivity('fees_structure',$array_upd,$where_upd,'activity_log',$user_activity);
+
+					$delete=$this->feescommodel->deleteFeesMonthDetails($feesComID);
+					
+
+							foreach ($sel_month as $key => $value) {		
+							$array_fee_month_dtl = array(
+									"fees_structure_id" => $feesComID,
+									"month_id" => $value,
+									
+								);
+								
+								
+									$user_activity = array(
+									"activity_module" => 'feescomponent',
+									"action" => 'Insert',
+									"from_method" => 'feescomponent/feesComponent_action',
+									"user_id" => $session['userid'],
+									"ip_address" => getUserIPAddress(),
+									"user_browser" => getUserBrowserName(),
+									"user_platform" => getUserPlatform()
+									
+								 );
+
+									
+								$tbl_name = array('fees_strucrure_month_dtl','activity_log');
+								$insert_array = array($array_fee_month_dtl,$user_activity);
+								$insertData = $this->commondatamodel->insertMultiTableData($tbl_name,$insert_array);
+
+			    	} //end of foreach
+						
+
+
+					
 					
 					
 					if($update)
@@ -167,23 +208,40 @@ class Feescomponent extends CI_Controller {
 						"created_by" => $session['userid']
 					);
 					
-					
+					$insertId=$this->commondatamodel->insertSingleTableDataRerurnInsertId('fees_structure',$array_insert);
 	
-					$user_activity = array(
-						"activity_module" => 'feescomponent',
-						"action" => 'Insert',
-						"from_method" => 'feescomponent/feesComponent_action',
-						"user_id" => $session['userid'],
-						"ip_address" => getUserIPAddress(),
-						"user_browser" => getUserBrowserName(),
-						"user_platform" => getUserPlatform()
-						
-					 );
+				
 
 						
-					$tbl_name = array('fees_structure','activity_log');
+					/*$tbl_name = array('fees_structure','activity_log');
 					$insert_array = array($array_insert,$user_activity);
-					$insertData = $this->commondatamodel->insertMultiTableData($tbl_name,$insert_array);
+					$insertData = $this->commondatamodel->insertMultiTableData($tbl_name,$insert_array);*/
+
+						foreach ($sel_month as $key => $value) {		
+							$array_fee_month_dtl = array(
+									"fees_structure_id" => $insertId,
+									"month_id" => $value,
+									
+								);
+								
+								
+									$user_activity = array(
+									"activity_module" => 'feescomponent',
+									"action" => 'Insert',
+									"from_method" => 'feescomponent/feesComponent_action',
+									"user_id" => $session['userid'],
+									"ip_address" => getUserIPAddress(),
+									"user_browser" => getUserBrowserName(),
+									"user_platform" => getUserPlatform()
+									
+								 );
+
+									
+								$tbl_name = array('fees_strucrure_month_dtl','activity_log');
+								$insert_array = array($array_fee_month_dtl,$user_activity);
+								$insertData = $this->commondatamodel->insertMultiTableData($tbl_name,$insert_array);
+
+			    	} //end of foreach
 
 					if($insertData)
 					{

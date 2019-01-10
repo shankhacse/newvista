@@ -14,11 +14,13 @@ if ( ! function_exists('createbody_method'))
 	 /* leftmenu */
 	
 	 $left_menu = $CI->menumodel->getAllAdministrativeMenu('admin_menu_master');
+	 $acdsessionData= $CI->menumodel->getAcademicSessionData();
 	 //$user_role = $CI->menumodel->getAllRoleById();
 
 	 $data['bodyview'] = $body_content_page;
 	 $data['leftmenusidebar'] = '';
 	 $data['headermenu'] = $body_content_header;
+	 $data['acdsessionData'] = $acdsessionData;
 	 //$data['web_user_role']=$user_role;
 	
 	 $CI->template->setHeader($heared_menu_content);

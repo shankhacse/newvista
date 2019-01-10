@@ -1,6 +1,29 @@
 <?php
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class menumodel extends CI_Model{
+	public function getAcademicSessionData(){
+		$session = $this->session->userdata('user_data');
+			$data = [];
+			$where = array('academic_session_master.id' =>$session['acd_session_id']);
+			$query = $this->db->select("*")
+					->from('academic_session_master')
+					->where($where)
+				    ->limit(1);
+					$query = $this->db->get();
+				#q();
+				if($query->num_rows()> 0)
+				{
+		           $row = $query->row();
+		           return $data = $row;
+		             
+		        }
+				else
+				{
+		            return $data;
+		        }
+			       
+		
+	}	
 	public function getAllAdministrativeMenu($table)
 	{
 		$data = array();

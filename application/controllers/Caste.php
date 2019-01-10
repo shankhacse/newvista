@@ -15,6 +15,8 @@ class Caste extends CI_Controller {
 		if($this->session->userdata('user_data'))
 		{
 			$header = "";
+			$result['btnText'] = "Save";
+			$result['btnTextLoader'] = "Saving...";
 			$result['casteList'] = $this->castemodel->getAllCasteList(); 
 			$page = "dashboard/admin_dashboard/caste/caste_list_view";
 			createbody_method($result, $page, $header, $session);

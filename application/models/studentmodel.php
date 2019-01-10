@@ -127,11 +127,15 @@ class Studentmodel extends CI_Model{
 		
 	}
 
+/* get student list by class and section*/
 	public function getStudentListbyClassSection($sel_class,$sel_section){
+		$session = $this->session->userdata('user_data');
 		$data = [];
 		$where = array(
 						'academic_details.class_id' =>$sel_class,
-						'academic_details.section_id' =>$sel_section
+						'academic_details.section_id' =>$sel_section,
+						'academic_details.school_id' =>$session['school_id'],
+						'academic_details.acdm_session_id' =>$session['acd_session_id'],
 					);
 		$query = $this->db->select("student_master.*,
 									academic_details.rollno,
@@ -161,10 +165,16 @@ class Studentmodel extends CI_Model{
 		
 	}
 
+	/* get student list by class */
+	
+
 		public function getStudentListbyClass($sel_class){
+			$session = $this->session->userdata('user_data');
 		$data = [];
 		$where = array(
-						'academic_details.class_id' =>$sel_class
+						'academic_details.class_id' =>$sel_class,
+						'academic_details.school_id' =>$session['school_id'],
+						'academic_details.acdm_session_id' =>$session['acd_session_id'],
 					);
 		$query = $this->db->select("student_master.*,
 									academic_details.rollno,
@@ -196,7 +206,8 @@ class Studentmodel extends CI_Model{
 
 
 	public function inserIntoStudent($data,$sesion_data)
-	{
+	{ 
+			$session = $this->session->userdata('user_data');
 		try
 		{
         	$this->db->trans_begin();
@@ -278,6 +289,7 @@ class Studentmodel extends CI_Model{
 			 	'student_id' => $student_insert_ID, 
 			 	'acdm_session_id' => $data['acdm_session_id'], 
 			 	'class_id' => $data['class_id'], 
+			 	'school_id' => $session['school_id'], 
 			 	'section_id' => $data['section_id'], 
 			 	'rollno' => $data['rollno'], 
 			 	'created_by' => $sesion_data['userid'] 

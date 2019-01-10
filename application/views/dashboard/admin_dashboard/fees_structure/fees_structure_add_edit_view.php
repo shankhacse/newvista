@@ -76,7 +76,7 @@
                    
 
                     <label for="amount">Amount</label>
-                    <input type="text" class="form-control forminputs typeahead" id="amount" name="amount" placeholder="Enter Account" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['feesStructureEditdata']->amount;}?>" >
+                    <input type="text" class="form-control forminputs typeahead" id="amount" name="amount" placeholder="Enter Amount" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['feesStructureEditdata']->amount;}?>" >
                   </div>
 
                   <p id="feesstrmsg" class="form_error"></p>

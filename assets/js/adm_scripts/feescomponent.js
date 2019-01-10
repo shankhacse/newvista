@@ -2,6 +2,21 @@ $(document).ready(function(){
    
 	var basepath = $("#basepath").val();
 	$("#caste").focus();
+     $('.selectpicker').selectpicker({
+    dropupAuto: false
+    });
+
+      var mode=$("#mode").val();
+            
+              if (mode=='EDIT') {
+
+            var  selected_roles = $("#selected_month_ids").val();
+
+            var selected_attr = selected_roles.split(',');
+            $("#sel_month").selectpicker("val", selected_attr);
+           // $('#sel_role').selectpicker('refresh');
+
+                }
 	
 	$(document).on('submit','#feesComponentForm',function(e){
 		e.preventDefault();
@@ -72,6 +87,8 @@ $(document).ready(function(){
 function validate()
 {  
 	var fees_desc = $("#fees_desc").val();
+    var months =$('#sel_month').val().length;
+    
 	$("#feescommsg").text("").css("dispaly", "none").removeClass("form_error");
 	if(fees_desc=="")
 	{
@@ -82,5 +99,15 @@ function validate()
         .css("display", "block");
 		return false;
 	}
+
+    if(months=="0")
+    {
+        $("#fees_desc").focus();
+        $("#feescommsg")
+        .text("Error : Select Month")
+        .addClass("form_error")
+        .css("display", "block");
+        return false;
+    }
 	return true;
 }

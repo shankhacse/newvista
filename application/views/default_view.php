@@ -147,10 +147,13 @@
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
-
+      <a href="javascript:;" class="logo" style="background-color: #3c8dbc;width:300px;"> <span class="logo-mini" style=""><b>Academic Year: <?php echo $acdsessionData->start_yr." - ".$acdsessionData->end_yr;?></b></span></a>
+      <a href="javascript:;" class="logo" style="background-color: #3c8dbc;margin-left:50px;width:300px;"> <span class="logo-lg" style=""><b>Academic Year: <?php echo $acdsessionData->start_yr." - ".$acdsessionData->end_yr;?></b></span></a>
+      
       <div class="navbar-custom-menu">
+      
         <ul class="nav navbar-nav">
-		
+   
           <!-- Messages: style can be found in dropdown.less
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
