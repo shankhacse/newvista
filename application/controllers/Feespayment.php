@@ -31,6 +31,44 @@ class Feespayment extends CI_Controller {
 		}
 	}
 
+	public function paymentEdit()
+	{
+		$session = $this->session->userdata('user_data');
+		if($this->session->userdata('user_data'))
+		{
+			$header = "";
+			$result['mode'] = "EDIT";
+			$paymentid = $this->uri->segment(3);
+			$result['classList']=$this->commondatamodel->getAllDropdownData('class_master');
+			$result['sectionList']=$this->commondatamodel->getAllDropdownData('section_master');
+			$result['monthList']=$this->commondatamodel->getAllDropdownData('month_master');
+			$result['studentinfo']=$this->feespaymentmodel->getStudentDetailsByPaymentId($paymentid);
+			$result['fessComponentData']=$this->feespaymentmodel->getFeesComponentListbyPaymentId($paymentid);
+			$result['paymentMonthList']=$this->feespaymentmodel->getPaymentMonthbyPaymentId($paymentid);
+
+			foreach ($result['paymentMonthList'] as $key => $value) {
+				$sel_month[]=$value->month_id;
+			}
+
+			foreach ($sel_month as  $value) {
+            	$monthids[]=$value;
+            	$where_mon_id = array('month_master.id' =>$value);
+            	$monthData=$this->commondatamodel->getSingleRowByWhereCls('month_master',$where_mon_id);
+            	$result['monthsname'][]=$monthData->month_code;
+            }
+
+             $result['monthids_string'] = implode(',', $monthids);
+			//pre($result['monthsname']);
+			$page = "dashboard/admin_dashboard/fees_payment/fees_payment_view_edit";
+			createbody_method($result, $page, $header, $session);
+			
+		}
+		else
+		{
+			redirect('login','refresh');
+		}
+	}
+
 	public function payment_history()
 	{
 		$session = $this->session->userdata('user_data');
@@ -104,13 +142,15 @@ public function getStudent()
 			parse_str($formData, $dataArry);
 			$result=[];
 
-		
+		    $result['mode'] = "ADD";
+		    $result['btnText'] = "Save";
 			
             $studentid = $dataArry['studentid'];
             $result['studentid']=$studentid;
             $sel_month = $dataArry['sel_month'];
             $session['school_id'];
             $session['acd_session_id'];
+
 
             foreach ($sel_month as  $value) {
             	$monthids[]=$value;
@@ -137,11 +177,61 @@ public function getStudent()
 		}
 		else
 		{
-			redirect('administratorpanel','refresh');
+			redirect('login','refresh');
 		}
 	}
 
+/* get component list for edit*/
 
+public function getPaymentComponentListPaymentEdit()
+	{
+		$session = $this->session->userdata('user_data');
+		if($this->session->userdata('user_data'))
+		{
+			$formData = $this->input->post('formDatas');
+			parse_str($formData, $dataArry);
+			$result=[];
+
+		    $result['mode'] = "EDIT";
+		    $result['btnText'] = "Update";
+			
+            $studentid = $dataArry['studentid'];
+            $result['paymentID'] = $dataArry['paymentID'];
+           
+            $result['studentid']=$studentid;
+            $sel_month = $dataArry['sel_month'];
+            $session['school_id'];
+            $session['acd_session_id'];
+
+
+            foreach ($sel_month as  $value) {
+            	$monthids[]=$value;
+            	$where_mon_id = array('month_master.id' =>$value);
+            	$monthData=$this->commondatamodel->getSingleRowByWhereCls('month_master',$where_mon_id);
+            	$result['monthsname'][]=$monthData->month_code;
+            }
+
+             $result['monthids_string'] = implode(',', $monthids);
+            //$destination_array = explode(',', $string_version);
+            //print_r($destination_array);
+            $result['studentData']=$this->Studentmodel->getStudentDataEditbyId($studentid,$session['acd_session_id']);
+          
+          	$classid=$result['studentData']->class_id;
+          	
+
+          	$result['fessComponentData']=$this->feespaymentmodel->getFeesComponentListbyClass($classid,$monthids);
+
+
+			//pre($result['fessComponentData']);
+			$page = "dashboard/admin_dashboard/fees_payment/fees_payment_compnent_view.php";
+			$partial_view = $this->load->view($page, $result, TRUE);
+			echo $partial_view;
+		}
+		else
+		{
+			redirect('login','refresh');
+		}
+	}
 
 
 	/* payment details save and edit */
@@ -174,6 +264,7 @@ public function getStudent()
 			$result['studentData']=$this->Studentmodel->getStudentDataEditbyId($studentid,$session['acd_session_id']);
           
           	$classid=$result['studentData']->class_id;
+          	$academic_dtl_id=$result['studentData']->academic_dtl_id;
 			
 	
 			
@@ -191,13 +282,16 @@ public function getStudent()
 					 *	-----------------
 					*/
 
-					$array_upd = array(
-						"caste" => $caste,
+					$payment_master_id=$paymentID;
+					$payment_mst_array_upd = array(
+						"payment_date" => $payment_date,
+						"payment_mode" => $payment_mode,
+						"total_amount" => $total_pay_amount,
 						"last_modified" => date('Y-m-d')
 					);
 
-					$where_upd = array(
-						"caste_master.id" => $casteID
+					$where_upd_payment_mst = array(
+						"payment_master.payment_id" => $paymentID
 					);
 
 					$user_activity = array(
@@ -214,7 +308,63 @@ public function getStudent()
 					/*
 					@updateData_WithUserActivity('update table name','update table data','update table where condition','user activity table name','user activity table data');
 					*/
-					$update = $this->commondatamodel->updateData_WithUserActivity('caste_master',$array_upd,$where_upd,'activity_log',$user_activity);
+					$update = $this->commondatamodel->updateData_WithUserActivity('payment_master',$payment_mst_array_upd,$where_upd_payment_mst,'activity_log',$user_activity);
+
+					$where_payment_mon_dtl = array('payment_month_dtl.payment_master_id' =>$paymentID);
+					$delete1 = $this->commondatamodel->deleteTableData('payment_month_dtl',$where_payment_mon_dtl);
+
+					$where_payment_details = array('payment_details.payment_master_id' =>$paymentID);
+					$delete1 = $this->commondatamodel->deleteTableData('payment_details',$where_payment_details);
+
+					/* start month loop*/
+					foreach ($monthids_array as $key => $value) {
+						$monthid=$value;
+						$fessComponentListData=$this->feespaymentmodel->getFeesComponentListbyClassMonth($classid,$value);
+						$fessComsumData=$this->feespaymentmodel->getFeesComponentListSumbyClassMonth($classid,$value);
+						$total_amount_monthly=$fessComsumData->sum_amount;
+
+						//pre($fessComponentListData);
+
+						$payment_month_dtl_array = array(
+							'payment_master_id' => $payment_master_id, 
+							'month_id' => $monthid, 
+							'amount' => $total_amount_monthly, 
+						    'created_by' => $session['userid']
+						);
+
+						$month_dtl_insertId = $this->commondatamodel->insertSingleTableDataRerurnInsertId('payment_month_dtl',$payment_month_dtl_array);
+
+							foreach ($fessComponentListData as $fesscomlistdata) {
+
+								$payment_details_array = array(
+										'payment_master_id' => $payment_master_id, 
+										'month_id' => $monthid, 
+										'payment_month_dtl_id' => $month_dtl_insertId, 
+										'fees_component_id' => $fesscomlistdata->fees_comp_id, 
+										'amount' => $fesscomlistdata->amount, 
+										'created_by' => $session['userid']
+										 );
+
+								$user_activity = array(
+								"activity_module" => 'Feespayment',
+								"action" => 'Insert',
+								"from_method" => 'Feespayment/payment_action',
+								"user_id" => $session['userid'],
+								"ip_address" => getUserIPAddress(),
+								"user_browser" => getUserBrowserName(),
+								"user_platform" => getUserPlatform()
+								
+							 );
+
+						$tbl_name = array('payment_details','activity_log');
+						$insert_array = array($payment_details_array,$user_activity);
+						$insertData = $this->commondatamodel->insertMultiTableData($tbl_name,$insert_array);
+
+							}
+
+
+						
+					} /* end of month loop*/
 					
 					
 					if($update)
@@ -245,6 +395,7 @@ public function getStudent()
             
 
 					$array_payment_master = array(
+						"academic_dtl_id" => $academic_dtl_id,
 						"class_id" => $classid,
 						"school_id" => $session['school_id'],
 						"acdm_session_id" => $session['acd_session_id'],
@@ -356,7 +507,123 @@ public function getStudent()
 	}
 
 
+/* payment list details*/
 
 
+public function getPaymentList()
+	{
+		$session = $this->session->userdata('user_data');
+		if($this->session->userdata('user_data'))
+		{
+			$formData = $this->input->post('formDatas');
+			parse_str($formData, $dataArry);
+			$result=[];
+
+			 $from_date = $dataArry['from_date'];
+			 $to_date = $dataArry['to_date'];
+			 $acdm_class = $dataArry['acdm_class'];
+			 if ($acdm_class=='') {
+			 	$acdm_class=0;
+			 }
+			 $acdm_section = $dataArry['acdm_section'];
+			 $studentid = $dataArry['studentid'];
+
+			 	 if($from_date!=""){
+				$from_date = str_replace('/', '-', $from_date);
+				$from_date = date("Y-m-d",strtotime($from_date));
+				 }
+				 else{
+					 $from_date = NULL;
+			    }
+
+			    if($to_date!=""){
+				$to_date = str_replace('/', '-', $to_date);
+				$to_date = date("Y-m-d",strtotime($to_date));
+				 }
+				 else{
+					 $to_date = NULL;
+			    }
+
+			   $result['from_date']=$from_date;
+			   $result['to_date']=$to_date;
+			   $result['acdm_class']=$acdm_class;
+			   $result['acdm_section']=$acdm_section;
+			   $result['studentid']=$studentid;
+//exit;
+			$page = "dashboard/admin_dashboard/fees_payment/payment_history_partial_view.php";
+			$partial_view = $this->load->view($page, $result, TRUE);
+			echo $partial_view;
+		}
+		else
+		{
+			redirect('login','refresh');
+		}
+	}
+
+
+public function updatePaymentMaster(){
+		$session = $this->session->userdata('user_data');
+		if($this->session->userdata('user_data'))
+		{
+			$paymentID = trim($this->input->post('paymentID'));
+			$mode = trim($this->input->post('mode'));
+			$payment_mode = trim($this->input->post('payment_mode'));
+			$payment_date = trim($this->input->post('payment_date'));
+
+			 if($payment_date!=""){
+				$payment_date = str_replace('/', '-', $payment_date);
+				$payment_date = date("Y-m-d",strtotime($payment_date));
+			 }
+			 else{
+				 $payment_date = NULL;
+		    }
+			
+			$update_array  = array(
+				"payment_date" => $payment_date,
+				"payment_mode" => $payment_mode
+				);
+				
+			$where = array(
+				"payment_master.payment_id" => $paymentID
+				);
+			
+			
+				$user_activity = array(
+								"activity_module" => 'Feespayment',
+								"action" => 'Insert',
+								"from_method" => 'Feespayment/payment_action',
+								"user_id" => $session['userid'],
+								"ip_address" => getUserIPAddress(),
+								"user_browser" => getUserBrowserName(),
+								"user_platform" => getUserPlatform()
+								
+							 );
+				$update = $this->commondatamodel->updateData_WithUserActivity('payment_master',$update_array,$where,'activity_log',$user_activity);
+			if($update)
+			{
+				$json_response = array(
+					"msg_status" => 1,
+					"msg_data" => "Status updated"
+				);
+			}
+			else
+			{
+				$json_response = array(
+					"msg_status" => 0,
+					"msg_data" => "Failed to update"
+				);
+			}
+
+
+		header('Content-Type: application/json');
+		echo json_encode( $json_response );
+		exit;
+
+		}
+		else
+		{
+			redirect('login','refresh');
+		}
+	}
 
 }//end of class

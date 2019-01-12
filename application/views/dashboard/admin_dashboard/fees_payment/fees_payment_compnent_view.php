@@ -1,11 +1,12 @@
 <hr>
 <center><button type="button" class="btn btn bg-maroon margin">Fees Details</button><br>
 <div class="datatalberes" >
-  <input type="text" name="monthids" id="monthids" value="<?php echo $monthids_string; ?>" />
-  <input type="text" name="studentid" id="studentid" value="<?php echo $studentid; ?>" />
+  <input type="hidden" name="monthids" id="monthids" value="<?php echo $monthids_string; ?>" />
+  <input type="hidden" name="studentid" id="studentid" value="<?php echo $studentid; ?>" />
 
-   <input type="hidden" name="paymentID" id="paymentID" value="0" />
-   <input type="hidden" name="mode" id="mode" value="ADD" />
+   <input type="hidden" name="paymentID" id="paymentID" value="<?php if($mode=='EDIT'){echo $paymentID;}else{ echo "0";}?>" />
+  
+    <input type="hidden" name="mode" id="mode" value="<?php echo $mode; ?>" />
 
               <table class="table table-bordered table-striped  nowrap" style="border-collapse: collapse !important;width: 70%;outline: 1px solid #77609e;">
                 <thead>
@@ -57,7 +58,7 @@
               </table>
               </center>
 
-      <input type="text" name="total_pay_amount" id="total_pay_amount" value="<?php echo $total_amount;?>" />
+      <input type="hidden" name="total_pay_amount" id="total_pay_amount" value="<?php echo $total_amount;?>" />
               <?php
        $curr_dt = date('d/m/Y');     
 ?>
@@ -96,7 +97,7 @@
 
       
     </div>
-     <p id="paymentmsg" class="form_error" style="width: 655px;"></p> 
+     <p id="paymentmsg" class="form_error" style="width: 776px;"></p> 
      <p id="payment_err_msg" class="form_error"></p>
     <div class="form-group row" style="margin-top:20px;" >
 
@@ -105,5 +106,5 @@
 
               </div>
               <center> <div class="">
-              <button type="submit" class="btn btn-primary formBtn" id="paymentSave" style="display: inline-block;width:150px;">Save</button></center>
+              <button type="submit" class="btn btn-primary formBtn" id="paymentSave" style="display: inline-block;width:150px;"><?php echo $btnText;?></button></center>
             </div>

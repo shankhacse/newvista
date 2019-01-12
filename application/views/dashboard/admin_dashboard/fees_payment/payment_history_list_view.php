@@ -1,4 +1,4 @@
-<script src="<?php echo base_url(); ?>assets/js/adm_scripts/admission.js"></script>  
+<script src="<?php echo base_url(); ?>assets/js/adm_scripts/fees_payment.js"></script>  
 <link rel="stylesheet" href="<?php echo base_url();?>application/assets/css/admin_style.css" />     
 <style type="text/css">
   .searchby{
@@ -15,6 +15,7 @@
   
   margin-left: 170px;
 }
+.req-star-mark{color: red;}
 </style>
     <section class="content-header">
       <h1>
@@ -43,35 +44,33 @@
               echo form_open('',$attr); ?>
 
 
+       
+
             <div class="row">
-            <div class="col-md-4 "><label for="classList" class="searchby"> From Date </label> </div>
-            <div class="col-md-4">
-                      <div class="form-group">
-                     
-                     <input type="text"  class="form-control custom_frm_input datepicker"  name="payment_date" id="payment_date"  placeholder="" value="" style="width: 204px;" />
+            <div class="col-md-4 "><!-- <label for="classList" class="searchby"> From Date </label> --> </div>
+            <div class="col-md-2" style="">
+                <div class="form-group">
+                     <label for="reg_no">From Date<span class="req-star-mark">*</span></label>
+                     <input type="text"  class="form-control custom_frm_input datepicker"  name="from_date" id="from_date"  placeholder="dd-mm-yy" value="" style="" />
                         </div>
-                <label for="classList" class="orleb">OR</label>
             </div>
-
-            <div class="col-md-4 "><label for="classList" class="searchby"> To Date </label> </div>
-            <div class="col-md-4">
-                      <div class="form-group">
-                     
-                     <input type="text"  class="form-control custom_frm_input datepicker"  name="payment_date" id="payment_date"  placeholder="" value="" style="width: 204px;" />
+            <div class="col-md-2">
+                <div class="form-group">
+                     <label for="reg_no">To Date<span class="req-star-mark">*</span></label>
+                     <input type="text"  class="form-control custom_frm_input datepicker"  name="to_date" id="to_date"  placeholder="dd-mm-yy" value="" style="" />
                         </div>
-                <label for="classList" class="orleb">OR</label>
             </div>
-
-            
            </div>
 
-              <div class="row">
-            <div class="col-md-4 "><label for="classList" class="searchby"> Class </label> </div>
+         
+
+            <div class="row">
+            <div class="col-md-4 "><label for="classList" class="searchby">Class </label> </div>
             <div class="col-md-4">
                       <div class="form-group">
                      
                      
-                       <select id="sel_class" name="sel_class" class="form-control selectpicker"
+                       <select id="acdm_class" name="acdm_class" class="form-control selectpicker"
                         data-actions-box="true" data-live-search="true" >
                         <option value="">Select</option>
                           <?php 
@@ -98,9 +97,9 @@
                       <div class="form-group">
                      
                      
-                       <select id="sel_section" name="sel_section" class="form-control selectpicker"
+                       <select id="acdm_section" name="acdm_section" class="form-control selectpicker"
                         data-actions-box="true" data-live-search="true" >
-                         <option value="">Select</option>
+                         <option value="0">Select</option>
                           <?php 
                             if($bodycontent['sectionList'])
                             {
@@ -118,11 +117,28 @@
 
              
                 </div>
-            
 
+                <div class="row">
+            <div class="col-md-4 "><label for="classList" class="searchby"> Student </label> </div>
+            <div class="col-md-4">
+                   <div class="form-group">
+                          
+                        <div id="student_dropdown">
+                         <select id="studentid" name="studentid" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                         <option value="0">Select</option> 
+                         
+
+                        </select>
+                        </div>
+
+                        </div>
+            </div>
+           </div>
+            
+         <p id="payhismsg" class="form_error"></p>
                  <div class="row">
                     <div class="col-md-offset-4 col-md-4 btnview">
-              <button type="submit" class="btn btn-primary formBtn viewbtn" id="viewblocllist">View</button>
+              <button type="submit" class="btn btn-primary formBtn viewbtn" id="viewpaymenthistory">View</button>
               </div>
                  </div>
              <?php echo form_close(); ?>
@@ -132,7 +148,9 @@
              style="margin-left:auto;margin-right:auto;display:block;" />
            <p style="text-align:center;color:#055E87;letter-spacing:1px;">Please wait loading...</p>
             </div><br>
-            <section id="loadStudentList"> 
+            <section id="loadpaymentList"> 
+
+                   
                
 
              </section>

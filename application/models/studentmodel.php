@@ -12,7 +12,8 @@ class Studentmodel extends CI_Model{
 		$query = $this->db->select("student_master.*,
 									academic_details.*,
 									uploaded_documents_all.*,
-									uploaded_documents_all.id as docid
+									uploaded_documents_all.id as docid,
+									academic_details.id as academic_dtl_id
 									
 
 			")
@@ -189,7 +190,7 @@ class Studentmodel extends CI_Model{
 				->where($where)
 			    ->order_by('student_master.name')
 				->get();
-			
+			#q();
 			if($query->num_rows()> 0)
 			{
 	          foreach($query->result() as $rows)
