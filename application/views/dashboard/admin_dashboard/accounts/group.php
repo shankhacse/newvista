@@ -64,6 +64,8 @@
                            }else{
                                echo 'none';
                            }
+                        }else{
+                            echo 'none';
                         } ?>;">
                             <label class="radio-inline"><input type="radio" <?php if ($bodycontent['mode']=="EDIT"){
                                 if($bodycontent['editgroup']->sub_category=="A"){
@@ -84,6 +86,8 @@
                            }else{
                                echo 'none';
                            }
+                        }else{
+                            echo 'none';
                         } ?>;">
                             <label class="radio-inline"><input type="radio" name="sub_category" <?php if ($bodycontent['mode']=="EDIT"){
                                 if($bodycontent['editgroup']->sub_category=="I"){
@@ -100,7 +104,8 @@
                         <label class="checkbox-inline"><input type="checkbox" name="is_active" id="is_active" value="Y" checked>Active</label>
                         </div>
                         <div class="btnDiv">
-                        <button type="submit"  name="submit" id="submit" class="btn btn-primary"><?php echo $bodycontent['btnText'];?></button>
+                        <button type="submit"  name="submit" id="cassavebtn" class="btn formBtn btn-primary"><?php echo $bodycontent['btnText'];?></button>
+                        <span class="btn btn-primary formBtn loaderbtn" id="loaderbtn" style="display:none;"><i class="fa fa-spinner rotating" aria-hidden="true"></i> <?php echo $bodycontent['btnTextLoader']; ?></span>
                         </div>
                     </form>
                     <div class="response_msg" id="cas_response_msg">

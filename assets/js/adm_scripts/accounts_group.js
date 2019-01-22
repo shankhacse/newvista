@@ -21,6 +21,8 @@ $( document ).ready(function() {
         // console.log(formDataserialize);
         var type = "POST"; //for creating new resource
         var urlpath = basepath + 'accounts/GroupInsert';
+        $("#cassavebtn").css('display', 'none');
+            $("#loaderbtn").css('display', 'block');
 
         $.ajax({
             type: type,
@@ -46,12 +48,12 @@ $( document ).ready(function() {
                     $("#cas_response_msg").text(result.msg_data);
                 }
                 
-                // $("#loaderbtn").css('display', 'none');
+                $("#loaderbtn").css('display', 'none');
                 
-                // $("#cassavebtn").css({
-                //     "display": "block",
-                //     "margin": "0 auto"
-                // });
+                $("#cassavebtn").css({
+                    "display": "block",
+                    "margin": "0 auto"
+                });
             },
             error: function(jqXHR, exception) {
                 var msg = '';

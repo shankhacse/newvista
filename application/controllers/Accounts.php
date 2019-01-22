@@ -37,12 +37,14 @@ class Accounts extends CI_Controller
                 $result['module'] = "Group";		
                 $result['mode'] = "ADD";		
                 $result['btnText'] = "Submit";
+                $result['btnTextLoader'] = "Saving...";
                 $result['editgroup']=[];
                 	
             }else{
                 $result['module'] = "Group";	
                 $result['mode'] = "EDIT";	
                 $result['btnText'] = "Update";
+                $result['btnTextLoader'] = "Updating...";
                 $group_id = $this->uri->segment(3);
 				$whereAry = array(
 					'id' => $group_id
@@ -66,19 +68,20 @@ class Accounts extends CI_Controller
             $group_description=$this->input->post("group_description");
             $main_category=$this->input->post("main_category");
             $sub_category=$this->input->post("sub_category");
-            $mode=$this->input->post("mode");
+            $mode=$this->input->post("mode"); 
             if($this->input->post("is_active")=="Y" && $this->input->post("is_active")!="")
-            {
-                $is_active="Y";
-            }else{
-                $is_active="N";
-            }            
+                {
+                    $is_active="Y";
+                }else{
+                    $is_active="N";
+                } 
+            $insert_arr['is_active']=$is_active ;                      
             $table="group_master";
             $insert_arr['group_description']=$group_description ;
             $insert_arr['main_category']=$main_category ;
-            $insert_arr['sub_category']=$sub_category ;            
-            $insert_arr['is_active']=$is_active ;
+            $insert_arr['sub_category']=$sub_category ;     
             if ($mode=="ADD") {
+                
                 $insert_arr['is_special']="Y" ;
                 $insert=$this->commondatamodel->insertSingleTableData($table,$insert_arr);
             }else{
