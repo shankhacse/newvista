@@ -21,17 +21,26 @@ function groupFormValidation()
    if($("input[name='main_category']:checked").val() == null)
    {
     $("#main_category_div").addClass('has-error');
-    // $("#main_category1").focus();
+    $("#main_category1").focus();
     return false;
    }
-   if($("input[name='main_category']:checked").val() != null)
+   if($("#main_category1:checked").val() != null)
    {
-        if($("input[name='sub_category']:checked").val() == null)
-    {
-        $("#div_sub_category1").addClass('has-error');
-        // $("input[name='sub_category']:checked").focus();
-        return false;
-    }
+        if($("#div_sub_category1 input[name='sub_category']:checked").val() == null)
+        {
+            $("#div_sub_category1").addClass('has-error');
+            // $("input[name='sub_category']:checked").focus();
+            return false;
+        }
+   }
+   if($("#main_category2:checked").val() != null)
+   {       
+        if($("#div_sub_category2 input[name='sub_category']:checked").val() == null)
+        {
+            $("#div_sub_category2").addClass('has-error');
+            // $("input[name='sub_category']:checked").focus();
+            return false;
+        }
    }
    return true;
 }

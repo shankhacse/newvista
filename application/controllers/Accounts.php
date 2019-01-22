@@ -53,6 +53,7 @@ class Accounts extends CI_Controller
             $insert_arr['group_description']=$group_description ;
             $insert_arr['main_category']=$main_category ;
             $insert_arr['sub_category']=$sub_category ;
+            $insert_arr['is_special']="Y" ;
             $insert_arr['is_active']=$is_active ;
             $insert=$this->commondatamodel->insertSingleTableData($table,$insert_arr);
             if($insert)
