@@ -13,8 +13,13 @@ class Accounts extends CI_Controller
     {
         $session=$this->session->userdata('user_data');
         if($this->session->userdata('user_data'))
-		{
-        //echo "hii";
+		{           
+            $header = "";
+            $result['module'] = "Group";
+            $result['groupList']=$this->accountsmodel->getAllGroupList();
+            // print_r($result);exit;   
+			$page = "dashboard/admin_dashboard/accounts/group_list";
+			createbody_method($result, $page, $header, $session);
             
         }else{
             redirect('login','refresh');
@@ -25,8 +30,26 @@ class Accounts extends CI_Controller
         $session=$this->session->userdata('user_data');
         if($this->session->userdata('user_data'))
 		{
+            // echo "ID-".$this->uri->segment(3);exit;
+            if (empty($this->uri->segment(3)))
+			{
+               
+                $result['module'] = "Group";		
+                $result['mode'] = "ADD";		
+                $result['btnText'] = "Submit";
+                $result['editgroup']=[];
+                	
+            }else{
+                $result['module'] = "Group";	
+                $result['mode'] = "EDIT";	
+                $result['btnText'] = "Update";
+                $group_id = $this->uri->segment(3);
+				$whereAry = array(
+					'id' => $group_id
+                );
+                $result['editgroup'] = $this->commondatamodel->getSingleRowByWhereCls('group_master',$whereAry); 
+            }	
             $header = "";
-			$result['module'] = "Group";		
 			$page = "dashboard/admin_dashboard/accounts/group";
 			createbody_method($result, $page, $header, $session);
         }else{
@@ -39,10 +62,11 @@ class Accounts extends CI_Controller
         $session=$this->session->userdata('user_data');
         if($this->session->userdata('user_data'))
 		{
-            // print_r($this->input->post());exit;
+            //  print_r($this->input->post());exit;
             $group_description=$this->input->post("group_description");
             $main_category=$this->input->post("main_category");
             $sub_category=$this->input->post("sub_category");
+            $mode=$this->input->post("mode");
             if($this->input->post("is_active")=="Y" && $this->input->post("is_active")!="")
             {
                 $is_active="Y";
@@ -52,20 +76,36 @@ class Accounts extends CI_Controller
             $table="group_master";
             $insert_arr['group_description']=$group_description ;
             $insert_arr['main_category']=$main_category ;
-            $insert_arr['sub_category']=$sub_category ;
-            $insert_arr['is_special']="Y" ;
+            $insert_arr['sub_category']=$sub_category ;            
             $insert_arr['is_active']=$is_active ;
-            $insert=$this->commondatamodel->insertSingleTableData($table,$insert_arr);
+            if ($mode=="ADD") {
+                $insert_arr['is_special']="Y" ;
+                $insert=$this->commondatamodel->insertSingleTableData($table,$insert_arr);
+            }else{
+                $id=$this->input->post("id");
+                $insert_arr['is_special']=$this->input->post("is_special");
+                $whereAry = array(
+					'id' => $id
+                );                
+                $insert=$this->commondatamodel->updateSingleTableData($table,$insert_arr,$whereAry);
+            }
+           
             if($insert)
             {
-                $result['msg'] = '<div class="alert alert-success alert-dismissible"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Group Added Successfully</div>';
+                $json_response = array(
+                    "msg_status" => HTTP_SUCCESS,
+                    "msg_data" => "Saved successfully",
+                    "mode" => "ADD"
+                );
             }else{
-                $result['msg'] = '<div class="alert alert-danger alert-dismissible"> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>There is some problem.Try again</div>';
+                $json_response = array(
+                    "msg_status" => HTTP_FAIL,
+                    "msg_data" => "There is some problem.Try again"
+                );
             }
-            $result['module'] = "Group";
-            $header = "";					
-			$page = "dashboard/admin_dashboard/accounts/group";
-			createbody_method($result, $page, $header, $session);
+            header('Content-Type: application/json');
+			echo json_encode( $json_response );
+			exit;
         }else{
             redirect('login','refresh');
         }
