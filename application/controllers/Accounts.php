@@ -79,14 +79,13 @@ class Accounts extends CI_Controller
             $table="group_master";
             $insert_arr['group_description']=$group_description ;
             $insert_arr['main_category']=$main_category ;
-            $insert_arr['sub_category']=$sub_category ;     
-            if ($mode=="ADD") {
-                
-                $insert_arr['is_special']="Y" ;
+            $insert_arr['sub_category']=$sub_category ; 
+            $insert_arr['is_special']="Y" ;    
+            if ($mode=="ADD") {   
                 $insert=$this->commondatamodel->insertSingleTableData($table,$insert_arr);
             }else{
                 $id=$this->input->post("id");
-                $insert_arr['is_special']=$this->input->post("is_special");
+                // $insert_arr['is_special']=$this->input->post("is_special");
                 $whereAry = array(
 					'id' => $id
                 );                

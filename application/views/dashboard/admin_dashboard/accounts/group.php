@@ -33,7 +33,7 @@
                      if ($bodycontent['mode']=="EDIT") {
                     ?>
                         <input type="hidden" name="id" id="id" value="<?php echo $bodycontent['editgroup']->id;?>">
-                        <input type="hidden" name="is_special" id="is_special" value="<?php echo $bodycontent['editgroup']->is_special;?>">
+                        <!-- <input type="hidden" name="is_special" id="is_special" value="<?php echo $bodycontent['editgroup']->is_special;?>"> -->
                     <?php 
                      }
                     ?>
