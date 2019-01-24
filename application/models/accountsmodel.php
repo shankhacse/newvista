@@ -10,12 +10,13 @@ class Accountsmodel extends CI_Model
 
     public function getAllGroupList(){
 		$data = [];
-		$where=[
-			"is_active"=>"Y"
-		];
+		// $where=[
+		// 	// "is_active"=>"Y"
+		// ];
 		$query = $this->db->select("*")
 				->from('group_master')
-				->where($where)
+				// ->where($where)
+				->order_by("group_description", "asc")
 				->get();
 			
 			if($query->num_rows()> 0)
@@ -44,6 +45,7 @@ class Accountsmodel extends CI_Model
 				->join('group_master','account_master.group_id=group_master.id','left')
 				->join('account_opening_master','account_master.account_id=account_opening_master.account_master_id','left')
 				// ->where($where)
+				->order_by("account_master.account_name", "asc")
 				->get();
 			// echo $this->db->last_query();exit;
 			if($query->num_rows()> 0)

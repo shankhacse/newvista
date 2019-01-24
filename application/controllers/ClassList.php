@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class ClassList extends CI_Controller {
+class Classlist extends CI_Controller {
 	public function __construct()
 	{
 	    parent::__construct();
@@ -14,6 +14,7 @@ class ClassList extends CI_Controller {
 		$session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
 		{
+		  //  print_r("index");exit;
 			$header = "";
 			$result['classList'] = $this->classmodel->getAllClassList(); 
 			$page = "dashboard/admin_dashboard/ds-class/class_list_view";

@@ -490,9 +490,9 @@ class Studentmodel extends CI_Model{
 		//$dir = APPPATH . 'assets/application_extension/';
 		//$dir1 = $_SERVER['DOCUMENT_ROOT'].'/img';
 
-		//$dir1 = $_SERVER['DOCUMENT_ROOT'].'/newvista/assets/documents/profile_picture'; //server
+		$dir1 = $_SERVER['DOCUMENT_ROOT'].'/newvista/assets/documents/profile_picture'; //server
 
-		$dir1 = $_SERVER['DOCUMENT_ROOT'].'/newvista/assets/documents/profile_picture'; //local
+// 		$dir1 = $_SERVER['DOCUMENT_ROOT'].'/newvista/assets/documents/profile_picture'; //local
 		
 		//echo "<br>";
 		
@@ -545,7 +545,7 @@ class Studentmodel extends CI_Model{
         }
 
         // If File Not Changed Then insert Info
-        $countChanged = sizeof($data['isChangedFile']);
+     $countChanged = sizeof($data['isChangedFile']);
 
        // echo "Count Changed ".$countChanged;
       //  exit;
@@ -557,9 +557,9 @@ class Studentmodel extends CI_Model{
         	if($data['isChangedFile'][$k]=="N")
         	{   
 				$detail_array_edit =array(
-					"random_file_name" => $data['randomFileName'][$k],
+					"random_file_name" => $file_name,
 					"document_type_id" => $data['docType'][$k],
-					"user_file_name" => $data['prvFilename'][$k],
+					"user_file_name" => $data['userFilename'][$k],
 					"uploaded_file_desc" => $data['fileDesc'][$k],
 					"uploaded_on" => date('Y-m-d'),
 					"modified_on" => date('Y-m-d'),

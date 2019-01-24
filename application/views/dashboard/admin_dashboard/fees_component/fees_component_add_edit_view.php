@@ -62,7 +62,7 @@
                       {
                         foreach($bodycontent['accountList'] as $accountlist)
                         { ?>
-                            <option value="<?php echo $accountlist->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['feesComponentEditdata']->account_id==$accountlist->id){echo "selected";}else{echo "";} ?> ><?php echo $accountlist->account_name; ?></option>
+                            <option value="<?php echo $accountlist->account_id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['feesComponentEditdata']->account_id==$accountlist->account_id){echo "selected";}else{echo "";} ?> ><?php echo $accountlist->account_name; ?></option>
                       <?php   }
                       }
                       ?>

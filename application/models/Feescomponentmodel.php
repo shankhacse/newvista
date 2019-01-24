@@ -8,7 +8,7 @@ class Feescomponentmodel extends CI_Model{
         $where = array('fees_structure.school_id' =>$school_id);
 		$query = $this->db->select("fees_structure.*,account_master.account_name")
 				->from('fees_structure')
-				->join('account_master','account_master.id = fees_structure.account_id','left')
+				->join('account_master','account_master.account_id = fees_structure.account_id','left')
 				->where($where)
 			    ->order_by('fees_structure.id')
 				->get();
@@ -36,7 +36,7 @@ class Feescomponentmodel extends CI_Model{
 		$where = array('fees_structure.school_id' =>$school_id);
 		$query = $this->db->select("fees_structure.*,account_master.account_name")
 				->from('fees_structure')
-				->join('account_master','account_master.id = fees_structure.account_id','left')
+				->join('account_master','account_master.account_id = fees_structure.account_id','left')
 				->where($where)
 			    ->order_by('fees_structure.id')
 				->get();

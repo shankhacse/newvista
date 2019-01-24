@@ -653,7 +653,7 @@ echo base_url()."assets/documents/profile_picture/".$bodycontent['studentEditdat
                         <div class="form-group">
                           <label for="reg_no">Session<span class="req-star-mark">*</span></label>
                          <select id="academic_session" name="academic_session" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
-                         <option value="0">Select</option> 
+                         <!-- <option value="0">Select</option>  -->
                           <?php 
                           if($bodycontent['sessionList'])
                           {
@@ -671,7 +671,7 @@ echo base_url()."assets/documents/profile_picture/".$bodycontent['studentEditdat
 
                            <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group">
-                          <label for="reg_no">Class</label>
+                          <label for="reg_no">Class<span class="req-star-mark">*</span></label>
                          <select id="acdm_class" name="acdm_class" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
                           <?php 
@@ -691,7 +691,7 @@ echo base_url()."assets/documents/profile_picture/".$bodycontent['studentEditdat
 
                       <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group">
-                          <label for="reg_no">Section</label>
+                          <label for="reg_no">Section<span class="req-star-mark">*</span></label>
                          <select id="acdm_section" name="acdm_section" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
                           <?php 
@@ -711,7 +711,7 @@ echo base_url()."assets/documents/profile_picture/".$bodycontent['studentEditdat
 
                         <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group">
-                          <label for="reg_no">Roll</label>
+                          <label for="reg_no">Roll<span class="req-star-mark">*</span></label>
                         <input type="text" class="form-control forminputs removeerr" id="acdm_roll" name="acdm_roll" placeholder="Enter Roll" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->rollno; } ?>" />
 
                         </div>

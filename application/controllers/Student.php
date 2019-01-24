@@ -19,7 +19,7 @@ class Student extends CI_Controller {
 			$result = [];
 			$header = "";
 			$result['classList']=$this->commondatamodel->getAllDropdownData('class_master');
-			$result['sectionList']=$this->commondatamodel->getAllDropdownData('section_master');
+			$result['sectionList']=$this->commondatamodel->getAllDropdownData('section_master');//only current session need to fetch
 			$result['studentList']=$this->commondatamodel->getAllDropdownData('student_master');
 			createbody_method($result, $page, $header, $session);
 			
