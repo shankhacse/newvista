@@ -9,6 +9,8 @@ class Accounts extends CI_Controller
 		$this->load->model('commondatamodel','commondatamodel',TRUE);
     }
 
+    /* ******************* Group Section ******************* */
+
     public function index()
     {
         $session=$this->session->userdata('user_data');
@@ -18,7 +20,7 @@ class Accounts extends CI_Controller
             $result['module'] = "Group";
             $result['groupList']=$this->accountsmodel->getAllGroupList();
             // print_r($result);exit;   
-			$page = "dashboard/admin_dashboard/accounts/group_list";
+			$page = "dashboard/admin_dashboard/accounts/group/group_list";
 			createbody_method($result, $page, $header, $session);
             
         }else{
@@ -52,7 +54,7 @@ class Accounts extends CI_Controller
                 $result['editgroup'] = $this->commondatamodel->getSingleRowByWhereCls('group_master',$whereAry); 
             }	
             $header = "";
-			$page = "dashboard/admin_dashboard/accounts/group";
+			$page = "dashboard/admin_dashboard/accounts/group/group";
 			createbody_method($result, $page, $header, $session);
         }else{
 			redirect('login','refresh');
@@ -76,20 +78,41 @@ class Accounts extends CI_Controller
                     $is_active="N";
                 } 
             $insert_arr['is_active']=$is_active ;                      
-            $table="group_master";
             $insert_arr['group_description']=$group_description ;
             $insert_arr['main_category']=$main_category ;
             $insert_arr['sub_category']=$sub_category ; 
-            $insert_arr['is_special']="Y" ;    
-            if ($mode=="ADD") {   
-                $insert=$this->commondatamodel->insertSingleTableData($table,$insert_arr);
+            $insert_arr['is_special']="N" ;
+                
+            if ($mode=="ADD") {  
+                $user_activity = array(
+                    "activity_module" => 'account',
+                    "action" => 'Insert',
+                    "from_method" => 'account/GroupInsert',
+                    "user_id" => $session['userid'],
+                    "ip_address" => getUserIPAddress(),
+                    "user_browser" => getUserBrowserName(),
+                    "user_platform" => getUserPlatform()
+                 );
+                 $tbl_name = array('group_master','activity_log');
+                 $insert_array = array($insert_arr,$user_activity);
+                $insert=$this->commondatamodel->insertMultiTableData($tbl_name,$insert_array);
             }else{
+                $user_activity = array(
+                    "activity_module" => 'account',
+                    "action" => 'Update',
+                    "from_method" => 'account/GroupInsert',
+                    "user_id" => $session['userid'],
+                    "ip_address" => getUserIPAddress(),
+                    "user_browser" => getUserBrowserName(),
+                    "user_platform" => getUserPlatform()
+                 );
                 $id=$this->input->post("id");
                 // $insert_arr['is_special']=$this->input->post("is_special");
                 $whereAry = array(
 					'id' => $id
-                );                
-                $insert=$this->commondatamodel->updateSingleTableData($table,$insert_arr,$whereAry);
+                );    
+                $insert=$this->commondatamodel->updateData_WithUserActivity('group_master',$insert_arr,$whereAry,'activity_log',$user_activity);            
+                // $insert=$this->commondatamodel->updateSingleTableData($table,$insert_arr,$whereAry);
             }
            
             if($insert)
@@ -110,9 +133,165 @@ class Accounts extends CI_Controller
 			exit;
         }else{
             redirect('login','refresh');
-        }
-        
-        
+        }  
         
     }
+
+    /* ******************* Group Section End ******************* */
+
+
+    /* ******************* Account Section  ******************* */
+
+    public function account()
+    {
+        $session=$this->session->userdata('user_data');
+        if($this->session->userdata('user_data'))
+		{  
+
+            if (empty($this->uri->segment(3)))
+            {
+                
+                $result['module'] = "Add";
+                $result['mode'] = "ADD";
+                $result['btnText'] = "Submit";
+                $result['btnTextLoader'] = "Saving...";
+            }else{
+                $result['module'] = "Edit";	
+                $result['mode'] = "EDIT";	
+                $result['btnText'] = "Update";
+                $result['btnTextLoader'] = "Updating...";
+                $result['account_id'] = $this->uri->segment(3);
+                $result['group_id'] = $this->uri->segment(4);
+                $result['opening_balance'] = $this->uri->segment(5);                
+                $result['account_name'] = rawurldecode($this->uri->segment(6));
+                $result['is_active'] = $this->uri->segment(7);
+                $result['main_category'] = $this->uri->segment(8);
+
+            }
+            $header = "";
+            $result['groupList']=$this->accountsmodel->getAllGroupList();
+            
+			$page = "dashboard/admin_dashboard/accounts/account/account";
+			createbody_method($result, $page, $header, $session);
+            
+        }else{
+            redirect('login','refresh');
+        }
+    }
+
+    public function accountList()
+    {
+        $session=$this->session->userdata('user_data');
+        if($this->session->userdata('user_data'))
+		{           
+            $header = "";
+            $result['module'] = "List";
+            $result['accountList']=$this->accountsmodel->getAllDataForAcountList();
+            
+			$page = "dashboard/admin_dashboard/accounts/account/account_list";
+			createbody_method($result, $page, $header, $session);
+            
+        }else{
+            redirect('login','refresh');
+        }
+    }
+
+    public function accountAddEdit()
+    {
+        $session=$this->session->userdata('user_data');
+    //    pre($session);      
+        if($this->session->userdata('user_data'))
+		{ 
+            $acd_session_id=$session['acd_session_id'];
+            $school_id=$session['school_id'];
+            $userid=$session['userid'];
+            //  print_r($this->input->post());exit;
+             $account_name =$this->input->post('account_name');
+             $group_id =$this->input->post('group_id');
+             $opening_balance =$this->input->post('opening_balance');
+             $mode =$this->input->post('mode');
+             if($this->input->post("is_active")=="Y" && $this->input->post("is_active")!="")
+                {
+                    $is_active="Y";
+                }else{
+                    $is_active="N";
+                }            
+             $is_special='N';
+
+             if($mode=="ADD")
+             {
+                $user_activity = array(
+                    "activity_module" => 'account',
+                    "action" => 'Insert',
+                    "from_method" => 'account/accountAddEdit',
+                    "user_id" => $session['userid'],
+                    "ip_address" => getUserIPAddress(),
+                    "user_browser" => getUserBrowserName(),
+                    "user_platform" => getUserPlatform()
+                 );
+
+                $insert=$this->accountsmodel->insertAccount($account_name,$group_id,$is_special,$is_active,$school_id,$userid,$acd_session_id,$opening_balance,$user_activity);
+             }else{
+                $account_id =$this->input->post('account_id');
+                $data1=[
+                    "account_name"=>$account_name,
+                    "group_id"=>$group_id,
+                    "is_active"=>$is_active
+                ];
+                $where=[
+                    "account_id"=>$account_id,
+                    "school_id"=>$school_id,
+                    "created_by"=>$userid
+                ];
+                $data2=[
+                    "account_master_id"=>$account_id,
+                    "acdm_session_id"=>$acd_session_id,
+                    "opening_balance"=>$opening_balance,
+                    "created_by"=>$userid
+                ];
+                $user_activity = array(
+                    "activity_module" => 'account',
+                    "action" => 'Update',
+                    "from_method" => 'account/accountAddEdit',
+                    "user_id" => $session['userid'],
+                    "ip_address" => getUserIPAddress(),
+                    "user_browser" => getUserBrowserName(),
+                    "user_platform" => getUserPlatform()
+                 );
+                $insert=$this->accountsmodel->updateAccountMaster($data1,$where,$data2,$user_activity);
+             }
+             
+
+
+             if($insert)
+             {
+                 $json_response = array(
+                     "msg_status" => HTTP_SUCCESS,
+                     "msg_data" => "Saved successfully",
+                     "mode" => "ADD"
+                 );
+             }else{
+                 $json_response = array(
+                     "msg_status" => HTTP_FAIL,
+                     "msg_data" => "There is some problem.Try again"
+                 );
+             }
+             header('Content-Type: application/json');
+             echo json_encode( $json_response );
+             exit;
+
+        }else{
+            redirect('login','refresh');
+        } 
+    }
+
+
+    /* ******************* Account Section End ******************* */
+
+
+
+
+
+
+
 }

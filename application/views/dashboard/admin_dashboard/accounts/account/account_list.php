@@ -6,7 +6,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="<?php echo base_url(); ?>dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Group List</li>
+        <li class="active">Account List</li>
       </ol>
     </section>
 
@@ -15,8 +15,8 @@
 
 		    <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Group List</h3>&nbsp;
-              <a href="<?php echo base_url();?>accounts/group" class="link_tab"><span class="glyphicon glyphicon-plus"></span> ADD</a>
+              <h3 class="box-title">Account List</h3>&nbsp;
+              <a href="<?php echo base_url();?>accounts/account" class="link_tab"><span class="glyphicon glyphicon-plus"></span> ADD</a>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -25,10 +25,9 @@
                 <thead>
                 <tr>
                   <th style="width:10%;">Sl</th>
-                  <th>Description</th>
-                  <th>Main Category</th>
-                  <th>Sub Category</th>
-                  <th>Special</th>
+                  <th>Account</th>
+                  <th>Group</th>
+                  <th>Opening Balance</th>
                   <th>Active</th>
                   <!-- <th style="width:10%;">Status</th> -->
                   <th style="text-align:right;width:5%;">Action</th>
@@ -37,27 +36,27 @@
                 <tbody>
                
               	<?php 
-				// print_r($bodycontent['groupList']);
+				// print_r($bodycontent['accountList']);
               		$i = 1;
-              		foreach ($bodycontent['groupList'] as $value) { 
+              		foreach ($bodycontent['accountList'] as $value) { 
               		
               		?>
 
 					<tr>
 						<td><?php echo $i++; ?></td>
+            <td><?php echo $value->account_name; ?></td>
             <td><?php echo $value->group_description; ?></td>
-            <td><?php echo $value->main_category; ?></td>
-            <td><?php echo $value->sub_category; ?></td>
-            <td><?php echo $value->is_special; ?></td>
-            <td><?php echo $value->is_active; ?></td>
+            <td><?php echo $value->opening_balance; ?></td>
+            <td><?php echo $value->account_is_active; ?></td>
 				
 						
 						
 						<td align="center"> 
-							<a href="<?php echo base_url(); ?>accounts/group/<?php echo $value->id; ?>" class="btn btn-primary btn-xs" data-title="Edit">
+            <?php if($value->account_is_special!="Y"){ ?>
+							<a href="<?php echo base_url(); ?>accounts/account/<?php echo $value->account_id; ?>/<?php echo $value->group_id; ?>/<?php echo $value->opening_balance; ?>/<?php echo rawurlencode($value->account_name); ?>/<?php echo $value->account_is_active; ?>" class="btn btn-primary btn-xs" data-title="Edit">
 								<span class="glyphicon glyphicon-pencil"></span>
 							</a>
-						
+            <?php } ?>
 						</td>
 					</tr>
               			
