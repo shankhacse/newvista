@@ -72,7 +72,9 @@
 
                        <div class="col-md-4 col-sm-12 col-xs-12">
                     <div class="form-group">
-                <label>Date of Admission<span class="req-star-mark">*</span></label>
+                <label>Date of Admission
+                <!-- <span class="req-star-mark">*</span> -->
+                </label>
 
                 <div class="input-group date">
                   <div class="input-group-addon">
@@ -100,7 +102,9 @@
 
                           <div class="col-md-4 col-sm-12 col-xs-12">
                          <div class="form-group">
-                            <label>Date of Birth<span class="req-star-mark">*</span></label>
+                            <label>Date of Birth
+                            <!-- <span class="req-star-mark">*</span> -->
+                            </label>
 
                             <div class="input-group date">
                               <div class="input-group-addon">
@@ -660,14 +664,14 @@ echo base_url()."assets/documents/profile_picture/".$bodycontent['studentEditdat
                           foreach($bodycontent['sessionList'] as $value)
                           { ?>
                             <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->acdm_session_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->start_yr."-".$value->end_yr; ?></option>
-                      <?php   }
+                        <?php   }
                           }
                           ?>
 
                         </select>
 
                         </div>
-                      </div>
+                        </div>
 
                            <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group">
@@ -680,18 +684,18 @@ echo base_url()."assets/documents/profile_picture/".$bodycontent['studentEditdat
                           foreach($bodycontent['classList'] as $value)
                           { ?>
                             <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->class_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->classname; ?></option>
-                      <?php   }
+                        <?php   }
                           }
                           ?>
 
                         </select>
 
                         </div>
-                      </div>
+                        </div>
 
-                      <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="form-group">
-                          <label for="reg_no">Section<span class="req-star-mark">*</span></label>
+                          <label for="reg_no">Section</label>
                          <select id="acdm_section" name="acdm_section" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
                           <?php 
@@ -700,25 +704,53 @@ echo base_url()."assets/documents/profile_picture/".$bodycontent['studentEditdat
                           foreach($bodycontent['sectionList'] as $value)
                           { ?>
                             <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->section_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->section; ?></option>
-                      <?php   }
+                        <?php   }
                           }
                           ?>
 
                         </select>
 
                         </div>
-                      </div>
+                        </div>
 
                         <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="form-group">
-                          <label for="reg_no">Roll<span class="req-star-mark">*</span></label>
-                        <input type="text" class="form-control forminputs removeerr" id="acdm_roll" name="acdm_roll" placeholder="Enter Roll" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->rollno; } ?>" />
+                          <div class="form-group">
+                            <label for="reg_no">Roll</label>
+                            <input type="text" class="form-control forminputs removeerr" id="acdm_roll" name="acdm_roll" placeholder="Enter Roll" autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->rollno; } ?>" />
 
+                          </div>
+                            
                         </div>
-                          
-                        </div>
+                        
                    
                       </div>
+                      <p class="formSubTitle"><span class="glyphicon glyphicon-pencil"></span>Account Details</p>
+                   <div class="row">
+                      <div class="col-md-12">
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                          <div class="form-group">
+                          <?php if($bodycontent['mode']=="EDIT"){echo "<input type='hidden' name='account' id='account' value='".$bodycontent['studentEditdata']->account_id."'>";} ?> 
+                            <label for="account_group">Account Group<span class="req-star-mark">*</span></label>
+                          <select id="account_group" name="account_group" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                          <option value="">Select Group</option> 
+                            <?php 
+                            if($bodycontent['accountGroupList'])
+                            {
+                              // pre($bodycontent['groupIdToselect']->group_id);
+                            foreach($bodycontent['accountGroupList'] as $value)
+                            { ?>
+                           
+                              <option value="<?php echo $value->id; ?>"  <?php if(($bodycontent['mode']=="EDIT" && !empty($bodycontent['groupIdToselect']))){if($bodycontent['groupIdToselect']->group_id==$value->id){echo "selected";}else{echo "";}} ?> ><?php echo $value->group_description; ?></option>
+                          <?php   }
+                            }
+                            ?>
+
+                          </select>
+
+                          </div>
+                        </div>
+                      </div>
+                   </div>
                       <?php if($bodycontent['mode']=="EDIT"){?>
 
                        <p class="formSubTitle"><span class="glyphicon glyphicon-pencil"></span> Academic Historical data</p>
@@ -768,7 +800,10 @@ echo base_url()."assets/documents/profile_picture/".$bodycontent['studentEditdat
 
 
                        </div>
+                       
                    </div>
+                  
+                  
 
                   <p id="admmsg" class="form_error"></p>
 

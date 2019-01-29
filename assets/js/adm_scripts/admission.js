@@ -421,6 +421,7 @@ function validateAdmission()
     var acdm_class = $("#acdm_class").val();
     var acdm_section = $("#acdm_section").val();
     var acdm_roll = $("#acdm_roll").val();
+    var account_group = $("#account_group option:selected").val();
 
 
 
@@ -446,11 +447,21 @@ function validateAdmission()
         return false;
     }
 
-     if(admdt=="")
+    //  if(admdt=="")
+    // {
+    //     $("#admdt").focus();
+    //     $("#admmsg")
+    //     .text("Error : Select Admission Date")
+    //     .addClass("form_error")
+    //     .css("display", "block");
+    //     return false;
+    // }
+
+     if(account_group=="")
     {
-        $("#admdt").focus();
+        $("#account_group").focus();
         $("#admmsg")
-        .text("Error : Select Admission Date")
+        .text("Error : Select Account Group")
         .addClass("form_error")
         .css("display", "block");
         return false;
@@ -466,15 +477,15 @@ function validateAdmission()
         return false;
     }
 
-    if(studentdob=="")
-    {
-        $("#studentdob").focus();
-        $("#admmsg")
-        .text("Error : Enter date of birth")
-        .addClass("form_error")
-        .css("display", "block");
-        return false;
-    }
+    // if(studentdob=="")
+    // {
+    //     $("#studentdob").focus();
+    //     $("#admmsg")
+    //     .text("Error : Enter date of birth")
+    //     .addClass("form_error")
+    //     .css("display", "block");
+    //     return false;
+    // }
 
     if(gender=="0")
     {
@@ -547,25 +558,25 @@ function validateAdmission()
         return false;
     }
 
-    if(acdm_section=="0")
-    {
-        $("#acdm_section").focus();
-        $("#admmsg")
-        .text("Error : Select section")
-        .addClass("form_error")
-        .css("display", "block");
-        return false;
-    }
+    // if(acdm_section=="0")
+    // {
+    //     $("#acdm_section").focus();
+    //     $("#admmsg")
+    //     .text("Error : Select section")
+    //     .addClass("form_error")
+    //     .css("display", "block");
+    //     return false;
+    // }
 
-    if(acdm_roll=="")
-    {
-        $("#acdm_roll").focus();
-        $("#admmsg")
-        .text("Error : Enter Roll")
-        .addClass("form_error")
-        .css("display", "block");
-        return false;
-    }
+    // if(acdm_roll=="")
+    // {
+    //     $("#acdm_roll").focus();
+    //     $("#admmsg")
+    //     .text("Error : Enter Roll")
+    //     .addClass("form_error")
+    //     .css("display", "block");
+    //     return false;
+    // }
  
  
     return true;

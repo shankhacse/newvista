@@ -1,6 +1,12 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Studentmodel extends CI_Model{
+	public function __construct()
+    {
+        parent::__construct();
+		
+		$this->load->model('commondatamodel','commondatamodel',TRUE);
+    }
 
 	public function getStudentDataEditbyId($student_id,$acd_session_id){
 		$data = [];
@@ -20,12 +26,12 @@ class Studentmodel extends CI_Model{
 				->from('student_master')
 				->join('academic_details','academic_details.student_id = student_master.student_id','INNER')
 				->join('class_master','class_master.id = academic_details.class_id','INNER')
-				->join('section_master','section_master.id = academic_details.section_id','INNER')
+				->join('section_master','section_master.id = academic_details.section_id','LEFT')
 				->join('uploaded_documents_all','uploaded_documents_all.upload_from_module_id = student_master.student_id and uploaded_documents_all.upload_from_module="Admission"','left')
 				->where($where)
 			    ->limit(1)
 				->get();
-			#q();
+			// q();
 			if($query->num_rows()> 0)
 				{
 		           $row = $query->row();
@@ -109,11 +115,11 @@ class Studentmodel extends CI_Model{
 				->from('student_master')
 				->join('academic_details','academic_details.student_id = student_master.student_id','INNER')
 				->join('class_master','class_master.id = academic_details.class_id','INNER')
-				->join('section_master','section_master.id = academic_details.section_id','INNER')
+				->join('section_master','section_master.id = academic_details.section_id','LEFT')
 				->where($where)
 			    ->order_by('student_master.name')
 				->get();
-			
+			// q();
 			if($query->num_rows()> 0)
 			{
 	          foreach($query->result() as $rows)
@@ -147,7 +153,7 @@ class Studentmodel extends CI_Model{
 				->from('student_master')
 				->join('academic_details','academic_details.student_id = student_master.student_id','INNER')
 				->join('class_master','class_master.id = academic_details.class_id','INNER')
-				->join('section_master','section_master.id = academic_details.section_id','INNER')
+				->join('section_master','section_master.id = academic_details.section_id','LEFT')
 				->where($where)
 			    ->order_by('student_master.name')
 				->get();
@@ -186,7 +192,7 @@ class Studentmodel extends CI_Model{
 				->from('student_master')
 				->join('academic_details','academic_details.student_id = student_master.student_id','INNER')
 				->join('class_master','class_master.id = academic_details.class_id','INNER')
-				->join('section_master','section_master.id = academic_details.section_id','INNER')
+				->join('section_master','section_master.id = academic_details.section_id','LEFT')
 				->where($where)
 			    ->order_by('student_master.name')
 				->get();
@@ -273,6 +279,7 @@ class Studentmodel extends CI_Model{
 				'pin_code' => $data['pin_code'], 
 				'state_id' => $data['state_id'], 
 				'dist_id' => $data['dist_id'], 
+				'account_id' =>$this->accountMasterLastId($data['name'],$data['account_id'],$sesion_data['userid'],$session['school_id']), 
 
 				'is_file_uploaded' => $is_file_uploaded,  
 				 
@@ -376,6 +383,15 @@ class Studentmodel extends CI_Model{
 
 
 			$upd_where = array("student_master.student_id" => $data['studentID']);
+			$data_account=[
+				"account_name"=>$data['name'],
+				"group_id"=>$data['account_id'],
+			];
+			$where_account=[
+				"account_id"=>$data['account'],
+				"school_id"=>$sesion_data['school_id']
+			];
+			$this->commondatamodel->updateSingleTableData('account_master',$data_account,$where_account);
 
 				$insert_student_data = array(
 				
@@ -410,6 +426,8 @@ class Studentmodel extends CI_Model{
 				'pin_code' => $data['pin_code'], 
 				'state_id' => $data['state_id'], 
 				'dist_id' => $data['dist_id'], 
+				// 'account_id' =>$this->accountMasterLastId($data['name'],$data['account_id'],$sesion_data['userid'],$session['school_id']), 
+				'account_id' =>$data['account'], 
 
 				 
 				 
@@ -576,6 +594,23 @@ class Studentmodel extends CI_Model{
 			}
         }
 
+	}
+
+
+	/* account master id */
+	public function accountMasterLastId($account_name,$Group_id,$created_by,$school_id)
+	{
+		$data=[
+			"account_name"=>$account_name,
+			"group_id"=>$Group_id,
+			"school_id"=>$school_id,
+			"is_special"=>"Y",
+			"is_active"=>"Y",
+			"created_By"=>$created_by
+		];
+		$this->db->insert('account_master', $data);
+		    $insert_ID = $this->db->insert_id();
+            return $insert_ID;
 	}
 
 

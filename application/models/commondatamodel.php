@@ -385,7 +385,8 @@ class Commondatamodel extends CI_Model{
         public function duplicateValueCheck($table="",$where="")
         {
             
-            $query = $this->db->select("*")->from($table)->where($where)->get();
+			$query = $this->db->select("*")->from($table)->where($where)->get();
+			
             if($query->num_rows()>0){
 			return TRUE;
 		}

@@ -6,6 +6,7 @@ class Student extends CI_Controller {
 	    parent::__construct();
 		$this->load->library('session');
 		$this->load->model('studentmodel','studentmodel',TRUE);
+		$this->load->model('accountsmodel','accountsmodel',TRUE);
 	}
 
 
@@ -59,6 +60,10 @@ class Student extends CI_Controller {
 
 //pre($result['studentEditdata']);exit;
 				$result['studentAcademicData'] = $this->studentmodel->getStudentAcademicHistory($studentID);
+				$where_account=[
+					"account_id"=>$result['studentEditdata']->account_id
+				];
+				$result['groupIdToselect']=$this->commondatamodel->getSingleRowByWhereCls('account_master',$where_account);//group id
 				
 				
 			}
@@ -74,6 +79,8 @@ class Student extends CI_Controller {
 
 			$where_dist = array('district.state_id' => 41, ); /*41:west bengal*/
 			$result['districtList']=$this->commondatamodel->getAllRecordWhere('district',$where_dist);
+
+			$result['accountGroupList']=$this->accountsmodel->getAllGroupList();
 
 			$where_acd_session = array('academic_session_master.id' =>$session['acd_session_id'] );
 			$result['sessionList']=$this->commondatamodel->getAllRecordWhere('academic_session_master',$where_acd_session);
@@ -141,6 +148,7 @@ public function saveStudent()
 		$session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
 		{
+			// pre($this->input->post());exit;
 			$student_array = array();
 			$user_activity = array();
 			$tbl_name = array();
@@ -218,6 +226,8 @@ public function saveStudent()
 				"class_id" => $this->input->post('acdm_class'),
 				"section_id" => $this->input->post('acdm_section'),
 				"rollno" => $this->input->post('acdm_roll'),
+				"account_id" => $this->input->post('account_group'),
+				
 
 				"docType" => $docType,
 				"userFilename" => $userFilename,
@@ -241,6 +251,7 @@ public function saveStudent()
 					'isChangedFile' => $isFileChanged ,
 					'randomFileName' => $randomFileName, 
 					'prvFilename' => $prvFilename, 
+					"account" => $this->input->post('account'),
 					'docDetailIDs' => $docDetailIDs 
 				);
 
