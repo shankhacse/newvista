@@ -606,6 +606,7 @@ class Studentmodel extends CI_Model{
 			"school_id"=>$school_id,
 			"is_special"=>"Y",
 			"is_active"=>"Y",
+			"from_where"=>"O",
 			"created_By"=>$created_by
 		];
 		$this->db->insert('account_master', $data);

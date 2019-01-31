@@ -1,9 +1,7 @@
 <script src="<?php echo base_url(); ?>assets/js/adm_scripts/accounts_account.js"></script>  
 <?php
-if(isset($bodycontent['test']))
-{
-    print_r($bodycontent['test']);
-}
+
+    // print_r($bodycontent['acountEditData']);
 
 ?>
 <section class="content-header">
@@ -29,40 +27,54 @@ if(isset($bodycontent['test']))
                 <div class="box-body">                    
                     <form method="post" id="accountForm" >
                         <?php if($bodycontent['mode']=="EDIT"){
-                            echo '<input type="hidden" name="account_id" id="account_id" value="'.$bodycontent["account_id"].'">';
+                            echo '<input type="hidden" name="account_id" id="account_id" value="'.$bodycontent["acountEditData"]->account_id.'">';
                         }  ?>
                     <input type="hidden" name="mode" id="mode" value="<?php echo $bodycontent['mode'];?>">
                         <div id="account_name_div" class="form-group">                            
                             <label for="account_name">Account *</label>
-                            <input type="text" class="form-control" name="account_name" id="account_name" value="<?php if ($bodycontent['mode']=="EDIT"){ echo $bodycontent['account_name'];} ?>"  placeholder="Account" required>
+                            <input type="text" class="form-control" name="account_name" id="account_name" <?php if ($bodycontent['mode']=="EDIT"){ echo "value='".$bodycontent['acountEditData']->account_name."'";
+                            if ($bodycontent['acountEditData']->from_where=="O" && $bodycontent['acountEditData']->is_special=="N") {
+                                echo "  readonly";
+                            }
+                            } ?>  placeholder="Account" >
                         </div>
-                        <div id="group_id_div" class="form-group">                            
+                        <div id="group_id_div" class="form-group">
+                            <?php if ($bodycontent['mode']=="EDIT"){
+                                    if ($bodycontent['acountEditData']->from_where=="O" && $bodycontent['acountEditData']->is_special=="N") {
+                                        echo '<input type="hidden" name="group_id" id="group_id" value="'.$bodycontent["acountEditData"]->group_id.'" >';
+                                    }                              
+                                    
+                            } ?>                            
                             <label for="group_id">Group *</label>
-                            <select class="form-control selectpicker" data-show-subtext="true" name="group_id" id="group_id" data-live-search="true" required>
+                            <select class="form-control selectpicker" data-show-subtext="true" name="group_id" id="group_id" data-live-search="true"
+                            <?php if ($bodycontent['mode']=="EDIT"){
+                                 if ($bodycontent['acountEditData']->from_where=="O" && $bodycontent['acountEditData']->is_special=="N") {
+                                    echo "  disabled";
+                                }
+                             }?> >
                             <option  value="0">Select Group</option>
                             <?php foreach ($bodycontent['groupList'] as $value) { ?>
                                 <option  value="<?php echo $value->id; ?>" data-tokens="<?php echo $value->group_description; ?>" 
                                 <?php if ($bodycontent['mode']=="EDIT"){
-                                    if ($bodycontent['group_id']==$value->id) {
+                                    if ($bodycontent['acountEditData']->group_id==$value->id) {
                                         echo " selected";
                                     }
+                                    
                                 } ?>
                                 ><?php echo $value->group_description; ?></option>   
-                            <?php  }  ?>
-                                
-                                <!-- <option data-tokens="mustard">Burger, Shake and a Smile</option>
-                                <option data-tokens="frosting">Sugar, Spice and all things nice</option> -->
+                            <?php  }  ?>                                
+                               
                             </select>
                         </div>
                         <div id="opening_balance_div" class="form-group" >                            
                             <label for="opening_balance">Opening Balance</label>
-                            <input type="number" class="form-control" name="opening_balance" id="opening_balance" value="<?php if ($bodycontent['mode']=="EDIT"){ echo $bodycontent['opening_balance'] ;} ?>"  placeholder="Account">
+                            <input type="number" class="form-control" name="opening_balance" id="opening_balance" <?php if ($bodycontent['mode']=="EDIT"){ echo "value=".$bodycontent['acountEditData']->opening_balance; }?>  placeholder="Opening Balance">
                         </div>
                         <div class="form-group">
                             <label class="checkbox-inline">
                                 <input type="checkbox" name="is_active" id="is_active" value="Y"  
                                 <?php if ($bodycontent['mode']=="EDIT"){ 
-                                    if($bodycontent['is_active']=="Y")
+                                    if($bodycontent['acountEditData']->is_active=="Y")
                                     {
                                         echo "checked";
                                     }

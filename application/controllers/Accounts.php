@@ -161,11 +161,8 @@ class Accounts extends CI_Controller
                 $result['btnText'] = "Update";
                 $result['btnTextLoader'] = "Updating...";
                 $result['account_id'] = $this->uri->segment(3);
-                $result['group_id'] = $this->uri->segment(4);
-                $result['opening_balance'] = $this->uri->segment(5);                
-                $result['account_name'] = rawurldecode($this->uri->segment(6));
-                $result['is_active'] = $this->uri->segment(7);
-                $result['main_category'] = $this->uri->segment(8);
+                $result['acountEditData']=$this->accountsmodel->getAcountEditData($this->uri->segment(3));
+                // pre($result['acountEditData']);              
 
             }
             $header = "";

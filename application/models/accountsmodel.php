@@ -107,8 +107,7 @@ class Accountsmodel extends CI_Model
 
 	public function updateAccountMaster($data1,$where,$data2,$user_activity)
 	{
-		$this->db->trans_begin();
-            //$this->db->where($where);
+		$this->db->trans_begin();            
 			$this->db->update('account_master',$data1,$where);
 			$this->db->last_query();
             //$affectedRow = $this->db->affected_rows();
@@ -121,7 +120,6 @@ class Accountsmodel extends CI_Model
 				if($insert){
 					$this->commondatamodel->insertSingleTableData('activity_log',$user_activity);
 					$this->db->trans_commit();
-					// $lastinsert_id;
 					return true;
 				}else{
 					$this->db->trans_rollback();					
@@ -155,4 +153,34 @@ class Accountsmodel extends CI_Model
 			return true;
 		}
 	}
-}
+
+	public function getAcountEditData($id)
+	{
+		$data=array();
+		$where=[
+			"account_master.account_id"=>$id
+		];
+		$query=$this->db->select("*")
+						->from('account_master')
+						->join('account_opening_master','account_master.account_id=account_opening_master.account_master_id','left')	
+						->where($where)	
+						->limit(1)				
+						->get();
+										
+		if($query->num_rows()> 0)
+		{
+	        foreach($query->result() as $rows)
+			{
+				$data= $rows;
+			}
+	             
+	    }
+		return $data;
+
+	}
+
+
+
+
+
+}/* end of class */
