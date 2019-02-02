@@ -135,7 +135,7 @@
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="javascript:;" class="logo">
+    <a href="<?php echo base_url();?>dashboard" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>+</b>NV</span>
       <!-- logo for regular state and mobile devices -->
@@ -537,7 +537,7 @@
 		}
 		
 		?>
-		
+		<li><a href="javascript:void(0);" data-backdrop="static" data-keyboard="false"  data-toggle="modal" data-target="#ChangeAcademicSession"><i class="fa fa-circle-o text-aqua"></i><span>Change Academic Session</span></a></li>
        <!--
         <li class="treeview">
           <a href="#">
@@ -955,7 +955,40 @@
    </div>
 </div>
 
-
+<!-- Change academic session Modal -->
+<div class="modal fade centered-modal" id="ChangeAcademicSession" tabindex="-1" role="dialog" aria-labelledby="ChangeAcademicSessionLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header"> 
+      <span>Change Academic Session</span>      
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row">                     
+          <div class="col-md-12">                     
+            <form class="form-inline" method="post" action="<?php echo base_url();?>Resetacdsession" id="AcademicSessionForm">
+            <div class="row">
+              <div class="form-group col-md-6 offset-md-6">
+                <label class="sr-only" for="AcademicSession">Academic Session</label>
+                <select class="form-control selectpicker" data-show-subtext="true" name="AcademicSession" id="AcademicSession" data-live-search="true">
+                  <option  value="0">Select Academic Session</option>
+                    <?php foreach ($acdSessionList as $value) { ?>
+                      <option  value="<?php echo $value->id; ?>"><?php echo $value->start_yr."-".$value->end_yr; ?></option>   
+                    <?php  }  ?>                   
+                </select>
+              </div>
+              <button type="submit"  class="btn btn-primary">Change</button>
+            </div>
+            </form>          
+          </div>
+          </div>
+      </div>
+     
+    </div>
+  </div>
+</div>
 
 
 

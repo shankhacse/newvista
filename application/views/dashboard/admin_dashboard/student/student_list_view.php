@@ -56,17 +56,38 @@
                             {
                               foreach($bodycontent['studentList'] as $value)
                               { ?>
-                    <option value="<?php echo $value->student_id; ?>"><?php echo $value->reg_no ; ?></option>
+                                <option value="<?php echo $value->student_id; ?>"><?php echo $value->reg_no ; ?></option>
                             <?php 
                               }
                             }
                           ?>
                         </select>
                         </div>
-                <label for="classList" class="orleb">OR</label>
+                      <label for="classList" class="orleb">OR</label>
                   </div>
-
-            
+                </div>
+            <div class="row">
+            <div class="col-md-4 "><label for="classList" class="searchby"> Student Name </label> </div>
+            <div class="col-md-4">
+                      <div class="form-group">
+                     
+                     <select id="sel_name" name="sel_name" class="form-control selectpicker"
+                        data-actions-box="true" data-live-search="true" >
+                        <option value="">Select</option>
+                          <?php 
+                            if($bodycontent['StudentNameList'])
+                            {
+                              foreach($bodycontent['StudentNameList'] as $value)
+                              { ?>
+                                <option value="<?php echo $value->name; ?>"><?php echo $value->name ; ?></option>
+                            <?php 
+                              }
+                            }
+                          ?>
+                        </select>
+                        </div>
+                      <label for="classList" class="orleb">OR</label>
+                  </div>
                 </div>
               <div class="row">
             <div class="col-md-4 "><label for="classList" class="searchby"> Class </label> </div>

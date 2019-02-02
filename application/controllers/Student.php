@@ -22,6 +22,8 @@ class Student extends CI_Controller {
 			$result['classList']=$this->commondatamodel->getAllDropdownData('class_master');
 			$result['sectionList']=$this->commondatamodel->getAllDropdownData('section_master');//only current session need to fetch
 			$result['studentList']=$this->commondatamodel->getAllDropdownData('student_master');
+			$result['studentList']=$this->commondatamodel->getAllDropdownData('student_master');
+			$result['StudentNameList']=$this->studentmodel->getStudentNameListGroupByName();
 			createbody_method($result, $page, $header, $session);
 			
 		}
@@ -194,8 +196,10 @@ public function saveStudent()
 				"name" => trim($this->input->post('student_name')),
 				"gender_id" => $this->input->post('gender'),
 				"blood_gr_id" => $this->input->post('bloodgroup'),
-				"caste_id" => $this->input->post('caste'),
-				"religion_id" => $this->input->post('religion'),
+				// "caste_id" => $this->input->post('caste'),
+				// "religion_id" => $this->input->post('religion'),
+				"caste_id" =>NULL,
+				"religion_id" =>NULL,
 				"father_name" => trim($this->input->post('father_name')),
 				"father_contact_no" => trim($this->input->post('father_contact_no')),
 				"father_occupation_id" => $this->input->post('father_occupation'),
@@ -430,6 +434,11 @@ public function checkFromSl()
 				
 			$result['studentList'] = $this->studentmodel->getStudentbyStudentId($student_id); 	
            
+			}elseif($dataArry['sel_name']!=""){
+				$sel_name=$dataArry['sel_name'];
+				
+				$result['studentList'] = $this->studentmodel->getStudentListbyName($sel_name); 
+
 			}elseif($dataArry['sel_class']!="" && $dataArry['sel_section']!=""){
 				$sel_class=$dataArry['sel_class'];
 				$sel_section=$dataArry['sel_section'];
@@ -437,8 +446,7 @@ public function checkFromSl()
 				$result['studentList'] = $this->studentmodel->getStudentListbyClassSection($sel_class,$sel_section); 
 
 			}elseif($dataArry['sel_class']!=""){
-				$sel_class=$dataArry['sel_class'];
-				
+				$sel_class=$dataArry['sel_class'];			
 
 				$result['studentList'] = $this->studentmodel->getStudentListbyClass($sel_class); 
 

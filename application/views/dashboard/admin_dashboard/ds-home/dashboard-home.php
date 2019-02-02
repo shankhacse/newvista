@@ -1,3 +1,4 @@
+<script src="<?php echo base_url(); ?>assets/js/adm_scripts/dashboard.js"></script> 
     <section class="content-header">
       <h1>
         Dashboard
@@ -18,14 +19,14 @@
     <!--  small box -->
      <div class="small-box bg-aqua">
        <div class="inner">
-         <h3><?php ;?></h3>
+         <h3><?php echo $bodycontent['activeStdentCount'] ;?></h3>
    
-         <p>Demo</p>
+         <p>Total Student</p>
        </div>
        <div class="icon">
          <i class="ion ion-ios-people-outline"></i>
        </div>
-       <a href="<?php echo base_url();?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+       <a href="javascript:void(0);" class="small-box-footer" id="Studentlist" onclick="OpenStudentList($(this).attr('id'))">More info <i class="fa fa-arrow-circle-right"></i></a>
      </div>
    </div> 
         <!-- ./col -->
@@ -80,11 +81,14 @@
 
 
   <div class="jumbotron jumbotron-fluid" style="text-align:center;background: transparent;">
-  <div class="container">
-    <h1 class="display-4" style="font-size: 3em;">Welcome to New Vista Academy </h1>
-   
+    <div class="container">
+      <div id="DetailList">
+      <h1 class="display-4" style="font-size: 3em;">Welcome to New Vista Academy </h1>
+      </div>
+        
+    
+    </div>
   </div>
-</div>
 
-    </section>
+</section>
     <!-- /.content -->

@@ -164,46 +164,46 @@
                         </div>
                       </div>
 
-                          <div class="col-md-4 col-sm-12 col-xs-12">
-                        <div class="form-group">
-                          <label for="caste">Caste</label>
-                         <select id="caste" name="caste" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
-                         <option value="0">Select</option> 
-                          <?php 
-                          if($bodycontent['casteList'])
-                          {
-                          foreach($bodycontent['casteList'] as $value)
-                          { ?>
-                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->caste_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->caste; ?></option>
-                      <?php   }
-                          }
-                          ?>
+                      <!-- <div class="col-md-4 col-sm-12 col-xs-12">
+                          <div class="form-group">
+                            <label for="caste">Caste</label>
+                            <select id="caste" name="caste" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                            <option value="0">Select</option> 
+                            <?php 
+                            // if($bodycontent['casteList'])
+                            // {
+                            // foreach($bodycontent['casteList'] as $value)
+                            // { ?>
+                              <option value="<?php //echo $value->id; ?>" <?php //if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->caste_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->caste; ?></option>
+                            <?php  
+                            //  }
+                            // }
+                            ?>
 
-                        </select>
-
+                          </select>
                         </div>
-                          
-                  </div>
+                      </div> -->
 
-                  <div class="col-md-4 col-sm-12 col-xs-12">
+                  <!-- <div class="col-md-4 col-sm-12 col-xs-12">
                         <div class="form-group">
                           <label for="religion">Religion</label>
                          <select id="religion" name="religion" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
                           <?php 
-                          if($bodycontent['religionList'])
-                          {
-                          foreach($bodycontent['religionList'] as $value)
-                          { ?>
-                            <option value="<?php echo $value->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->religion_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->religion; ?></option>
-                      <?php   }
-                          }
+                          // if($bodycontent['religionList'])
+                          // {
+                          // foreach($bodycontent['religionList'] as $value)
+                          // { ?>
+                            <option value="<?php //echo $value->id; ?>" <?php //if(($bodycontent['mode']=="EDIT") && $bodycontent['studentEditdata']->religion_id==$value->id){echo "selected";}else{echo "";} ?> ><?php echo $value->religion; ?></option>
+                      <?php   
+                          // }
+                          // }
                           ?>
 
                         </select>
 
                         </div>
-                      </div>
+                      </div> -->
                        
                    
                    

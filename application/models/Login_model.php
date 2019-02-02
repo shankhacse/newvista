@@ -88,6 +88,8 @@ class Login_model extends CI_Model{
     $data=array();   
     $query = $this->db->select("*")
                 ->from("academic_session_master")
+                ->order_by('id','DESC')
+                ->where('is_active','1')
              ->get();
        
         if($query->num_rows()>0){

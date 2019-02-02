@@ -129,10 +129,45 @@ class Studentmodel extends CI_Model{
 	             
 	        }
 			
-	        return $data;
-	       
+	        return $data;	       
 		
 	}
+
+
+	public function getStudentListbyName($name)
+	{
+		$session = $this->session->userdata('user_data');
+		$data = [];
+		$where = array(
+						'student_master.name' =>$name,
+						'academic_details.school_id' =>$session['school_id'],
+						'academic_details.acdm_session_id' =>$session['acd_session_id'],
+					);
+		$query = $this->db->select("student_master.*,
+									academic_details.rollno,
+									class_master.classname,
+									section_master.section
+
+			")
+				->from('student_master')
+				->join('academic_details','academic_details.student_id = student_master.student_id','INNER')
+				->join('class_master','class_master.id = academic_details.class_id','INNER')
+				->join('section_master','section_master.id = academic_details.section_id','LEFT')
+				->where($where)
+			    ->order_by('student_master.name')
+				->get();
+			if($query->num_rows()> 0)
+			{
+	          foreach($query->result() as $rows)
+				{
+					$data[] = $rows;
+				}
+	             
+	        }
+			
+	        return $data;
+	}
+
 
 /* get student list by class and section*/
 	public function getStudentListbyClassSection($sel_class,$sel_section){
@@ -612,6 +647,30 @@ class Studentmodel extends CI_Model{
 		$this->db->insert('account_master', $data);
 		    $insert_ID = $this->db->insert_id();
             return $insert_ID;
+	}
+
+	public function getStudentNameListGroupByName()
+	{		
+		$where=["is_active"=>'1'];
+		$data = array();
+		$this->db->select("name")
+				->from("student_master")
+				->where($where)
+				->group_by('name');
+		$query = $this->db->get();
+		if($query->num_rows()> 0)
+		{
+            foreach ($query->result() as $rows)
+			{
+				$data[] = $rows;
+            }
+            return $data;
+             
+        }
+		else
+		{
+             return $data;
+         }
 	}
 
 

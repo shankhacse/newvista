@@ -10,17 +10,20 @@ if ( ! function_exists('createbody_method'))
 	  
 	
 	 $CI->load->model('menumodel','',TRUE);
+	 $CI->load->model('login_model','',TRUE);
 	 $CI->load->library('template');
 	 /* leftmenu */
 	
 	 $left_menu = $CI->menumodel->getAllAdministrativeMenu('admin_menu_master');
 	 $acdsessionData= $CI->menumodel->getAcademicSessionData();
+	 $acdSessionList=$CI->login_model->getAllAcademinSession();
 	 //$user_role = $CI->menumodel->getAllRoleById();
 
 	 $data['bodyview'] = $body_content_page;
 	 $data['leftmenusidebar'] = '';
 	 $data['headermenu'] = $body_content_header;
 	 $data['acdsessionData'] = $acdsessionData;
+	 $data['acdSessionList'] = $acdSessionList; // added by sandipan sarkar for change academic session modal on 01.02.2019
 	 //$data['web_user_role']=$user_role;
 	
 	 $CI->template->setHeader($heared_menu_content);

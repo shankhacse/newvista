@@ -518,6 +518,7 @@ div.slider {
    display: none;
 }*/
 
+
 .datatbl_style {
     font-family: verdana;
     font-size: 12px;
@@ -548,4 +549,15 @@ div.slider {
 @media only screen and (max-width: 450px){
   .formBtn {
     width: 100%;
+}
+
+/* added by sandipan on 01.02.2019 for change academic session modal */
+.centered-modal.in {
+    display: flex !important;
+}
+.centered-modal .modal-dialog {
+    margin: auto;
+}
+.centered-modal .col-md-6{
+    margin-left: 108px;
 }
