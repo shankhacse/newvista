@@ -6,6 +6,7 @@ class Dashboardmodel extends CI_Model{
             
         $this->db->select('*')
                 ->from($table)
+                ->join('academic_details','student_master.student_id=academic_details.student_id')
                 ->where($where);
 
         $query = $this->db->get();

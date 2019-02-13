@@ -1,4 +1,6 @@
 <script src="<?php echo base_url(); ?>assets/js/adm_scripts/dashboard.js"></script> 
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
     <section class="content-header">
       <h1>
         Dashboard

@@ -21,9 +21,8 @@ class Student extends CI_Controller {
 			$header = "";
 			$result['classList']=$this->commondatamodel->getAllDropdownData('class_master');
 			$result['sectionList']=$this->commondatamodel->getAllDropdownData('section_master');//only current session need to fetch
-			$result['studentList']=$this->commondatamodel->getAllDropdownData('student_master');
-			$result['studentList']=$this->commondatamodel->getAllDropdownData('student_master');
-			$result['StudentNameList']=$this->studentmodel->getStudentNameListGroupByName();
+			$result['studentList']=$this->studentmodel->getStudentListByRegno($session['acd_session_id']);			
+			$result['StudentNameList']=$this->studentmodel->getStudentNameListGroupByName($session['acd_session_id']);
 			createbody_method($result, $page, $header, $session);
 			
 		}
@@ -60,7 +59,7 @@ class Student extends CI_Controller {
 				
 				$result['studentEditdata'] = $this->studentmodel->getStudentDataEditbyId($studentID,$session['acd_session_id']);
 
-//pre($result['studentEditdata']);exit;
+	//pre($result['studentEditdata']);exit;
 				$result['studentAcademicData'] = $this->studentmodel->getStudentAcademicHistory($studentID);
 				$where_account=[
 					"account_id"=>$result['studentEditdata']->account_id
@@ -100,8 +99,8 @@ class Student extends CI_Controller {
 	}
 
 
-/* get present district by state*/
-public function getPresentDistrict()
+	/* get present district by state*/
+	public function getPresentDistrict()
 	{
 		$session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
@@ -109,8 +108,8 @@ public function getPresentDistrict()
 			$stateid = trim($this->input->post('stateid'));
 			$where_dist = array('district.state_id' => $stateid, ); 
 			$result['districtList']=$this->commondatamodel->getAllRecordWhere('district',$where_dist);
-			 
-//pre($result['districtList']);
+				
+	//pre($result['districtList']);
 			$page = "dashboard/admin_dashboard/student/present_district_view";
 			//$partial_view = $this->load->view($page,$result);
 			echo $this->load->view($page, $result, TRUE);
@@ -123,7 +122,7 @@ public function getPresentDistrict()
 	}
 
 	/* get  district by state*/
-public function getDistrict()
+	public function getDistrict()
 	{
 		$session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
@@ -132,7 +131,7 @@ public function getDistrict()
 			$where_dist = array('district.state_id' => $stateid, ); 
 			$result['districtList']=$this->commondatamodel->getAllRecordWhere('district',$where_dist);
 			 
-//pre($result['districtList']);
+	//pre($result['districtList']);
 			$page = "dashboard/admin_dashboard/student/district_view";
 			//$partial_view = $this->load->view($page,$result);
 			echo $this->load->view($page, $result, TRUE);
@@ -145,7 +144,7 @@ public function getDistrict()
 	}
 
 
-public function saveStudent()
+	public function saveStudent()
 	{
 		$session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
@@ -260,6 +259,7 @@ public function saveStudent()
 				);
 
 				$student_array_new = array_merge($student_array,$student_array_edit_info);
+				
 
 				$updateData = $this->studentmodel->updateStudent($student_array_new,$session);
 				if($updateData)
@@ -325,8 +325,8 @@ public function saveStudent()
 		}
 	}
 
-/* check reg no */
-public function checkRegNo()
+	/* check reg no */
+	public function checkRegNo()
 	{
 		$session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
@@ -368,8 +368,8 @@ public function checkRegNo()
 	}
 
 
-/* check form Sl no */
-public function checkFromSl()
+	/* check form Sl no */
+	public function checkFromSl()
 	{
 		$session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
@@ -432,7 +432,7 @@ public function checkFromSl()
 				$student_id = $dataArry['sel_reg'];
 				
 				
-			$result['studentList'] = $this->studentmodel->getStudentbyStudentId($student_id); 	
+			$result['studentList'] = $this->studentmodel->getStudentbyStudentId($student_id,$session['acd_session_id']); 	
            
 			}elseif($dataArry['sel_name']!=""){
 				$sel_name=$dataArry['sel_name'];

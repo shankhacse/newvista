@@ -265,11 +265,6 @@ public function getPaymentComponentListPaymentEdit()
           
           	$classid=$result['studentData']->class_id;
           	$academic_dtl_id=$result['studentData']->academic_dtl_id;
-			
-	
-			
-			
-
 
 			if($studentid!="")
 			{
@@ -323,7 +318,7 @@ public function getPaymentComponentListPaymentEdit()
 						$fessComsumData=$this->feespaymentmodel->getFeesComponentListSumbyClassMonth($classid,$value);
 						$total_amount_monthly=$fessComsumData->sum_amount;
 
-						//pre($fessComponentListData);
+						// pre($fessComponentListData);
 
 						$payment_month_dtl_array = array(
 							'payment_master_id' => $payment_master_id, 
@@ -415,7 +410,7 @@ public function getPaymentComponentListPaymentEdit()
 						$fessComsumData=$this->feespaymentmodel->getFeesComponentListSumbyClassMonth($classid,$value);
 						$total_amount_monthly=$fessComsumData->sum_amount;
 
-						//pre($fessComponentListData);
+						// pre($fessComponentListData);
 
 						$payment_month_dtl_array = array(
 							'payment_master_id' => $payment_master_id, 
@@ -434,7 +429,8 @@ public function getPaymentComponentListPaymentEdit()
 										'payment_month_dtl_id' => $month_dtl_insertId, 
 										'fees_component_id' => $fesscomlistdata->fees_comp_id, 
 										'amount' => $fesscomlistdata->amount, 
-										'created_by' => $session['userid']
+										'created_by' => $session['userid'],
+										'fees_session_id'=>$fessComsumData->id
 										 );
 
 								$user_activity = array(
@@ -479,11 +475,6 @@ public function getPaymentComponentListPaymentEdit()
 
 				} // end add mode ELSE PART
 
-
-
-
-				
-
 			}
 			else
 			{
@@ -496,9 +487,6 @@ public function getPaymentComponentListPaymentEdit()
 			header('Content-Type: application/json');
 			echo json_encode( $json_response );
 			exit;
-
-			
-
 		}
 		else
 		{

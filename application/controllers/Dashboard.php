@@ -17,7 +17,8 @@ class Dashboard extends CI_Controller {
       header("Access-Control-Allow-Origin: *");
       $session = $this->session->userdata('user_data');
       $where=[
-        "is_active"=>'1'
+        "academic_details.acdm_session_id"=>$session['acd_session_id'],
+        "student_master.is_active"=>'1'
       ];
       $result['activeStdentCount']=$this->dashboardmodel->rowcountWithWhere('student_master',$where);
       $page = 'dashboard/admin_dashboard/ds-home/dashboard-home';

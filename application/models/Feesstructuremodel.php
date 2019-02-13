@@ -66,7 +66,30 @@ class Feesstructuremodel extends CI_Model{
 	        return $data;
 	       
 		
-	}
+    }
+    
+    public function checkIfThefeesStructureHaveAnyEntry($school_id,$acdm_session_id,$id)
+    {
+        $where=[
+            'fees_session.school_id' =>$school_id,
+            'fees_session.acdm_session_id' =>$acdm_session_id,
+            'fees_session.id'=>$id
+        ];
+        $this->db->select('*')
+                 ->from('fees_session')
+                 ->join('payment_details','fees_session.id=payment_details.fees_session_id','INNER')
+                 ->where($where);
+            $query = $this->db->get();           
+           $rowcount = $query->num_rows();        
+            if($query->num_rows()>0){
+                // return $rowcount;
+
+                return false;//if get any data
+
+            }else{
+                return true;
+            }
+    }
 
 
 } //end of class

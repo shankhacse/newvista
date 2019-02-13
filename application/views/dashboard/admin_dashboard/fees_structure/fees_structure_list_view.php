@@ -1,4 +1,7 @@
-    
+<script src="<?php echo base_url(); ?>assets/js/adm_scripts/feesstructure.js"></script>  
+<script src="<?php echo base_url(); ?>assets/bower_components/bootstrap_sweetalert/dist/sweetalert.min.js"></script> 
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/bower_components/bootstrap_sweetalert/dist/sweetalert.css"> 
+  
    <section class="content-header">
       <h1>
         Dashboard
@@ -36,14 +39,14 @@
                 <tbody>
                
               	<?php 
-				
+                  // pre($bodycontent['feesstructureList']);
               		$i = 1;
               		foreach ($bodycontent['feesstructureList'] as $value) { 
               	
               		?>
 
 					<tr>
-						<td><?php echo $i++; ?></td>
+						<td><?php echo $i; ?></td>
             <td><?php echo $value->classname; ?></td>
             <td><?php echo $value->fees_desc; ?></td>
             <td><?php echo $value->amount; ?></td>
@@ -52,11 +55,15 @@
 							<a href="<?php echo base_url(); ?>feesstructure/addFeesStructure/<?php echo $value->id; ?>" class="btn btn-primary btn-xs" data-title="Edit">
 								<span class="glyphicon glyphicon-pencil"></span>
 							</a>
+							<a href="javascript:void(0);" id="deleteBtn_<?php echo $i; ?>" data-text="<?php echo $value->id;?>" class="btn deleteBtn btn-danger btn-xs" data-title="Delete">
+								<span class="glyphicon glyphicon-trash"></span>
+							</a>
 						
 						</td>
 					</tr>
               			
               	<?php
+                $i++;
               		}
 
               	?>
@@ -75,3 +82,5 @@
 
     </section>
     <!-- /.content -->
+
+    

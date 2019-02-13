@@ -2,12 +2,19 @@
 // pre($Studentlist);
 // echo "<br>";
 ?>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
+
 <script>
 $(document).ready(function() {
-    var groupColumn = 1;
+    var groupColumn = 0;
     var table = $('#Studentlisttable').DataTable({
         "columnDefs": [
             { "visible": false, "targets": groupColumn }
+        ],
+        "dom": 'Bfrtip',
+        "buttons": [
+            'print'
         ],
         "order": [[ groupColumn, 'asc' ]],
         "displayLength": 10,
@@ -39,7 +46,10 @@ $(document).ready(function() {
         }
     } );
 } );
+
+
 </script>
+
 <style>
 tr.group,
 tr.group:hover {
@@ -63,16 +73,17 @@ tr.group:hover {
         </div>
         
       </div>
-      <div class="box-footer">
+      <div class="box-footer">      
       <div class="datatalberes" style="overflow-x:auto;">
+     
               <table class="table table-bordered table-striped dataTables" id="Studentlisttable" style="border-collapse: collapse !important;">
                 <thead>
                 <tr>
-                  <th style="width:5%;">Sl</th>
+                  <!-- <th style="width:5%;">Sl</th> -->
                   <th style="width:10%;">Class</th>
                   <th style="width:10%;">Reg. No</th>
                   <th style="width:20%;">Name</th>
-                  <th style="width:10%;">Class</th>
+                  <!-- <th style="width:10%;">Class</th> -->
                   <th style="width:10%;">Section</th>
                   <th style="width:10%;">Roll</th>
                   <th style="width:20%;">Father Name</th>
@@ -97,14 +108,14 @@ tr.group:hover {
                   ?>
 
           <tr>
-            <td><?php echo $i++; ?></td>
+            <!-- <td><?php echo $i++; ?></td> -->
             <td><?php echo "Class - ".$value->classname; ?></td>
-            <td><?php echo $value->reg_no; ?></td>
-            <td><?php echo $value->name; ?></td>
-            <td><?php echo $value->classname; ?></td>
+            <td style="text-align: left;"><?php echo $value->reg_no; ?></td>
+            <td style="text-align: left;"><?php echo $value->name; ?></td>
+            <!-- <td><?php echo $value->classname; ?></td> -->
             <td><?php echo $value->section; ?></td>
             <td><?php echo $value->rollno; ?></td>
-            <td><?php echo $value->father_name; ?></td>
+            <td style="text-align: left;"><?php echo $value->father_name; ?></td>
             <td><?php echo $value->father_contact_no; ?></td>   
           </tr>
                     
@@ -119,8 +130,10 @@ tr.group:hover {
                 </tbody>
                 
               </table>
+             
             </div>
       </div>
   </div>
 </section>
 </div>
+

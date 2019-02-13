@@ -103,9 +103,9 @@ class Studentmodel extends CI_Model{
 		
 	}
 
-		public function getStudentbyStudentId($student_id){
+		public function getStudentbyStudentId($student_id,$acd_session_id){
 		$data = [];
-		$where = array('student_master.student_id' =>$student_id);
+		$where = array('student_master.student_id' =>$student_id,'academic_details.acdm_session_id'=>$acd_session_id);
 		$query = $this->db->select("student_master.*,
 									academic_details.rollno,
 									class_master.classname,
@@ -560,6 +560,8 @@ class Studentmodel extends CI_Model{
 			
 			);
 
+			
+
 		$this->load->library('upload', $config);
 		$images = array();
         $detail_array = array();	
@@ -649,14 +651,45 @@ class Studentmodel extends CI_Model{
             return $insert_ID;
 	}
 
-	public function getStudentNameListGroupByName()
+	public function getStudentNameListGroupByName($acd_session_id)
 	{		
-		$where=["is_active"=>'1'];
+		$where=[
+			"academic_details.acdm_session_id"=>$acd_session_id,
+			"student_master.is_active"=>'1'
+		];
 		$data = array();
-		$this->db->select("name")
+		$this->db->select("student_master.name")
 				->from("student_master")
+				->join('academic_details','academic_details.student_id = student_master.student_id','INNER')
 				->where($where)
-				->group_by('name');
+				->group_by('student_master.name');
+		$query = $this->db->get();
+		if($query->num_rows()> 0)
+		{
+            foreach ($query->result() as $rows)
+			{
+				$data[] = $rows;
+            }
+            return $data;
+             
+        }
+		else
+		{
+             return $data;
+         }
+	}
+
+	public function getStudentListByRegno($acd_session_id)
+	{
+		$where=[
+			"academic_details.acdm_session_id"=>$acd_session_id,
+			"student_master.is_active"=>'1'
+		];
+		$data = array();
+		$this->db->select("*")
+				->from("student_master")
+				->join('academic_details','academic_details.student_id = student_master.student_id','INNER')
+				->where($where)	;			
 		$query = $this->db->get();
 		if($query->num_rows()> 0)
 		{

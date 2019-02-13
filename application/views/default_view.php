@@ -948,6 +948,51 @@
     <!-- /.modal -->
 <!-- end success modal-->
 
+<!--  modal  success -->
+<div class="modal modal-success fade" id="modal-success" style="display: none;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+              <!-- <a href="javascript;" id="redirectToListsuccess" class="close"  aria-label="Close">
+                  <span aria-hidden="true">×</span></a> -->
+                <!-- <h4 class="modal-title">Success Modal</h4> -->
+              </div>
+              <div class="modal-body">
+              <h3 id="appendBody"></h3>
+              </div>
+              <div class="modal-footer">
+              <a href="javascript;" id="redirectToListsuccess" class="btn btn-outline pull-left">Close</a>
+              
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+    <!-- /modal -->
+<!--  modal danger -->
+<div class="modal modal-danger fade in" id="modal-danger" style="display: none; padding-right: 17px;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+              <!-- <a href="javascript;" id="redirectToListerror" class="close"  aria-label="Close">
+                  <span aria-hidden="true">×</span></a> -->
+                <!-- <h4 class="modal-title">Danger Modal</h4> -->
+              </div>
+              <div class="modal-body">
+              <h3 id="dengAppendBody"></h3>
+              </div>
+              <div class="modal-footer">
+              <a href="javascript;" id="redirectToListerror" class="btn btn-outline pull-left" >Close</a>
+               
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+    <!-- /modal -->
+
 <!-- Admin Detail View Modal -->
 <div class="modal fade" id="pop_modal_detail_admin">
     <div class="modal-dialog">

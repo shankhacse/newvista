@@ -82,7 +82,8 @@ class Feespaymentmodel extends CI_Model{
 		$data = [];
 		$query = $this->db->select("
 									fees_structure.fees_desc,
-									sum(fees_session.amount) as sum_amount
+									sum(fees_session.amount) as sum_amount,
+									fees_session.id
 				")
 				->from('fees_session')
 				->join('fees_structure','fees_structure.id = fees_session.fees_id','INNER')

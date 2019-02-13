@@ -6,6 +6,7 @@ class Feesstructure extends CI_Controller {
 	    parent::__construct();
 		$this->load->library('session');
 		$this->load->model('Feesstructuremodel','feesstrmodel',TRUE);
+		$this->load->model('commondatamodel','commondatamodel',TRUE);
 	}
 
 
@@ -267,4 +268,38 @@ public function getFeesList()
 		redirect('login','refresh');
 	}
 }
+
+public function deleteFeesStructure()
+{
+	$session = $this->session->userdata('user_data');
+	if($this->session->userdata('user_data'))
+	{
+		$id=$this->input->post('fees_id');		
+		$check=$this->feesstrmodel->checkIfThefeesStructureHaveAnyEntry($session['school_id'],$session['acd_session_id'],$id);
+		if ($check) 
+		{
+			$where=[
+				"id"=>$id
+			];
+			$this->commondatamodel->deleteTableData('fees_session',$where);
+			$json_response = array(
+				"msg_status" => HTTP_SUCCESS,
+				"msg_data" => "Deleted successfully",
+			);
+		}else{
+			$json_response = array(
+				"msg_status" => HTTP_FAIL,
+				"msg_data" => "Can't delete! Already Done Payment Against this  "
+			);
+		}
+		header('Content-Type: application/json');
+		echo json_encode( $json_response );
+		exit;
+	}else{
+		redirect('login','refresh');
+	}
+}
+
+
+
 } // end of class

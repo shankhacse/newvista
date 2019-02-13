@@ -63,49 +63,97 @@ $(document).ready(function(){
 	});
 	
 	
-  /* On select Class  select fees */
-  $(document).on("change", "#classid", function() {
-    var val=$('select[name=classid]').val();
+    /* On select Class  select fees */
+    $(document).on("change", "#classid", function() {
+        var val=$('select[name=classid]').val();
 
-   
-$.ajax({
-type: "POST",
-url: basepath+'feesstructure/getFeesList',
-data: {classid:val},
+    
+        $.ajax({
+        type: "POST",
+        url: basepath+'feesstructure/getFeesList',
+        data: {classid:val},
 
-success: function(data){
-    $("#fees_dropdown").html(data);
-    $('.selectpicker').selectpicker();
-},
-error: function (jqXHR, exception) {
-              var msg = '';
-                if (jqXHR.status === 0) {
-                    msg = 'Not connect.\n Verify Network.';
-                } else if (jqXHR.status == 404) {
-                    msg = 'Requested page not found. [404]';
-                } else if (jqXHR.status == 500) {
-                    msg = 'Internal Server Error [500].';
-                } else if (exception === 'parsererror') {
-                    msg = 'Requested JSON parse failed.';
-                } else if (exception === 'timeout') {
-                    msg = 'Time out error.';
-                } else if (exception === 'abort') {
-                    msg = 'Ajax request aborted.';
-                } else {
-                    msg = 'Uncaught Error.\n' + jqXHR.responseText;
-                }
-               // alert(msg);  
+        success: function(data){
+            $("#fees_dropdown").html(data);
+            $('.selectpicker').selectpicker();
+        },
+        error: function (jqXHR, exception) {
+                    var msg = '';
+                        if (jqXHR.status === 0) {
+                            msg = 'Not connect.\n Verify Network.';
+                        } else if (jqXHR.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (jqXHR.status == 500) {
+                            msg = 'Internal Server Error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = 'Time out error.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        } else {
+                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                        }
+                    // alert(msg);  
+                    }
+
+        });/*end ajax call*/
+
+    });
+
+    $('.deleteBtn').click(function() {
+        var splitid=$(this).attr("id").split('_');
+        var id=splitid[1];
+        var fees_id= $('#deleteBtn_'+id).data('text');      
+        // alert(fees_id); 
+        $.ajax({
+            type: 'POST',
+            url: basepath+'feesstructure/deleteFeesStructure',
+            data: {fees_id:fees_id},
+            dataType: 'json',
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            success: function(result) {
+                if (result.msg_status == 200) {                 
+                     
+                    $("#modal-success").modal({
+                        "backdrop": "static",
+                        "keyboard": true,
+                        "show": true
+                    });
+                    var addurl = basepath + "feesstructure";
+                   
+                    $("#appendBody").text(result.msg_data);
+                    $("#redirectToListsuccess").attr("href", addurl);
+
+                } 
+                else {
+                    // alert(fees_id+" have data");                    
+                    $("#modal-danger").modal({
+                        "backdrop": "static",
+                        "keyboard": true,
+                        "show": true
+                    });
+                    var addurl = basepath + "feesstructure";
+                   
+                    $("#dengAppendBody").text(result.msg_data);
+                    $("#redirectToListerror").attr("href", addurl);
+                   
+                    
+                }                
+                
+            },
+            error: function(jqXHR, exception) {
+                var msg = '';
             }
+        });
+        
+        
 
 
-
-});/*end ajax call*/
-
-});
-
+    });
 	
 
-});
+});/* end of document ready */
 
 function validate()
 {  
@@ -144,3 +192,9 @@ function validate()
 	}
 	return true;
 }
+// <?php echo base_url(); ?>feesstructure/deleteFeesStructure/
+// function deleteFeesStructure()
+// {
+//     var id=$(this).data('text');
+//     alert(this.href);
+// }
