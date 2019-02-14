@@ -85,25 +85,17 @@ class Feescomponentmodel extends CI_Model{
                  ->from('fees_session')
                  ->where($where);
             $query = $this->db->get();           
-           $rowcount = $query->num_rows();        
+            $rowcount = $query->num_rows();        
             if($query->num_rows()>0){
                 // return $rowcount;
-                return false;//if get any data
-
+				return false;//if get any data
+				
             }else{
-                $month=$this->deleteFeesMonthDetails($id);
-				if($month)
-				{
-					$this->db->where('id', $id)
-							->delete('fees_strucrure');
-					if ($this->db->affected_rows()) {
-						return true;			
-					}else{
-						return false;
-					}
-				}else{
-					return 0;
-				}
+                $month=$this->deleteFeesMonthDetails($id);				
+				$this->db->where('id', $id)
+					     ->delete('fees_structure');				
+				return true;			
+				
             }
 	}
 

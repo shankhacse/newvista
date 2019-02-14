@@ -82,19 +82,16 @@ $(document).ready(function(){
         var splitid=$(this).attr("id").split('_');
         var id=splitid[1];
         var fees_id= $('#deleteBtn_'+id).data('text'); 
+       
+        // alert(fees_id); 
         $.confirm({
-            title: 'Confirm !',
-            content: 'Are you sure ?',
+            title: 'Confirm!',
+            content: 'Are you Sure you want to delete ?',
             buttons: {
-                delete: {
-                    btnClass:'btn-danger',
-                    confirm: function () {
-                        // $.alert('Confirmed!');                    
-                                            
-                    alert(fees_id); 
+                confirm: function () {
                     $.ajax({
                         type: 'POST',
-                        url: basepath+'feesscomponent/deleteFeesComponent',
+                        url: basepath+'feescomponent/deleteFeesComponent',
                         data: {fees_id:fees_id},
                         dataType: 'json',
                         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
@@ -106,7 +103,7 @@ $(document).ready(function(){
                                     "keyboard": true,
                                     "show": true
                                 });
-                                var addurl = basepath + "feesstructure";
+                                var addurl = basepath + "feescomponent";
                             
                                 $("#appendBody").text(result.msg_data);
                                 $("#redirectToListsuccess").attr("href", addurl);
@@ -119,7 +116,7 @@ $(document).ready(function(){
                                     "keyboard": true,
                                     "show": true
                                 });
-                                var addurl = basepath + "feesstructure";
+                                var addurl = basepath + "feescomponent";
                             
                                 $("#dengAppendBody").text(result.msg_data);
                                 $("#redirectToListerror").attr("href", addurl);
@@ -132,19 +129,13 @@ $(document).ready(function(){
                             var msg = '';
                         }
                     });
-
-                    }
                 },
-                cancel:{
-                    btnClass:'btn-primary',
-                    cancel: function () {
-                        //
-                    }
+                cancel: function () {
+                    $.alert('Canceled!');
                 }
             }
         });
-                
-       
+              
     });
 
 

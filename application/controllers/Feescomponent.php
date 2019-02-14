@@ -294,8 +294,23 @@ class Feescomponent extends CI_Controller {
 		if($this->session->userdata('user_data'))
 		{
 			$id=$this->input->post('fees_id');
-			// checkIfTheComponentHaveAnyEntry($session['school_id'],$id);
-			//
+			$check=$this->feescommodel->checkIfTheComponentHaveAnyEntry($session['school_id'],$id);
+
+			if ($check) 
+			{				
+				$json_response = array(
+					"msg_status" => HTTP_SUCCESS,
+					"msg_data" => "Deleted successfully",
+				);
+			}else{
+				$json_response = array(
+					"msg_status" => HTTP_FAIL,
+					"msg_data" => "Can't delete! Have Entry in Fees Structure "
+				);
+			}
+			header('Content-Type: application/json');
+			echo json_encode( $json_response );
+			exit;
 		}else{
 			redirect('login','refresh');
 		}
