@@ -1,6 +1,16 @@
 $( document ).ready(function() {
     var basepath = $("#basepath").val();
 
+    $(document).on('change','#group_id',function(e){
+        var group_id=$('#group_id option:selected').data('tokens');
+        if (group_id=='Y') {
+            $('#bankdetails').show();
+           
+        }else{
+            $('.desablecls').val('');
+            $('#bankdetails').hide();
+        }
+    });
   
 
   $(document).on('submit','#accountForm',function(e){
@@ -57,22 +67,50 @@ $( document ).ready(function() {
 
 });
 
-});
+
+});/* end of document ready */
 
 
 function accountFormValidation()
 {
+    $('#account_name_div').removeClass('has-error');
+    $('#group_id_div').removeClass('has-error');
+    $('#bank_ifsc_div').removeClass('has-error');
+    $('#bank_ac_no_div').removeClass('has-error');
+    $('#bank_address_div').removeClass('has-error');
+    $('#bank_branch_div').removeClass('has-error');
+
     if($('#account_name').val()=="")
     {
         $('#account_name_div').addClass('has-error');
         return false;
     }
     if($('#group_id option:selected').val()=="0")
-    {
-        $('#account_name_div').removeClass('has-error');
+    {        
         $('#group_id_div').addClass('has-error');
         return false;
     }
-    return true;
 
+    if($('#group_id option:selected').data('tokens')=='Y')
+    {
+        if($('#bank_ifsc').val()=="") {
+            $('#bank_ifsc_div').addClass('has-error');
+            return false;
+        }
+
+        if($('#bank_ac_no').val()=="") {
+            $('#bank_ac_no_div').addClass('has-error');
+            return false;
+        }
+        if($('#bank_address').val()=="") {
+            $('#bank_address_div').addClass('has-error');
+            return false;
+        }
+        if($('#bank_branch').val()=="") {
+            $('#bank_branch_div').addClass('has-error');
+            return false;
+        }
+    }
+
+    return true;
 }

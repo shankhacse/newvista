@@ -1,12 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Contra extends CI_Controller {
-	public function __construct()
-	{
-	    parent::__construct();
+class Journal extends CI_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
 		$this->load->library('session');
-		$this->load->model('contramodel','contramodel',TRUE);
 		$this->load->model('commondatamodel','commondatamodel',TRUE);
+		$this->load->model('journalmodel','journalmodel',TRUE);		
     }
 
     public function index()
@@ -19,9 +20,9 @@ class Contra extends CI_Controller {
 		  //  print_r("index");exit;
             $header = "";
             $result="";
-			$result['ContraList'] = $this->contramodel->getAllContraVoucherList($school_id,$acd_session_id); 
-			$page = "dashboard/admin_dashboard/contra/contra_list";
-			// $page = "dashboard/admin_dashboard/contra/add_edit_contra";
+			$result['journalList'] = $this->journalmodel->getAllJournalVoucherList($school_id,$acd_session_id); 
+			$page = "dashboard/admin_dashboard/journal_entry/journal_list";
+			// $page = "dashboard/admin_dashboard/journal_entry/journal";
 			createbody_method($result, $page, $header, $session);
 			
 		}
@@ -31,13 +32,13 @@ class Contra extends CI_Controller {
 		}
     }
     
-    public function contra()
+    public function journal()
 	{
 		$session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
 		{
 			$header = "";
-			$result['AccountList'] = $this->contramodel->getAccountList($session['school_id']);
+			$result['AccountList'] = $this->journalmodel->getAccountList($session['school_id']);
 			if (empty($this->uri->segment(3)))
 			{
                 $result['mode']="ADD";           
@@ -61,15 +62,15 @@ class Contra extends CI_Controller {
 					"voucher_master_id"=>$this->uri->segment(3),
 					"tran_type"=>"C"
 				];
-				$result['ContraEditData']=$this->commondatamodel->getSingleRowByWhereCls('voucher_master',$where);
-				$result['ContraDebitData']=$this->commondatamodel->getSingleRowByWhereCls('voucher_detail',$where1);
-				$result['ContraCreditData']=$this->commondatamodel->getSingleRowByWhereCls('voucher_detail',$where2);
+				$result['JournalEditData']=$this->commondatamodel->getSingleRowByWhereCls('voucher_master',$where);
+				$result['JournalDebitData']=$this->commondatamodel->getSingleRowByWhereCls('voucher_detail',$where1);
+				$result['JournalCreditData']=$this->commondatamodel->getSingleRowByWhereCls('voucher_detail',$where2);
 			}
             
                  
              	
             		
-			$page = "dashboard/admin_dashboard/contra/add_edit_contra";
+			$page = "dashboard/admin_dashboard/journal_entry/journal";
 			createbody_method($result, $page, $header, $session);
 			
 		}
@@ -87,9 +88,9 @@ class Contra extends CI_Controller {
 		$year=$this->commondatamodel->getSingleRowByWhereCls('academic_session_master',$where);
 		$start_yr=substr($year->start_yr,2);
 		$end_yr=substr($year->end_yr,2);
-		$serial=$this->contramodel->getSerialnumber($school_id,$acd_session_id);
+		$serial=$this->commondatamodel->getSerialnumber($school_id,$acd_session_id);
 		
-		$voucher_no="CN/".$serial."/".$start_yr."-".$end_yr;
+		$voucher_no="JV/".$serial."/".$start_yr."-".$end_yr;
 		// echo $voucher_no;exit;
 		return $voucher_no;
 	}
@@ -133,7 +134,7 @@ class Contra extends CI_Controller {
                 $user_activity = array(
                     "activity_module" => 'contra',
                     "action" => 'Insert',
-                    "from_method" => 'contra/insertUpdate',
+                    "from_method" => 'journal/insertUpdate',
                     "user_id" => $session['userid'],
                     "ip_address" => getUserIPAddress(),
                     "user_browser" => getUserBrowserName(),
@@ -147,7 +148,7 @@ class Contra extends CI_Controller {
 					 "cheque_date"=>$cheque_date,
 					 "chq_clear_on"=>"",
 					 "is_chq_clear"=>"",
-					 "transaction_type"=>'CN',
+					 "transaction_type"=>"JV",
 					 "created_by"=>$userid,
 					 "school_id"=>$school_id,
 					 "acdm_session_id"=>$acd_session_id,
@@ -184,7 +185,7 @@ class Contra extends CI_Controller {
 				$user_activity = array(
                     "activity_module" => 'contra',
                     "action" => 'Update',
-                    "from_method" => 'contra/insertUpdate',
+                    "from_method" => 'journal/insertUpdate',
                     "user_id" => $session['userid'],
                     "ip_address" => getUserIPAddress(),
                     "user_browser" => getUserBrowserName(),
@@ -256,5 +257,4 @@ class Contra extends CI_Controller {
 
 
 
-
-}  // end of class
+}/* end of class */

@@ -1,4 +1,6 @@
-  <script src="<?php echo base_url(); ?>assets/js/adm_scripts/classlist.js"></script>   
+<script src="<?php echo base_url(); ?>assets/js/adm_scripts/feescomponent.js"></script>   
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>  
   <style type="text/css">
   .monthstyle{background-color: #ef7a25 !important;}
 </style>   
@@ -45,7 +47,7 @@
               		?>
 
 					<tr>
-						<td><?php echo $i++; ?></td>
+						<td><?php echo $i; ?></td>
             <td><?php echo $value['FeesComponentData']->fees_desc; ?></td>
             <td><?php 
 
@@ -60,11 +62,14 @@
 							<a href="<?php echo base_url(); ?>feescomponent/addFeesComponent/<?php echo $value['FeesComponentData']->id; ?>" class="btn btn-primary btn-xs" data-title="Edit">
 								<span class="glyphicon glyphicon-pencil"></span>
 							</a>
-						
+							<a href="javascript:void(0);" id="deleteBtn_<?php echo $i; ?>"  data-text="<?php echo $value['FeesComponentData']->id;?>" class="btn deleteBtn btn-danger btn-xs" data-title="Delete">
+								<span class="glyphicon glyphicon-trash"></span>
+							</a>              
 						</td>
 					</tr>
               			
               	<?php
+                  $i++;
               		}
 
               	?>

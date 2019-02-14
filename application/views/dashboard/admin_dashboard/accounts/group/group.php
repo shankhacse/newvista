@@ -103,6 +103,13 @@
                         <div class="form-group">
                         <label class="checkbox-inline"><input type="checkbox" name="is_active" id="is_active" value="Y" checked>Active</label>
                         </div>
+                        <div class="form-group">
+                        <label class="checkbox-inline"><input type="checkbox" name="is_bank" id="is_bank" value="Y"<?php if ($bodycontent['mode']=="EDIT"){
+                                if($bodycontent['editgroup']->is_bank=="Y"){
+                                    echo " checked " ;
+                                }
+                             } ?>>Is it a Bank Account ?</label>
+                        </div>
                         <div class="btnDiv">
                         <button type="submit"  name="submit" id="cassavebtn" class="btn formBtn btn-primary"><?php echo $bodycontent['btnText'];?></button>
                         <span class="btn btn-primary formBtn loaderbtn" id="loaderbtn" style="display:none;"><i class="fa fa-spinner rotating" aria-hidden="true"></i> <?php echo $bodycontent['btnTextLoader']; ?></span>

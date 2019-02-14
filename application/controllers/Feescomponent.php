@@ -288,4 +288,19 @@ class Feescomponent extends CI_Controller {
 		}
 	}
 
+	public function deleteFeesComponent()
+	{
+		$session = $this->session->userdata('user_data');
+		if($this->session->userdata('user_data'))
+		{
+			$id=$this->input->post('fees_id');
+			// checkIfTheComponentHaveAnyEntry($session['school_id'],$id);
+			//
+		}else{
+			redirect('login','refresh');
+		}
+	}
+
+
+
 } // end of class

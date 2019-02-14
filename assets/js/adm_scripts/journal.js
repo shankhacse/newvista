@@ -48,17 +48,17 @@ $(document).ready(function(){
      });
 
 
-     $(document).on('submit','#ContraForm',function(e){
+     $(document).on('submit','#JournalForm',function(e){
         e.preventDefault();    
         if(fromValidate())
         {        
         
-            var formDataserialize = $("#ContraForm").serialize();
+            var formDataserialize = $("#JournalForm").serialize();
             // alert(formDataserialize);
             // console.log(formDataserialize);
             var type = "POST"; //for creating new resource
-            var urlpath = basepath + 'contra/insertUpdate';
-            $("#contrasavebtn").css('display', 'none');
+            var urlpath = basepath + 'journal/insertUpdate';
+            $("#journalsavebtn").css('display', 'none');
                 $("#loaderbtn").css('display', 'block');
     
             $.ajax({
@@ -74,8 +74,8 @@ $(document).ready(function(){
                             "keyboard": true,
                             "show": true
                         });
-                        var addurl = basepath + "contra/contra";
-                        var listurl = basepath + "contra";
+                        var addurl = basepath + "journal/journal";
+                        var listurl = basepath + "journal";
                         $("#responsemsg").text(result.msg_data);
                         $("#response_add_more").attr("href", addurl);
                         $("#response_list_view").attr("href", listurl);
@@ -86,7 +86,7 @@ $(document).ready(function(){
                     
                     $("#loaderbtn").css('display', 'none');
                     
-                    $("#contrasavebtn").css({
+                    $("#journalsavebtn").css({
                         "display": "block",
                         "margin": "0 auto"
                     });

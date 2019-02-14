@@ -61,16 +61,9 @@ class Accountsmodel extends CI_Model
 	}
 
 
-	public function insertAccount($account_name,$group_id,$is_special,$is_active,$school_id,$userid,$acd_session_id,$opening_balance,$user_activity)
+	public function insertAccount($data,$userid,$acd_session_id,$opening_balance,$user_activity)
 	{
-		$data=[
-			"account_name"=>$account_name,
-			"group_id"=>$group_id,
-			"school_id"=>$school_id,
-			"is_special"=>$is_special,
-			"is_active"=>$is_active,
-			"created_by"=>$userid
-		];
+		
 		// print_r($data);exit;		
             $this->db->trans_begin();
             $this->db->insert('account_master', $data);

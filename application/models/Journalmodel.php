@@ -1,19 +1,21 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Contramodel extends CI_Model{
-    
+class Journalmodel extends CI_Model 
+{
+
+
     public function getAccountList($school_id)
 	{
         $where=[
             "school_id"=>$school_id,
             "is_active"=>"Y"            
         ];
-        $where_in=array(33,34);
+        $where_not_in=array(33,34);//id-33(cash),id-34(bank)
 		$data = array();
 		$this->db->select("*")
 				->from('account_master')
                 ->where($where)
-                ->where_in('group_id',$where_in)
+                ->where_not_in('group_id',$where_not_in)
                 ->order_by('account_name');
                 
 		$query = $this->db->get();
@@ -35,60 +37,13 @@ class Contramodel extends CI_Model{
          }
     }
     
-    public function getSerialnumber($school_id,$acd_session_id)
-    {
-       
-        $lastnumber = (int)(0);
-        $serialno="";
-        $sql="SELECT *
-            FROM voucher_srl_master
-            WHERE school_id='".$school_id."'
-            AND acd_session_id='$acd_session_id'
-			LOCK IN SHARE MODE";
-        $query = $this->db->query($sql);
-		if ($query->num_rows() > 0) {
-			  $row = $query->row(); 
-			  $lastnumber = $row->srl_no;
-        }
-        $digit = (int)(log($lastnumber,10)+1) ; 
-      
-       
-        if($digit==5){
-            $serialno ="0".$lastnumber;
-        }
-		elseif($digit==4){
-              $serialno = "00".$lastnumber;
-        }
-		elseif($digit==3){
-            $serialno = "000".$lastnumber;
-        }
-		elseif($digit==2){
-            $serialno = "0000".$lastnumber;
-        }
-		elseif($digit==1){
-            $serialno = "00000".$lastnumber;
-        }
-        $lastnumber = $lastnumber + 1;
-        
-        //update
-        $upddata = [
-			'srl_no' => $lastnumber,
-        ];
-        $where = [
-            'school_id' => $school_id,
-            'acd_session_id'=>$acd_session_id
-			];
-        $this->db->where($where); 
-        $this->db->update('voucher_srl_master', $upddata);
-        return $serialno;
-    }
-
-    public function getAllContraVoucherList($school_id,$acd_session_id)
+    
+    public function getAllJournalVoucherList($school_id,$acd_session_id)
     {
         $where=[
             "school_id"=>$school_id,
             "acdm_session_id"=>$acd_session_id,
-            "transaction_type"=>'CN'
+            "transaction_type"=>'JV'
         ];
         $data = array();
         $query=$this->db->select('*')
@@ -155,10 +110,6 @@ class Contramodel extends CI_Model{
          }
     }
     
-
-
     
-
-
-
-} //end of class
+	
+}/* end of class */

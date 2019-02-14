@@ -404,7 +404,56 @@ class Commondatamodel extends CI_Model{
 			$this->db->insert($table, $data);
 		    $insert_ID = $this->db->insert_id();
             return $insert_ID;
-	    }
+		}
+		
+		//added by sandipan on 14.02.2019
+		public function getSerialnumber($school_id,$acd_session_id)
+		{
+		   
+			$lastnumber = (int)(0);
+			$serialno="";
+			$sql="SELECT *
+				FROM voucher_srl_master
+				WHERE school_id='".$school_id."'
+				AND acd_session_id='$acd_session_id'
+				LOCK IN SHARE MODE";
+			$query = $this->db->query($sql);
+			if ($query->num_rows() > 0) {
+				  $row = $query->row(); 
+				  $lastnumber = $row->srl_no;
+			}
+			$digit = (int)(log($lastnumber,10)+1) ; 
+		  
+		   
+			if($digit==5){
+				$serialno ="0".$lastnumber;
+			}
+			elseif($digit==4){
+				  $serialno = "00".$lastnumber;
+			}
+			elseif($digit==3){
+				$serialno = "000".$lastnumber;
+			}
+			elseif($digit==2){
+				$serialno = "0000".$lastnumber;
+			}
+			elseif($digit==1){
+				$serialno = "00000".$lastnumber;
+			}
+			$lastnumber = $lastnumber + 1;
+			
+			//update
+			$upddata = [
+				'srl_no' => $lastnumber,
+			];
+			$where = [
+				'school_id' => $school_id,
+				'acd_session_id'=>$acd_session_id
+				];
+			$this->db->where($where); 
+			$this->db->update('voucher_srl_master', $upddata);
+			return $serialno;
+		}
 	
 
 	

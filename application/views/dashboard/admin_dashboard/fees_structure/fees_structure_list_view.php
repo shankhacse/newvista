@@ -1,6 +1,4 @@
 <script src="<?php echo base_url(); ?>assets/js/adm_scripts/feesstructure.js"></script>  
-<script src="<?php echo base_url(); ?>assets/bower_components/bootstrap_sweetalert/dist/sweetalert.min.js"></script> 
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/bower_components/bootstrap_sweetalert/dist/sweetalert.css"> 
   
    <section class="content-header">
       <h1>

@@ -62,22 +62,52 @@ class Feescomponentmodel extends CI_Model{
 	}
 
 
-	 function deleteFeesMonthDetails($fees_structure_id){
-
+	function deleteFeesMonthDetails($fees_structure_id)
+	{
   	   $this->db->where('fees_strucrure_month_dtl.fees_structure_id', $fees_structure_id)
                 ->delete('fees_strucrure_month_dtl');
-                if ($this->db->affected_rows()) {
-                	return 1;
-                }else{
-                	return 0;
-                }
-  }
+        if ($this->db->affected_rows()) {
+            return 1;
+        }else{
+            return 0;
+        }
+	}
 
 
 
+	public function checkIfTheComponentHaveAnyEntry($school_id,$id)
+	{
+		$where=[
+            'fees_session.school_id' =>$school_id,           
+            'fees_session.fees_id'=>$id
+        ];
+        $this->db->select('*')
+                 ->from('fees_session')
+                 ->where($where);
+            $query = $this->db->get();           
+           $rowcount = $query->num_rows();        
+            if($query->num_rows()>0){
+                // return $rowcount;
+                return false;//if get any data
 
+            }else{
+                $month=$this->deleteFeesMonthDetails($id);
+				if($month)
+				{
+					$this->db->where('id', $id)
+							->delete('fees_strucrure');
+					if ($this->db->affected_rows()) {
+						return true;			
+					}else{
+						return false;
+					}
+				}else{
+					return 0;
+				}
+            }
+	}
 
-public function getFeeMonthDetails($fees_structure_id){
+	public function getFeeMonthDetails($fees_structure_id){
      $data = [];
     	$where = array(
 			
@@ -102,8 +132,11 @@ public function getFeeMonthDetails($fees_structure_id){
 		        }
 		
 		
-            return $data;
-       
+            return $data;      
         
-    }
+	}
+	
+
+
+
 } //end of class

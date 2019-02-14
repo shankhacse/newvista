@@ -970,8 +970,8 @@
           <!-- /.modal-dialog -->
         </div>
     <!-- /modal -->
-<!--  modal danger -->
-<div class="modal modal-danger fade in" id="modal-danger" style="display: none; padding-right: 17px;">
+  <!--  modal danger -->
+  <div class="modal modal-danger fade in" id="modal-danger" style="display: none; padding-right: 17px;">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">

@@ -75,14 +75,82 @@ $(document).ready(function(){
 			
 		}
 
-	});
+    });
+    
 	
-	
+    $('.deleteBtn').click(function() {
+        var splitid=$(this).attr("id").split('_');
+        var id=splitid[1];
+        var fees_id= $('#deleteBtn_'+id).data('text'); 
+        $.confirm({
+            title: 'Confirm !',
+            content: 'Are you sure ?',
+            buttons: {
+                delete: {
+                    btnClass:'btn-danger',
+                    confirm: function () {
+                        // $.alert('Confirmed!');                    
+                                            
+                    alert(fees_id); 
+                    $.ajax({
+                        type: 'POST',
+                        url: basepath+'feesscomponent/deleteFeesComponent',
+                        data: {fees_id:fees_id},
+                        dataType: 'json',
+                        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                        success: function(result) {
+                            if (result.msg_status == 200) {                 
+                                
+                                $("#modal-success").modal({
+                                    "backdrop": "static",
+                                    "keyboard": true,
+                                    "show": true
+                                });
+                                var addurl = basepath + "feesstructure";
+                            
+                                $("#appendBody").text(result.msg_data);
+                                $("#redirectToListsuccess").attr("href", addurl);
+
+                            } 
+                            else {
+                                // alert(fees_id+" have data");                    
+                                $("#modal-danger").modal({
+                                    "backdrop": "static",
+                                    "keyboard": true,
+                                    "show": true
+                                });
+                                var addurl = basepath + "feesstructure";
+                            
+                                $("#dengAppendBody").text(result.msg_data);
+                                $("#redirectToListerror").attr("href", addurl);
+                            
+                                
+                            }                
+                            
+                        },
+                        error: function(jqXHR, exception) {
+                            var msg = '';
+                        }
+                    });
+
+                    }
+                },
+                cancel:{
+                    btnClass:'btn-primary',
+                    cancel: function () {
+                        //
+                    }
+                }
+            }
+        });
+                
+       
+    });
 
 
 	
 
-});
+});/* end of document ready */
 
 function validate()
 {  

@@ -77,7 +77,13 @@ class Accounts extends CI_Controller
                 }else{
                     $is_active="N";
                 } 
+            if (!$this->input->post("is_bank")) {
+                $is_bank="N";
+            }else{
+                $is_bank="Y";
+            }
             $insert_arr['is_active']=$is_active ;                      
+            $insert_arr['is_bank']=$is_bank;                      
             $insert_arr['group_description']=$group_description ;
             $insert_arr['main_category']=$main_category ;
             $insert_arr['sub_category']=$sub_category ; 
@@ -215,6 +221,18 @@ class Accounts extends CI_Controller
                 }            
              $is_special='N';
 
+             if ($this->input->post('bank_ifsc')!="") {
+                $bank_ifsc=$this->input->post('bank_ifsc');
+                $bank_ac_no=$this->input->post('bank_ac_no');
+                $bank_address=$this->input->post('bank_address');
+                $bank_branch=$this->input->post('bank_branch');
+             }else{
+                $bank_ifsc=NULL;
+                $bank_ac_no=NULL;
+                $bank_address=NULL;
+                $bank_branch=NULL;
+             }
+
              if($mode=="ADD")
              {
                 $user_activity = array(
@@ -226,12 +244,31 @@ class Accounts extends CI_Controller
                     "user_browser" => getUserBrowserName(),
                     "user_platform" => getUserPlatform()
                  );
+                
 
-                $insert=$this->accountsmodel->insertAccount($account_name,$group_id,$is_special,$is_active,$school_id,$userid,$acd_session_id,$opening_balance,$user_activity);
+                 $data=[
+                    "account_name"=>$account_name,
+                    "group_id"=>$group_id,
+                    "school_id"=>$school_id,
+                    'bank_ifsc'=>$bank_ifsc,
+                    'bank_ac_no'=>$bank_ac_no,
+                    'bank_address'=>$bank_address,
+                    'bank_branch'=>$bank_branch,
+                    "is_special"=>$is_special,
+                    "from_where"=>'S',
+                    "is_active"=>$is_active,
+                    "created_by"=>$userid
+                ];
+
+                $insert=$this->accountsmodel->insertAccount($data,$userid,$acd_session_id,$opening_balance,$user_activity);
              }else{
                 $account_id =$this->input->post('account_id');
                 $data1=[
                     "account_name"=>$account_name,
+                    'bank_ifsc'=>$bank_ifsc,
+                    'bank_ac_no'=>$bank_ac_no,
+                    'bank_address'=>$bank_address,
+                    'bank_branch'=>$bank_branch,
                     "group_id"=>$group_id,
                     "is_active"=>$is_active
                 ];
