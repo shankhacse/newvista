@@ -1,4 +1,4 @@
-<script src="<?php echo base_url(); ?>assets/js/adm_scripts/admission.js"></script>  
+<script src="<?php echo base_url(); ?>admission.js"></script>  
 <link rel="stylesheet" href="<?php echo base_url();?>application/assets/css/admin_style.css" />     
 <style type="text/css">
   .searchby{

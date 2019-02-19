@@ -244,6 +244,7 @@ $(document).on('change', '.changmonthedit', function(event){
 
    $(document).on("click", "#paymentSave", function(event) {
     event.preventDefault();
+    
       var studentid = $("#studentid").val();
       var monthids = $("#monthids").val();
       var payment_mode = $("#payment_mode").val();
@@ -251,13 +252,23 @@ $(document).on('change', '.changmonthedit', function(event){
       var total_pay_amount = $("#total_pay_amount").val();
       var paymentID = $("#paymentID").val();
       var mode = $("#mode").val();
+
+      var paid_amount=$('#paid_amount').val(); 
+      var cheque_no=$('#cheque_no').val(); 
+      var bank_name=$('#bank_name').val(); 
+      var cheque_date=$('#cheque_date').val(); 
+      var branch_name=$('#branch_name').val(); 
+      var narration=$('#narration').val();
+      var account_debit=$('#account_debit option:selected').val();
      
+      var component_amount_total=$('#component_amount_total').val();
+    //   alert(component_amount_total);exit();
       var urlpath = basepath + 'feespayment/payment_action';
      if (ValidateSavePayment()) {
         $.ajax({
       type: "POST",
       url:  urlpath,
-      data: {paymentID:paymentID,mode:mode,studentid:studentid,monthids:monthids,payment_mode:payment_mode,payment_date:payment_date,total_pay_amount:total_pay_amount},
+      data: {paymentID:paymentID,mode:mode,studentid:studentid,monthids:monthids,payment_mode:payment_mode,payment_date:payment_date,total_pay_amount:total_pay_amount,paid_amount:paid_amount,cheque_no:cheque_no,bank_name:bank_name,cheque_date:cheque_date,branch_name:branch_name,narration:narration,component_amount_total:component_amount_total,account_debit:account_debit},
       dataType: 'json',
       contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
       success: function (result) {
@@ -425,6 +436,32 @@ $(document).on('click', '#viewpaymenthistory', function(event){
 }); 
 
 
+
+$(document).on('change', '#payment_mode', function(event){
+    event.preventDefault(); 
+    // var mode=$('#payment_mode option:selected').val();
+    var mode=$('#payment_mode option:selected').text();
+        $('#cheque_no').val(""); 
+        $('#bank_name').val(""); 
+        $('#cheque_date').val(""); 
+        $('#branch_name').val(""); 
+        // $('#narration').val("");
+  if(mode=="Cheque"){
+        $('#cheque_no_div').show(); 
+        $('#bank_name_div').show(); 
+        $('#cheque_date_div').show(); 
+        $('#branch_name_div').show();        
+   }else{
+        $('#cheque_no_div').hide(); 
+        $('#bank_name_div').hide(); 
+        $('#cheque_date_div').hide(); 
+        $('#branch_name_div').hide(); 
+        
+   }
+ 
+});
+
+
  });// end of document ready
 
 
@@ -462,6 +499,8 @@ function ValidateSavePayment()
 {  
       var payment_mode = $("#payment_mode").val();
       var payment_date = $("#payment_date").val();
+      var paid_amount = $("#paid_amount").val();
+      var account_debit = $("#account_debit option:selected").val();
      // alert(payment_date);
     
     $("#paymentmsg").text("").css("dispaly", "none").removeClass("form_error");
@@ -474,11 +513,32 @@ function ValidateSavePayment()
         .css("display", "block");
         return false;
     }
+
+    if(paid_amount=="")
+    {
+        $("#paid_amount").focus();
+        $("#paymentmsg")
+        .text("Error : Select Paid Amount")
+        .addClass("form_error")
+        .css("display", "block");
+        return false;
+    }
+
     if(payment_mode=="0")
     {
         $("#studentid").focus();
         $("#paymentmsg")
         .text("Error : Select Payment mode")
+        .addClass("form_error")
+        .css("display", "block");
+        return false;
+    }    
+
+    if(account_debit=="0")
+    {
+        $("#account_debit").focus();
+        $("#paymentmsg")
+        .text("Error : Select Account to be Debited")
         .addClass("form_error")
         .css("display", "block");
         return false;

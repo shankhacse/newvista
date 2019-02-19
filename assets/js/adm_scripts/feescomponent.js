@@ -131,7 +131,7 @@ $(document).ready(function(){
                     });
                 },
                 cancel: function () {
-                    $.alert('Canceled!');
+                    // $.alert('Canceled!');
                 }
             }
         });

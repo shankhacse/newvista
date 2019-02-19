@@ -327,8 +327,8 @@ echo base_url()."assets/documents/profile_picture/".$bodycontent['studentEditdat
                         </div>
                       </div>
 
-                        <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="form-group">
+                        <div class="col-md-3 col-sm-12 col-xs-12" id="father_contact_no_d">
+                        <div class="form-group" > 
                           <label for="reg_no">Father Contact No <span class="req-star-mark">*</span></label></label>
                         <input type="text" class="form-control forminputs removeerr" id="father_contact_no" name="father_contact_no" placeholder="Enter Father Contact " autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->father_contact_no; } ?>" />
 
@@ -381,7 +381,7 @@ echo base_url()."assets/documents/profile_picture/".$bodycontent['studentEditdat
                         </div>
                       </div>
 
-                        <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="col-md-3 col-sm-12 col-xs-12" id="mother_contact_no_d">
                         <div class="form-group">
                           <label for="reg_no">Mother Contact No</label>
                         <input type="text" class="form-control forminputs removeerr" id="mother_contact_no" name="mother_contact_no" placeholder="Enter Mother Contact " autocomplete="off" value="<?php if($bodycontent['mode']=="EDIT"){echo $bodycontent['studentEditdata']->mother_contact_no; } ?>" />

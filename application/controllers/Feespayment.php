@@ -162,7 +162,9 @@ public function getStudent()
              $result['monthids_string'] = implode(',', $monthids);
             //$destination_array = explode(',', $string_version);
             //print_r($destination_array);
-            $result['studentData']=$this->Studentmodel->getStudentDataEditbyId($studentid,$session['acd_session_id']);
+			$result['studentData']=$this->Studentmodel->getStudentDataEditbyId($studentid,$session['acd_session_id']);
+			$result['PaymentModeList']=$this->commondatamodel->getAllDropdownData('payment_mode_master');
+			$result['AccountList']=$this->commondatamodel->getOnlyBankAndCashAccountList( $session['school_id']);
           
           	$classid=$result['studentData']->class_id;
           	
@@ -170,7 +172,7 @@ public function getStudent()
           	$result['fessComponentData']=$this->feespaymentmodel->getFeesComponentListbyClass($classid,$monthids);
 
 
-			//pre($result['fessComponentData']);
+			// pre($result['fessComponentData']);
 			$page = "dashboard/admin_dashboard/fees_payment/fees_payment_compnent_view.php";
 			$partial_view = $this->load->view($page, $result, TRUE);
 			echo $partial_view;
@@ -222,7 +224,7 @@ public function getPaymentComponentListPaymentEdit()
           	$result['fessComponentData']=$this->feespaymentmodel->getFeesComponentListbyClass($classid,$monthids);
 
 
-			//pre($result['fessComponentData']);
+			// pre($result['fessComponentData']);
 			$page = "dashboard/admin_dashboard/fees_payment/fees_payment_compnent_view.php";
 			$partial_view = $this->load->view($page, $result, TRUE);
 			echo $partial_view;
@@ -233,6 +235,20 @@ public function getPaymentComponentListPaymentEdit()
 		}
 	}
 
+	public function createVoucherNumber($school_id,$acd_session_id,$prefix)
+	{
+		$where=[
+			"id"=>$acd_session_id
+		];
+		$year=$this->commondatamodel->getSingleRowByWhereCls('academic_session_master',$where);
+		$start_yr=substr($year->start_yr,2);
+		$end_yr=substr($year->end_yr,2);
+		$serial=$this->commondatamodel->getSerialnumber($school_id,$acd_session_id);
+		
+		$voucher_no=$prefix."/".$serial."/".$start_yr."-".$end_yr;
+		// echo $voucher_no;exit;
+		return $voucher_no;
+	}
 
 	/* payment details save and edit */
 
@@ -242,6 +258,10 @@ public function getPaymentComponentListPaymentEdit()
 		$session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
 		{
+			$acd_session_id=$session['acd_session_id'];
+			$school_id=$session['school_id'];
+			$userid=$session['userid'];
+
 			$paymentID = $this->input->post('paymentID');
 			$mode = $this->input->post('mode');
 			$studentid = $this->input->post('studentid');
@@ -249,6 +269,22 @@ public function getPaymentComponentListPaymentEdit()
 			$payment_mode = $this->input->post('payment_mode');
 			$payment_date = $this->input->post('payment_date');
 
+			$paid_amount= $this->input->post('paid_amount');
+			$cheque_no= $this->input->post('cheque_no');
+			$bank_name= $this->input->post('bank_name');
+			$cheque_date= $this->input->post('cheque_date');
+			$branch_name= $this->input->post('branch_name');
+			$narration= $this->input->post('narration');
+			$account_debit= $this->input->post('account_debit');
+		
+			$component_amount_total= base64_decode($this->input->post('component_amount_total'));			
+			$fessComponentData=json_decode($component_amount_total);
+			
+
+			
+
+			// $fees_id=explode(',',$fees_id);
+			
 			$monthids_array = explode(',', $monthids);
 
 			 if($payment_date!=""){
@@ -257,7 +293,16 @@ public function getPaymentComponentListPaymentEdit()
 			 }
 			 else{
 				 $payment_date = NULL;
-		    }
+			}
+			
+			if($cheque_date!=""){
+				$cheque_date = str_replace('/', '-', $cheque_date);
+				$cheque_date = date("Y-m-d",strtotime($cheque_date));
+			 }
+			 else{
+				 $cheque_date = NULL;
+			}
+			
 			$total_pay_amount = $this->input->post('total_pay_amount');
 
 			
@@ -282,6 +327,15 @@ public function getPaymentComponentListPaymentEdit()
 						"payment_date" => $payment_date,
 						"payment_mode" => $payment_mode,
 						"total_amount" => $total_pay_amount,
+						"total_amount" => $total_pay_amount,
+
+						"paid_amount"=>$paid_amount,
+						"cheque_no"=>$cheque_no,
+						"bank_name"=>$bank_name,
+						"cheque_date"=>$cheque_date,
+						"branch_name"=>$branch_name,
+						"narration"=>$narration,
+
 						"last_modified" => date('Y-m-d')
 					);
 
@@ -386,9 +440,9 @@ public function getPaymentComponentListPaymentEdit()
 					/*  ADD MODE
 					 *	-----------------
 					*/
+								
 
-            
-
+					/* insert into payment master */
 					$array_payment_master = array(
 						"academic_dtl_id" => $academic_dtl_id,
 						"class_id" => $classid,
@@ -398,20 +452,127 @@ public function getPaymentComponentListPaymentEdit()
 						"payment_date" => $payment_date,
 						"payment_mode" => $payment_mode,
 						"total_amount" => $total_pay_amount,
-						"created_by" => $session['userid']
+
+						"paid_amount"=>$paid_amount,
+						"cheque_no"=>$cheque_no,
+						"bank_name"=>$bank_name,
+						"cheque_date"=>$cheque_date,
+						"branch_name"=>$branch_name,
+						"narration"=>$narration,
+						"voucher_master_id"=>NULL,
+						"created_by" => $userid
 					);
 					
 					$payment_master_id = $this->commondatamodel->insertSingleTableDataRerurnInsertId('payment_master',$array_payment_master);
+					/* insert into payment master end */
 
+					$prefix=array('JV','RC');
+					for ($i=0; $i <sizeof($prefix) ; $i++) { 
+						if ($prefix[$i]=='JV') 
+						{
+							$amount=$total_pay_amount;
+						}else{
+							$amount=$paid_amount;
+						}
+						
+						/* insert into voucher master  */
+						$insert_arr=array(
+							"voucher_number"=>$this->createVoucherNumber($school_id,$acd_session_id,$prefix[$i]),
+							"voucher_date"=> $payment_date,
+							"narration"=>$narration,
+							"cheque_number"=>$cheque_no,
+							"cheque_date"=>$cheque_date,
+							"chq_clear_on"=>"",
+							"is_chq_clear"=>"",
+							"transaction_type"=>$prefix[$i],
+							"created_by"=>$userid,
+							"school_id"=>$school_id,
+							"acdm_session_id"=>$acd_session_id,
+							"serial_number"=>"0",
+							"vouchertype"=>NULL,
+							"paid_to"=>NULL,					
+							"total_debit"=>$amount,					
+							"total_credit"=>$amount					
+						);
+						$voucher_master_id=$this->commondatamodel->insertSingleTableDataRerurnInsertId("voucher_master",$insert_arr);
+						/* insert into voucher master  end */
+
+						/* insert into voucher detail */
+						if ($prefix[$i]=='JV') 
+						{
+							$whereS=[
+								"student_id"=>$studentid
+							];
+							$arr_D=array(
+								"voucher_master_id"=>$voucher_master_id,
+								"account_master_id"=>$this->feespaymentmodel->getSingleColumnData('account_id','student_master',$whereS),
+								"tran_type"=>NULL,
+								"voucher_amount"=>$total_pay_amount,
+								"is_debit"=>'Y'
+							);
+	
+							$this->commondatamodel->insertSingleTableData('voucher_detail',$arr_D);
+	
+							foreach ($fessComponentData as $fescomonent) {
+								$where=[
+									"id"=>$fescomonent->fees_id
+								]; 
+								$arr_C=array(
+									"voucher_master_id"=>$voucher_master_id,
+									"account_master_id"=>$this->feespaymentmodel->getSingleColumnData('account_id','fees_structure',$where),
+									"tran_type"=>NULL,
+									"voucher_amount"=>$fescomonent->sum_amount,
+									"is_debit"=>'N'
+								);
+								$this->commondatamodel->insertSingleTableData('voucher_detail',$arr_C);
+							}
+							
+						}else{
+							$whereS=[
+								"student_id"=>$studentid
+							];
+							$arr_D=array(
+								"voucher_master_id"=>$voucher_master_id,
+								"account_master_id"=>$this->feespaymentmodel->getSingleColumnData('account_id','student_master',$whereS),
+								"tran_type"=>NULL,
+								"voucher_amount"=>$total_pay_amount,
+								"is_debit"=>'N'
+							);
+							$where=[
+									"id"=>$fescomonent->fees_id
+								]; 
+								$arr_C=array(
+									"voucher_master_id"=>$voucher_master_id,
+									"account_master_id"=>$account_debit,
+									"tran_type"=>NULL,
+									"voucher_amount"=>$total_pay_amount,
+									"is_debit"=>'Y'
+								);
+							$table_arr=array("voucher_detail","voucher_detail");
+							$ins_data_arr=array($arr_D,$arr_C);
+							$this->commondatamodel->insertMultiTableData($table_arr,$ins_data_arr);
+							
+						}								
+						/* insert into voucher detail end */
+
+						/* insert into payment voucher ref */
+						$data_arr=array(
+							"payment_id"=>$payment_master_id,
+							"voucher_id"=>$voucher_master_id
+						);
+						$this->commondatamodel->insertSingleTableData('payment_voucher_ref',$data_arr);
+						/* insert into payment voucher ref end */
+						
+					}//end of voucher for
+
+					
 					/* start month loop*/
 					foreach ($monthids_array as $key => $value) {
 						$monthid=$value;
 						$fessComponentListData=$this->feespaymentmodel->getFeesComponentListbyClassMonth($classid,$value);
 						$fessComsumData=$this->feespaymentmodel->getFeesComponentListSumbyClassMonth($classid,$value);
 						$total_amount_monthly=$fessComsumData->sum_amount;
-
 						// pre($fessComponentListData);
-
 						$payment_month_dtl_array = array(
 							'payment_master_id' => $payment_master_id, 
 							'month_id' => $monthid, 
@@ -496,6 +657,7 @@ public function getPaymentComponentListPaymentEdit()
 
 
 /* payment list details*/
+
 
 
 public function getPaymentList()

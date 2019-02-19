@@ -454,6 +454,39 @@ class Commondatamodel extends CI_Model{
 			$this->db->update('voucher_srl_master', $upddata);
 			return $serialno;
 		}
+
+		public function getOnlyBankAndCashAccountList($school_id)
+		{
+			$where=[
+				"school_id"=>$school_id,
+				"is_active"=>"Y"            
+			];
+			$where_in=array(33,34);//id-33(cash),id-34(bank)
+			$data = array();
+			$this->db->select("*")
+					->from('account_master')
+					->where($where)
+					->where_in('group_id',$where_in)
+					->order_by('account_name');
+					
+			$query = $this->db->get();
+			// echo $this->db->last_query();exit;
+	
+			if($query->num_rows()> 0)
+			{
+				foreach ($query->result() as $rows)
+				{
+					$data[] = $rows;
+				}
+				// pre($data);
+				return $data;
+				 
+			}
+			else
+			{
+				 return $data;
+			 }
+		}
 	
 
 	

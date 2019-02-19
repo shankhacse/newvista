@@ -379,8 +379,39 @@ $('input[type="checkbox"][name="adr_check"]').change(function() {
                     }
                 }); /*end ajax call*/
 
-       
+    });
 
+    $('#father_contact_no').on('keyup',function(){
+        var length=$('#father_contact_no').val().length;
+        // alert(length);
+        $("#admmsg").text("").css("dispaly", "none").removeClass("form_error");
+        $("#father_contact_no_d").removeClass("has-error");
+        if (length>10) {
+            $("#father_contact_no").focus();
+            $("#father_contact_no_d").addClass("has-error");
+            $("#admmsg")
+            .text("Error : Enter 10 Digit Mobile Number")
+            .addClass("form_error")
+            .css("display", "block");
+            return false;
+        }
+        return true;
+    });
+    $('#mother_contact_no').on('keyup',function(){
+        var length=$('#mother_contact_no').val().length;
+        // alert(length);
+        $("#admmsg").text("").css("dispaly", "none").removeClass("form_error");
+        $("#mother_contact_no_d").removeClass("has-error");
+        if (length>10) {
+            $("#mother_contact_no").focus();
+            $("#mother_contact_no_d").addClass("has-error");
+            $("#admmsg")
+            .text("Error : Enter 10 Digit Mobile Number")
+            .addClass("form_error")
+            .css("display", "block");
+            return false;
+        }
+        return true;
     });
 
 
@@ -422,10 +453,11 @@ function validateAdmission()
     var acdm_section = $("#acdm_section").val();
     var acdm_roll = $("#acdm_roll").val();
     var account_group = $("#account_group option:selected").val();
-
-
+    var flength=$('#father_contact_no').val().length;
 
     $("#admmsg").text("").css("dispaly", "none").removeClass("form_error");
+    $("#father_contact_no_d").removeClass("has-error");
+   
 
     if(reg_no=="")
     {
@@ -516,6 +548,15 @@ function validateAdmission()
         .css("display", "block");
         return false;
     }
+    if (flength>10) {
+        $("#father_contact_no").focus();
+        $("#father_contact_no_d").addClass("has-error");
+        $("#admmsg")
+        .text("Error : Enter 10 Digit Mobile Number")
+        .addClass("form_error")
+        .css("display", "block");
+        return false;
+    }    
 
     if(guardian_name=="")
     {

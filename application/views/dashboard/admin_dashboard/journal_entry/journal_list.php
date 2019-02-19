@@ -67,7 +67,7 @@ vertical-align: inherit;
                   <tr>
                     <td><?php echo $voucher_detail->account_name; ?></td>
                     <td><?php echo $voucher_detail->voucher_amount; ?></td>
-                    <td><?php echo $voucher_detail->tran_type; ?></td>
+                    <td><?php if($voucher_detail->is_debit=='Y'){ echo "D"; }else{ echo "C"; }?></td>
                   </tr>
                <?php } ?>
               

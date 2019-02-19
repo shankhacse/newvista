@@ -37,9 +37,12 @@
 				
               		$i = 1;
                   $total_amount=0;
-
+                  $fees_id="";
+                  // pre($fessComponentData);
+                  $fessComponentJson=json_encode($fessComponentData);
                     foreach ($fessComponentData as $fescomonent) {
                      $total_amount+=$fescomonent->sum_amount;
+                     $fees_id=$fescomonent->fees_id.','.$fees_id;
                    
                   ?>
               	
@@ -50,61 +53,116 @@
 						<td align="right"><?php echo $fescomonent->sum_amount; ?></td>
 
 					</tr>
-         
+          
              <?php } ?>
              <tr style="font-weight: bold;"><td colspan="2" >Total amount</td><td align="right"><?php echo number_format($total_amount,2); ?></td></tr>
                 </tbody>
                
               </table>
-              </center>
+              </center>              
 
       <input type="hidden" name="total_pay_amount" id="total_pay_amount" value="<?php echo $total_amount;?>" />
+      <input type="hidden" name="component_amount_total" id="component_amount_total" value='<?php echo base64_encode($fessComponentJson);?>'>
               <?php
        $curr_dt = date('d/m/Y');     
 ?>
 
- <div  style="margin-top:50px;margin-left: 139px; ">
-  <div class="form-group row">
-    
-  <div class="col-sm-2 col-md-2 col-xs-12"> 
-   <label for="pdate">Payment Date</label>  
-   </div>
-      <div class="col-sm-2 col-md-2 col-xs-12">
-     
-                    <input type="text"  class="form-control custom_frm_input datepicker"  name="payment_date" id="payment_date"  placeholder="" value="<?php echo $curr_dt;?>" style="width: 204px;" />
+  <div  style="margin-top:50px;margin-left: 139px; ">
+        <div class="form-group row">
+        
+
+          <div class="col-sm-2 col-md-2 col-xs-12">
+            <label for="pdate">Payment Date</label> 
+            <input type="text"  class="form-control custom_frm_input datepicker"  name="payment_date" id="payment_date"  placeholder="" value="<?php echo $curr_dt;?>" style="width: 204px;" />
+          </div>
+          <div class="col-sm-2 col-md-2 col-xs-12"> </div>
+          <div class="col-sm-2 col-md-2 col-xs-12">
+            <label for="paid_amount">Paid Amount</label> 
+            <input type="text"  class="form-control"  name="paid_amount" id="paid_amount"  value="<?php echo $total_amount;?>" style="width: 204px;" />
+          </div>
+
+          <div class="col-sm-2 col-md-2 col-xs-12"> </div>
+        
+
+          <div class="col-md-2 col-sm-2 col-xs-12">
+            <div class="form-group">
+              <label for="mode">Payment mode</label>
+              <select id="payment_mode" name="payment_mode" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                <option value="0">Select</option> 
+                <?php
+                foreach ($PaymentModeList as $value) {
+                echo '<option value="'.$value->id.'">'.$value->payment_mode.'</option>';
+                }
+                ?>
+              </select>
+            </div>        
+        </div>      
+      </div>
+      
+      <div class="form-group row">
+        <div id="account_debit_div" class="col-md-4">
+          <div class="form-group">
+            <label for="account_debit">Account to be Debited</label>  
+            <select id="account_debit" name="account_debit" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+              <option value="0">Select</option> 
+              <?php
+                foreach ($AccountList as $value) {
+                  echo '<option data-text="'.$value->account_name.'" value="'.$value->account_id.'">'.$value->account_name.'</option>';
+                }
+              ?>
+            </select>
+          </div>
         </div>
-<div class="col-sm-2 col-md-2 col-xs-12"> </div>
-        <div class="col-sm-2 col-md-2 col-xs-12">
-        <label for="mode">Payment mode</label>  
-
-               
+        <div class="col-sm-2 col-md-2 col-xs-12"> </div>
+        <div style="display:none;" id="cheque_no_div" class="col-md-4">
+          <div class="form-group">
+            <label for="cheque_no">Cheque No.</label>
+            <input type="text" class="form-control" name="cheque_no" id="cheque_no" placeholder="Enter Cheque No.">
+          </div>
         </div>
-           <div class="col-md-2 col-sm-2 col-xs-12">
-                        <div class="form-group">
-                       
-                         <select id="payment_mode" name="payment_mode" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
-                         <option value="0">Select</option> 
-                         <option value="Cash">Cash</option> 
-                         <option value="Card">Card</option> 
-                         <option value="Cheque">Cheque</option> 
-                         
+      <!-- </div>
 
-                        </select>
+      <div class="form-group row"> -->
+        <div style="display:none;" id="bank_name_div" class="col-md-4">
+          <div class="form-group">
+            <label for="bank_name">Bank</label>  
+            <input name="bank_name" id="bank_name" class="form-control" placeholder="Enter Bank Name">              
+          </div>
+        </div>
+        <div class="col-sm-2 col-md-2 col-xs-12"> </div>
+        <div style="display:none;" id="cheque_date_div" class="col-md-4">
+          <div class="form-group">
+            <label for="cheque_date">Cheque Date</label>
+            <input type="text"  class="form-control custom_frm_input datepicker" name="cheque_date" id="cheque_date">
+          </div>
+        </div>
+      <!-- </div>
 
-                        </div>
-                      </div>
-                    
+      <div class="form-group row"> -->
+        <div style="display:none;" id="branch_name_div" class="col-md-4">
+          <div class="form-group">
+            <label for="branch_name">Branch Name</label>  
+            <input name="branch_name" id="branch_name" class="form-control" placeholder="Enter Branch Name">            
+          </div>
+        </div>
+        <div class="col-sm-2 col-md-2 col-xs-12"> </div>
+        <div  id="narration_div" class="col-md-4">
+          <div class="form-group">
+            <label for="narration">Narration</label>
+            <textarea class="form-control" name="narration" id="narration"></textarea>
+          </div>
+        </div>
+      </div>
+      
+
+      <p id="paymentmsg" class="form_error" style="width: 776px;"></p> 
+      <p id="payment_err_msg" class="form_error"></p>
+      <div class="form-group row" style="margin-top:20px;" >
 
       
-    </div>
-     <p id="paymentmsg" class="form_error" style="width: 776px;"></p> 
-     <p id="payment_err_msg" class="form_error"></p>
-    <div class="form-group row" style="margin-top:20px;" >
+      </div>
 
-     
-    </div>
-
-              </div>
+  </div>
               <center> <div class="">
               <button type="submit" class="btn btn-primary formBtn" id="paymentSave" style="display: inline-block;width:150px;"><?php echo $btnText;?></button></center>
             </div>

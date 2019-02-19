@@ -11,6 +11,7 @@ class Feespaymentmodel extends CI_Model{
 		$data = [];
 		$query = $this->db->select("
 									fees_structure.fees_desc,
+									fees_structure.id as fees_id,
 									SUM(fees_session.amount) AS sum_amount
 				")
 				->from('fees_session')
@@ -213,9 +214,26 @@ class Feespaymentmodel extends CI_Model{
 	             
 	        }
 			
-	        return $data;
-	       
+	        return $data;	       
 		
 	}
+
+
+	public function getSingleColumnData($column_name,$table,$where)
+	{
+		$query=$this->db->select($column_name)
+						->from($table)
+						->where($where)
+						->get();
+		if ($query->num_rows()>0) {
+			foreach($query->result() as $rows)
+			{
+				$data= $rows->$column_name;
+			}	             
+		}
+		return $data;
+	}
+
+
 
 } //end of class
