@@ -33,7 +33,7 @@
                    
                    <div class="col-md-2">
                          <div class="form-group">
-                          <label for="reg_no">Class</label>
+                          <label for="acdm_class">Class</label>
                          <select id="acdm_class" name="acdm_class" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
                           <?php 
@@ -53,7 +53,7 @@
 
                     <div class="col-md-2">
                           <div class="form-group">
-                          <label for="reg_no">Section</label>
+                          <label for="acdm_section">Section</label>
                          <select id="acdm_section" name="acdm_section" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
                           <?php 
@@ -75,7 +75,7 @@
                     <div class="col-md-3">
 
                          <div class="form-group">
-                          <label for="reg_no">Student</label>
+                          <label for="studentid">Student</label>
                         <div id="student_dropdown">
                          <select id="studentid" name="studentid" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
@@ -93,6 +93,7 @@
 
                      <div class="form-group">
                           <label for="reg_no">Month</label>
+                          <div id="sel_month_dropdown">
                           <select id="sel_month" name="sel_month[]" class="form-control selectpicker changmonth"  data-show-subtext="true" data-actions-box="true" data-live-search="true" multiple="multiple" >
                            
                         
@@ -107,6 +108,7 @@
                           ?>
 
                         </select>
+                        </div>
                       
 
                         </div>

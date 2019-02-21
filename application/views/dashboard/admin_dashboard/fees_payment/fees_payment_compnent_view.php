@@ -64,7 +64,7 @@
       <input type="hidden" name="total_pay_amount" id="total_pay_amount" value="<?php echo $total_amount;?>" />
       <input type="hidden" name="component_amount_total" id="component_amount_total" value='<?php echo base64_encode($fessComponentJson);?>'>
               <?php
-       $curr_dt = date('d/m/Y');     
+       $curr_dt = date('d-m-Y');     
 ?>
 
   <div  style="margin-top:50px;margin-left: 139px; ">
@@ -166,3 +166,6 @@
               <center> <div class="">
               <button type="submit" class="btn btn-primary formBtn" id="paymentSave" style="display: inline-block;width:150px;"><?php echo $btnText;?></button></center>
             </div>
+<script type="text/javascript">
+    $(".datepicker").datepicker({format: 'dd-mm-yyyy'});
+</script>   

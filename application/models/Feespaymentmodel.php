@@ -119,14 +119,11 @@ class Feespaymentmodel extends CI_Model{
 					);
 
 		$data = [];
-		$query = $this->db->select("payment_master.payment_id,
-									payment_master.student_id,
+		$query = $this->db->select("payment_master.*,									
 									class_master.classname,
 									academic_details.rollno,
 									section_master.section,
-									student_master.name AS student_name,
-									payment_master.payment_date,
-									payment_master.payment_mode")
+									student_master.name AS student_name")
 				->from('payment_master')
 				->join('class_master','class_master.id = payment_master.class_id','INNER')
 				->join('academic_details','academic_details.id = payment_master.academic_dtl_id','INNER')
@@ -149,6 +146,30 @@ class Feespaymentmodel extends CI_Model{
 	        }
 	       
 		
+	}
+
+	public function getDebitAccountId($paymentId)
+	{
+		$where=[
+			"payment_voucher_ref.payment_id"=>$paymentId,
+			"payment_voucher_ref.voucher_tag"=>"R",
+			"voucher_detail.is_debit"=>"Y"
+		];
+		$query=$this->db->select('voucher_detail.account_master_id,voucher_detail.id')
+						->from('payment_voucher_ref')
+						->join('voucher_detail','payment_voucher_ref.voucher_id=voucher_detail.voucher_master_id','INNER')
+						->where($where)
+						->get();
+		if($query->num_rows()> 0)
+		{
+	        foreach($query->result() as $rows)
+			{
+				$data= $rows;
+			}
+	             
+	    }
+			
+	    return $data;
 	}
 
 
@@ -231,6 +252,27 @@ class Feespaymentmodel extends CI_Model{
 				$data= $rows->$column_name;
 			}	             
 		}
+		return $data;
+	}
+
+	public function getAlreadyPaidMonthList($table,$join_table,$join_on,$where)
+	{
+		$data = [];
+		$this->db->select('*')
+				->from($table)
+				->join($join_table,$join_on)
+				->where($where);
+
+		$query = $this->db->get();
+		// $rowcount = $query->num_rows();
+	
+		if($query->num_rows()>0){
+			foreach($query->result() as $rows)
+			{
+				$data[]= $rows->month_id;
+			}
+		}
+		
 		return $data;
 	}
 

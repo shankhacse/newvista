@@ -64,6 +64,46 @@ $(document).ready(function(){
 
     });
 
+   /* check Payment Given Months  */
+    $(document).on("change", "#studentid", function() {
+        var acdm_class=$('#acdm_class option:selected').val();
+        var studentid=$('#studentid option:selected').val();
+         
+    $.ajax({
+    type: "POST",
+    url: basepath+'feespayment/checkPaymentGivenMonths',
+    data: {studentid:studentid,acdm_class:acdm_class},
+    
+    success: function(data){
+        $("#sel_month_dropdown").html(data);
+        $('.selectpicker').selectpicker();
+    },
+    error: function (jqXHR, exception) {
+                  var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                   // alert(msg);  
+                }
+
+
+
+    });/*end ajax call*/
+
+    });
+
 
   // search
     $(document).on("click","#searchbtn",function(event){
@@ -247,7 +287,7 @@ $(document).on('change', '.changmonthedit', function(event){
     
       var studentid = $("#studentid").val();
       var monthids = $("#monthids").val();
-      var payment_mode = $("#payment_mode").val();
+      var payment_mode = $("#payment_mode option:selected").val();
       var payment_date = $("#payment_date").val();
       var total_pay_amount = $("#total_pay_amount").val();
       var paymentID = $("#paymentID").val();
@@ -320,17 +360,25 @@ $(document).on('change', '.changmonthedit', function(event){
    $(document).on("click", "#paymentmstUpdate", function(event) {
     event.preventDefault();
       
-      var payment_mode = $("#payment_mode").val();
+      
       var payment_date = $("#payment_date").val();  
       var paymentID = $("#paymentID").val();
       var mode = $("#mode").val();
+      var payment_mode = $("#payment_mode option:selected").val();
+      var paid_amount=$('#paid_amount').val(); 
+           var cheque_no=$('#cheque_no').val(); 
+           var bank_name=$('#bank_name').val(); 
+           var cheque_date=$('#cheque_date').val(); 
+           var branch_name=$('#branch_name').val(); 
+           var narration=$('#narration').val();
+           var account_debit=$('#account_debit option:selected').val();
      
       var urlpath = basepath + 'feespayment/updatePaymentMaster';
      if (ValidateSavePayment()) {
         $.ajax({
       type: "POST",
       url:  urlpath,
-      data: {paymentID:paymentID,mode:mode,payment_mode:payment_mode,payment_date:payment_date},
+      data: {paymentID:paymentID,mode:mode,payment_mode:payment_mode,payment_date:payment_date,paid_amount:paid_amount,cheque_no:cheque_no,bank_name:bank_name,cheque_date:cheque_date,branch_name:branch_name,narration:narration,account_debit:account_debit},
       dataType: 'json',
       contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
       success: function (result) {

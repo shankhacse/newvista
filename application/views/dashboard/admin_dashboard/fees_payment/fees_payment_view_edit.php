@@ -168,38 +168,113 @@
              </center>
               <div  style="margin-top:50px;margin-left: 139px; ">
   <div class="form-group row">
-    
-  <div class="col-sm-2 col-md-2 col-xs-12"> 
-   <label for="pdate">Payment Date</label>  
-   </div>
+
       <div class="col-sm-2 col-md-2 col-xs-12">
-     
-                    <input type="text"  class="form-control custom_frm_input datepicker"  name="payment_date" id="payment_date"  placeholder="" value="<?php echo date("d/m/Y", strtotime($bodycontent['studentinfo']->payment_date));?>" style="width: 204px;" />
+      <label for="pdate">Payment Date</label>      
+      <input type="text"  class="form-control custom_frm_input datepicker"  name="payment_date" id="payment_date"  placeholder="" value="<?php echo date("d-m-Y", strtotime($bodycontent['studentinfo']->payment_date));?>" style="width: 204px;" />
         </div>
 <div class="col-sm-2 col-md-2 col-xs-12"> </div>
-        <div class="col-sm-2 col-md-2 col-xs-12">
-        <label for="mode">Payment mode</label>  
-
-               
-        </div>
+          <div class="col-sm-2 col-md-2 col-xs-12">
+            <label for="paid_amount">Paid Amount</label> 
+            <input type="text"  class="form-control"  name="paid_amount" id="paid_amount" <?php
+            if ($bodycontent['studentinfo']->paid_amount!="") {
+              echo "value='".$bodycontent['studentinfo']->paid_amount."'";
+            }else{
+              "value='".$total_amount."'";
+            }            
+            ?> style="width: 204px;" />
+          </div>  
+          <div class="col-sm-2 col-md-2 col-xs-12"> </div>      
            <div class="col-md-2 col-sm-2 col-xs-12">
+           <label for="mode">Payment mode</label>  
                         <div class="form-group">
                        
                          <select id="payment_mode" name="payment_mode" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
-                         <option value="0" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentinfo']->payment_mode=="0"){echo "selected";}else{echo "";} ?>>Select</option> 
-                         <option value="Cash" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentinfo']->payment_mode=="Cash"){echo "selected";}else{echo "";} ?>>Cash</option> 
-                         <option value="Card" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentinfo']->payment_mode=="Card"){echo "selected";}else{echo "";} ?>>Card</option> 
-                         <option value="Cheque" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentinfo']->payment_mode=="Cheque"){echo "selected";}else{echo "";} ?>>Cheque</option> 
+                         <option value="0">Select</option>                          
+                        <?php
+                          foreach ($bodycontent['PaymentModeList'] as $paymode) {
+                        ?>
+                            <option value="<?php echo $paymode->id; ?>" <?php if(($bodycontent['mode']=="EDIT") && $bodycontent['studentinfo']->payment_mode==$paymode->id){echo "selected";}?>><?php echo $paymode->payment_mode;?></option>
+                        <?php                            
+                          }
+                        ?>
                          
 
                         </select>
 
                         </div>
                       </div>
+                      </div>
+                      <div class="form-group row">
+        <div id="account_debit_div" class="col-md-4">
+          <div class="form-group">
+            <label for="account_debit">Account to be Debited</label>  
+            <select id="account_debit" name="account_debit" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+              <option value="0">Select</option> 
+              <?php
+                foreach ($bodycontent['AccountList'] as $value) {
+              ?>
+                  <option data-text="<?php echo $value->account_name;?>" value="<?php echo $value->account_id; ?>" 
+                  <?php  if ($value->account_id==$bodycontent['DebitAccountId']->account_master_id) {
+                    echo " selected ";
+                  } ?>><?php echo $value->account_name; ?></option>
+              <?php
+                }
+              ?>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-2 col-md-2 col-xs-12"> </div>
+        <div style="display:none;" id="cheque_no_div" class="col-md-4">
+          <div class="form-group">
+            <label for="cheque_no">Cheque No.</label>
+            <input type="text" class="form-control" name="cheque_no" value="<?php echo $bodycontent['studentinfo']->cheque_no;?>" id="cheque_no" placeholder="Enter Cheque No.">
+          </div>
+        </div>
+      <!-- </div>
+
+      <div class="form-group row"> -->
+        <div style="display:none;" id="bank_name_div" class="col-md-4">
+          <div class="form-group">
+            <label for="bank_name">Bank</label>  
+            <input name="bank_name" id="bank_name" value="<?php echo $bodycontent['studentinfo']->bank_name;?>" class="form-control" placeholder="Enter Bank Name">              
+          </div>
+        </div>
+        <div class="col-sm-2 col-md-2 col-xs-12"> </div>
+        <div style="display:none;" id="cheque_date_div" class="col-md-4">
+          <div class="form-group">
+            <label for="cheque_date">Cheque Date</label>
+            <input type="text"   class="form-control custom_frm_input datepicker" 
+            <?php  if($bodycontent['studentinfo']->cheque_date!="")
+            {
+              echo "value='".date("d-m-Y", strtotime($bodycontent['studentinfo']->cheque_date))."'";
+            }else{
+              echo "";
+            }
+            ?>  name="cheque_date" id="cheque_date">
+          </div>
+        </div>
+      <!-- </div>
+
+      <div class="form-group row"> -->
+        <div style="display:none;" id="branch_name_div" class="col-md-4">
+          <div class="form-group">
+            <label for="branch_name">Branch Name</label>  
+            <input name="branch_name" id="branch_name" value="<?php echo $bodycontent['studentinfo']->branch_name;?>" class="form-control" placeholder="Enter Branch Name">            
+          </div>
+        </div>
+        <div class="col-sm-2 col-md-2 col-xs-12"> </div>
+        <div  id="narration_div" class="col-md-4">
+          <div class="form-group">
+            <label for="narration">Narration</label>
+            <textarea class="form-control" name="narration" id="narration"><?php echo $bodycontent['studentinfo']->narration;?></textarea>
+          </div>
+        </div>
+      </div>
                     
 
       
-    </div>
+    
      <p id="paymentmsg" class="form_error" style="width: 776px;"></p> 
      <p id="payment_err_msg" class="form_error"></p>
     <div class="form-group row" style="margin-top:20px;" >
@@ -253,7 +328,22 @@
 </div>
 
 <script type="text/javascript">
-    $(".datepicker").datepicker({format: 'dd/mm/yyyy'});
+    $(".datepicker").datepicker({format: 'dd-mm-yyyy'});
+    $(window).on('load',function(){
+      var mode=$('#payment_mode option:selected').text();
+      if(mode=="Cheque"){
+              $('#cheque_no_div').show(); 
+              $('#bank_name_div').show(); 
+              $('#cheque_date_div').show(); 
+              $('#branch_name_div').show();        
+        }else{
+              $('#cheque_no_div').hide(); 
+              $('#bank_name_div').hide(); 
+              $('#cheque_date_div').hide(); 
+              $('#branch_name_div').hide(); 
+              
+        }
+    });
 </script>            
     
 
