@@ -8,7 +8,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="<?php echo base_url(); ?>dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Fees Payment </li>
+        <li class="active">Fees Receipt </li>
       </ol>
     </section>
 
@@ -19,7 +19,7 @@
       <div class="col-md-12">
         <div class="box box-primary formBlockLarge">
               <div class="box-header with-border">
-                <h3 class="box-title">Fees Payment</h3>
+                <h3 class="box-title">Fees Receipt</h3>
                  
               </div>
               <!-- /.box-header -->

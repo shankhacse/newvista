@@ -87,11 +87,11 @@ $(document).ready(function(){
 
 function validate()
 {  
-	var section = $(".classList option:selected").val();
+	var section = $("#classList option:selected").val();
 	$("#clsmsg").text("").css("dispaly", "none").removeClass("form_error");
 	if(section=="")
 	{
-		$(".classList").focus();
+		$("#classList").focus();
 		$("#clsmsg")
 		.text("Error : Select Class")
 		.addClass("form_error")

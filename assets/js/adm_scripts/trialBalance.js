@@ -13,7 +13,7 @@ $(document).ready(function() {
                  $("#from_date_div").addClass("has-error");                    
                     $("#fees_desc").focus();
                     $("#errormsg")
-                    .text("Error : Enter Fees Description")
+                    .text("Error : Enter From Date")
                     .addClass("form_error")
                     .css("display", "block");
                  return false;
@@ -22,7 +22,7 @@ $(document).ready(function() {
              if(todate==""){
                  $("#to_date_div").addClass("has-error");                  
                   $("#errormsg")
-                  .text("Error : Enter Fees Description")
+                  .text("Error : Enter To Date")
                   .addClass("form_error")
                   .css("display", "block");
                  return false;

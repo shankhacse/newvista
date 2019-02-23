@@ -24,7 +24,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="<?php echo base_url(); ?>dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Payment History</li>
+        <li class="active">Receipt History</li>
       </ol>
     </section>
 
@@ -33,7 +33,7 @@
 
 		    <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Payment History</h3>
+              <h3 class="box-title">Receipt History</h3>
              
             </div>
             <!-- /.box-header -->

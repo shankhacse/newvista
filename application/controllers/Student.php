@@ -420,7 +420,8 @@ class Student extends CI_Controller {
 		$session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
 		{       
-			
+		
+			// pre($this->input->post());exit;
 			$header = "";
 			$formData = $this->input->post('formDatas');
 			parse_str($formData, $dataArry);
@@ -454,6 +455,8 @@ class Student extends CI_Controller {
 			else{
 				$result['studentList']=[];
 			}
+
+			
 
    	
 			$page = "dashboard/admin_dashboard/student/student_list_data";

@@ -336,11 +336,11 @@ $('input[type="checkbox"][name="adr_check"]').change(function() {
   
     $(document).on("submit","#StudentListForm",function(event){
         event.preventDefault();
-
+        
            var formDataserialize = $("#StudentListForm" ).serialize();
             formDataserialize = decodeURI(formDataserialize);
             console.log(formDataserialize);
-            var formData = {formDatas: formDataserialize};
+            var formData = {formDatas:formDataserialize};
             
             $(".dashboardloader").css("display","block");
 
