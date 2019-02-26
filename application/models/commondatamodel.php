@@ -31,6 +31,7 @@ class Commondatamodel extends CI_Model{
             //$this->db->where($where);
 			$this->db->update($table, $data,$where);
 			$this->db->last_query();
+			
             //$affectedRow = $this->db->affected_rows();
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
@@ -407,6 +408,22 @@ class Commondatamodel extends CI_Model{
 		}
 		
 		//added by sandipan on 14.02.2019
+		public function createVoucherNumber($school_id,$acd_session_id,$prefix)
+		{
+			$where=[
+				"id"=>$acd_session_id
+			];
+			$year=$this->getSingleRowByWhereCls('academic_session_master',$where);
+			$start_yr=substr($year->start_yr,2);
+			$end_yr=substr($year->end_yr,2);
+			$serial=$this->getSerialnumber($school_id,$acd_session_id);
+			
+			$voucher_no=$prefix."/".$serial."/".$start_yr."-".$end_yr;
+			// echo $voucher_no;exit;
+			return $voucher_no;
+		}
+
+
 		public function getSerialnumber($school_id,$acd_session_id)
 		{
 		   
@@ -455,6 +472,9 @@ class Commondatamodel extends CI_Model{
 			return $serialno;
 		}
 
+
+
+
 		public function getOnlyBankAndCashAccountList($school_id)
 		{
 			$where=[
@@ -487,7 +507,39 @@ class Commondatamodel extends CI_Model{
 				 return $data;
 			 }
 		}
-	
+
+		public function getListOfAccountWhereAccountsAreNotInBankAndCashGroup($school_id)
+		{
+			$where=[
+				"account_master.school_id"=>$school_id,
+				"account_master.is_active"=>"Y"            
+			];
+			$where_in=array('Cash','Bank');
+			$data = array();
+			$this->db->select("*")
+					->from('account_master')
+					->join('group_master','account_master.group_id=group_master.id','INNER')
+					->where($where)
+					->where_not_in('group_master.group_description',$where_in)
+					->order_by('account_master.account_name');
+					
+			$query = $this->db->get();	
+			if($query->num_rows()> 0)
+			{
+				foreach ($query->result() as $rows)
+				{
+					$data[] = $rows;
+				}
+				// pre($data);
+				return $data;
+				 
+			}
+			else
+			{
+				 return $data;
+			 }
+		}
+
 
 	
 	

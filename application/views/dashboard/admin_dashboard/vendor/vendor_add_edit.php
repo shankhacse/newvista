@@ -51,7 +51,7 @@
                         </div>
                         <div id="contact_persone_div" class="form-group col-md-6">                            
                             <label for="contact_persone">Contact Persone</label>
-                            <input type="text" class="form-control" name="contact_persone" id="contact_persone" value="<?php     if ($bodycontent['mode']=="EDIT"){ echo $bodycontent['vendorEditData']->contact_persone;} ?>"  placeholder="Account">
+                            <input type="text" class="form-control" name="contact_persone" id="contact_persone" value="<?php     if ($bodycontent['mode']=="EDIT"){ echo $bodycontent['vendorEditData']->contact_persone;} ?>"  placeholder="Contact Persone">
                         </div>
                         <div id="state_id_div" class="form-group col-md-6">                            
                             <label for="state_id">State*</label>

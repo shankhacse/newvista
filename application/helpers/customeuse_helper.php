@@ -21,3 +21,18 @@ if(!function_exists('q'))
         echo $CI->db->last_query();
 	}
 }
+
+if(!function_exists('date_ymd'))
+{
+	//added by sandipan sarkar on 25.02.2019
+	function date_ymd($date)
+	{
+		$dateEx = explode('/',$date);
+            $month  = $dateEx[0];
+            $day  = $dateEx[1];
+			$year  = $dateEx[2];
+			$stringDate = $day."-".$month."-".$year;
+			$formated_date = date("Y-m-d",strtotime($stringDate));
+			return $formated_date;
+	}
+}

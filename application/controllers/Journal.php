@@ -105,17 +105,20 @@ class Journal extends CI_Controller
 			$school_id=$session['school_id'];
 			$userid=$session['userid'];
 
-			$mode=$this->input->post('mode');
+			$mode=$this->input->post('mode');			
+			
+			// $voucherDate = str_replace('/', '-', trim($this->input->post('voucher_date')));		
+			// $voucher_date=date("Y-m-d",strtotime($voucherDate));
+			$voucher_date=date_ymd($this->input->post('voucher_date'));
 
-			$voucherDate = str_replace('/', '-', trim($this->input->post('voucher_date')));		
-			$voucher_date=date("Y-m-d",strtotime($voucherDate));
 			$narration=$this->input->post('narration');
 			$cheque_number=$this->input->post('cheque_no');
 
 			
-			if ($this->input->post('cheque_date')!="" && !empty($this->input->post('cheque_date'))) {
-				$chequeDate = str_replace('/', '-', trim($this->input->post('cheque_date')));
-				$cheque_date=date("Y-m-d",strtotime($chequeDate));
+			if ($this->input->post('cheque_date')!="" && !empty($this->input->post('cheque_date'))) {	
+				// $chequedate = str_replace('/', '-', trim($this->input->post('cheque_date')));		
+				// $cheque_date=date("Y-m-d",strtotime($chequedate));
+				$cheque_date=date_ymd($this->input->post('cheque_date'));
 			}else{
 				$cheque_date=NULL;
 			}

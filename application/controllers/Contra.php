@@ -106,15 +106,18 @@ class Contra extends CI_Controller {
 
 			$mode=$this->input->post('mode');
 
-			$voucherDate = str_replace('/', '-', trim($this->input->post('voucher_date')));		
-			$voucher_date=date("Y-m-d",strtotime($voucherDate));
+			// $voucherDate = str_replace('/', '-',$this->input->post('voucher_date'));		
+			// $voucher_date=date("Y-m-d",strtotime($voucherDate));
+			$voucher_date=date_ymd($this->input->post('voucher_date'));
+
 			$narration=$this->input->post('narration');
 			$cheque_number=$this->input->post('cheque_no');
 
 			
 			if ($this->input->post('cheque_date')!="" && !empty($this->input->post('cheque_date'))) {
-				$chequeDate = str_replace('/', '-', trim($this->input->post('cheque_date')));
-				$cheque_date=date("Y-m-d",strtotime($chequeDate));
+				// $chequeDate = str_replace('/', '-', trim($this->input->post('cheque_date')));
+				// $cheque_date=date("Y-m-d",strtotime($chequeDate));
+				$cheque_date=date_ymd($this->input->post('cheque_date'));
 			}else{
 				$cheque_date=NULL;
 			}
