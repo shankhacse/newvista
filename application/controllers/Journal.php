@@ -208,14 +208,14 @@ class Journal extends CI_Controller
 				 $arr_D=array(
 					"voucher_master_id"=>$voucher_id,
 					"account_master_id"=>$debit_ac,
-					"tran_type"=>'D',
+					"tran_type"=>NULL,
 					"voucher_amount"=>$debit_amount,
-					"is_debit"=>'N'
+					"is_debit"=>'Y'
 				);
 				$arr_C=array(
 					"voucher_master_id"=>$voucher_id,
 					"account_master_id"=>$credit_ac,
-					"tran_type"=>'C',
+					"tran_type"=>NULL,
 					"voucher_amount"=>$credit_amount,
 					"is_debit"=>'N'
 				);

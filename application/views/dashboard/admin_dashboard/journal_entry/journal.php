@@ -124,6 +124,7 @@
                                         <?php foreach ($bodycontent['AccountList'] as $value) { ?>
                                             <option  value="<?php echo $value->account_id; ?>" 
                                             <?php if ($bodycontent['mode']=="EDIT"){
+                                                // pre($bodycontent['JournalDebitData']);
                                                if ($bodycontent['JournalDebitData']->account_master_id==$value->account_id) {
                                                 echo " selected";
                                                 }
