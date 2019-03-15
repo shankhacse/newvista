@@ -94,8 +94,21 @@ class Vendor extends CI_Controller
                     "user_browser" => getUserBrowserName(),
                     "user_platform" => getUserPlatform()
                  );
+                 $account_master_data=[
+                    "account_name"=>$name,
+                    "group_id"=>$Group_id,
+                    "bank_ifsc"=>$this->input->post('bank_ifsc'), 
+                    "bank_ac_no"=>$this->input->post('bank_ac_no'), 
+                    "bank_address"=>$this->input->post('bank_address'), 
+                    "bank_branch"=>$this->input->post('bank_branch'), 
+                    "school_id"=>$session['school_id'],
+                    "is_special"=>"N",
+                    "is_active"=>"Y",
+                    "from_where"=>"O",
+                    "created_By"=>$session['userid']
+                ];
 
-                $account_master_id=$this->vendormodel->accountMasterLastId($name,$group_id,$session['userid'],$session['school_id']);
+                $account_master_id=$this->commondatamodel->insertSingleTableData("account_master",$account_master_data);
                 $data_arr=[
                     "name"=>$name,
                     "address"=>$this->input->post('address'),
@@ -104,6 +117,10 @@ class Vendor extends CI_Controller
                     "contact_persone"=>$this->input->post('contact_persone'),
                     "state_id"=>$this->input->post('state_id'),                    
                     "account_master_id"=>$account_master_id,
+                    "bank_ifsc"=>$this->input->post('bank_ifsc'), 
+                    "bank_ac_no"=>$this->input->post('bank_ac_no'), 
+                    "bank_address"=>$this->input->post('bank_address'), 
+                    "bank_branch"=>$this->input->post('bank_branch'), 
                     "is_active"=>"Y"  
                 ];         
 
@@ -133,7 +150,11 @@ class Vendor extends CI_Controller
                     "contact_no"=>$this->input->post('contact_no'),
                     "contact_persone"=>$this->input->post('contact_persone'),
                     "state_id"=>$this->input->post('state_id'),
-                    "account_master_id"=>$account_id,                   
+                    "account_master_id"=>$account_id,  
+                    "bank_ifsc"=>$this->input->post('bank_ifsc'), 
+                    "bank_ac_no"=>$this->input->post('bank_ac_no'), 
+                    "bank_address"=>$this->input->post('bank_address'), 
+                    "bank_branch"=>$this->input->post('bank_branch'),                  
                     "is_active"=>"Y"  
                 ];
                 $where=[
@@ -141,6 +162,10 @@ class Vendor extends CI_Controller
                 ];
                 $data_arr2=[
                     "group_id"=>$group_id,
+                    "bank_ifsc"=>$this->input->post('bank_ifsc'), 
+                    "bank_ac_no"=>$this->input->post('bank_ac_no'), 
+                    "bank_address"=>$this->input->post('bank_address'), 
+                    "bank_branch"=>$this->input->post('bank_branch'),
                     "account_name"=>$name
                 ];
                 $where2=[

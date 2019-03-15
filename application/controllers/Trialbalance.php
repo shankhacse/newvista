@@ -16,7 +16,7 @@ class Trialbalance extends CI_Controller {
 			$page = "dashboard/admin_dashboard/trial_balance/trialBalance";
             $result['module'] = "View";
             $result['btnText'] = "PDF";
-            $yearid = $session['acd_session_id'];
+            $yearid = $session['accnt_year_id'];
 			$fiscalStartDt = $this->trialbalancemodel->getFiscalStartDt($yearid);
 			$result['fiscalStartDt'] = $fiscalStartDt;	
 			
@@ -38,7 +38,7 @@ class Trialbalance extends CI_Controller {
             // $page = 'dashboard/admin_dashboard/trial_balance/trialBalance_pdf';
             // $this->load->view($page,true);
             $companyId = $session['school_id'];
-            $yearid = $session['acd_session_id'];
+            $yearid = $session['accnt_year_id'];
 
             // print_r($this->input->post());exit;
         

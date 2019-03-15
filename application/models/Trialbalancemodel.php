@@ -2,11 +2,11 @@
 class Trialbalancemodel extends CI_Model{
 
     public function getFiscalStartDt($yearid){
-        $sql="SELECT fiscal_start_date FROM `academic_session_master` WHERE `academic_session_master`.id=".$yearid;
+        $sql="SELECT start_date FROM `accounting_year_master` WHERE id=".$yearid;
         $query = $this->db->query($sql);
          if ($query->num_rows() > 0) {
                 foreach ($query->result() as $rows) {
-                    return $rows->fiscal_start_date;
+                    return $rows->start_date;
                 }
          }
         

@@ -35,14 +35,14 @@ class Journalmodel extends CI_Model
 		{
              return $data;
          }
-    }
+    }    
     
-    
-    public function getAllJournalVoucherList($school_id,$acd_session_id)
+    public function getAllJournalVoucherList($school_id,$acd_session_id,$accnt_year_id)
     {
         $where=[
             "school_id"=>$school_id,
             "acdm_session_id"=>$acd_session_id,
+            "accnt_year_id"=>$accnt_year_id,
             "transaction_type"=>'JV'
         ];
         $data = array();
@@ -69,6 +69,7 @@ class Journalmodel extends CI_Model
                     "created_by"=>$rows->created_by,
                     "school_id"=>$rows->school_id,
                     "acdm_session_id"=>$rows->acdm_session_id,
+                    "accnt_year_id"=>$rows->accnt_year_id,
                     "serial_number"=>$rows->serial_number,
                     "vouchertype"=>$rows->vouchertype,
                     "paid_to"=>$rows->paid_to,

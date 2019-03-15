@@ -113,6 +113,7 @@ class Feesstructure extends CI_Controller {
 						"amount" => $amount,
 						"school_id" => $session['school_id'],
 						"acdm_session_id" => $session['acd_session_id'],
+						"accnt_year_id" => $session['accnt_year_id'],
 						"last_modified" => date('y-m-d')
 					);
 
@@ -169,6 +170,7 @@ class Feesstructure extends CI_Controller {
 						"amount" => $amount,
 						"school_id" => $session['school_id'],
 						"acdm_session_id" => $session['acd_session_id'],
+						"accnt_year_id" => $session['accnt_year_id'],
 						"created_by" => $session['userid']
 					);
 					
@@ -247,6 +249,7 @@ public function getFeesList()
 		$where = array(
 								'fees_session.class_id' =>$classid,
 								'fees_session.acdm_session_id' =>$session['acd_session_id'],
+								'fees_session.accnt_year_id' =>$session['accnt_year_id'],
 								'fees_session.school_id' =>$session['school_id']
 							 );
 	

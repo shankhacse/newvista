@@ -206,6 +206,7 @@ class Accounts extends CI_Controller
         if($this->session->userdata('user_data'))
 		{ 
             $acd_session_id=$session['acd_session_id'];
+            $accnt_year_id=$session['accnt_year_id'];
             $school_id=$session['school_id'];
             $userid=$session['userid'];
             //  print_r($this->input->post());exit;
@@ -280,6 +281,7 @@ class Accounts extends CI_Controller
                 $data2=[
                     "account_master_id"=>$account_id,
                     "acdm_session_id"=>$acd_session_id,
+                    "accnt_year_id"=>$accnt_year_id,
                     "opening_balance"=>$opening_balance,
                     "created_by"=>$userid
                 ];

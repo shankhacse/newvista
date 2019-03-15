@@ -408,12 +408,12 @@ class Commondatamodel extends CI_Model{
 		}
 		
 		//added by sandipan on 14.02.2019
-		public function createVoucherNumber($school_id,$acd_session_id,$prefix)
+		public function createVoucherNumber($school_id,$acd_session_id,$prefix,$accnt_year_id)
 		{
 			$where=[
-				"id"=>$acd_session_id
+				"id"=>$accnt_year_id
 			];
-			$year=$this->getSingleRowByWhereCls('academic_session_master',$where);
+			$year=$this->getSingleRowByWhereCls('accounting_year_master',$where);
 			$start_yr=substr($year->start_yr,2);
 			$end_yr=substr($year->end_yr,2);
 			$serial=$this->getSerialnumber($school_id,$acd_session_id);

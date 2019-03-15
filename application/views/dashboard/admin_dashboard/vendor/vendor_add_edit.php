@@ -84,7 +84,23 @@
                             <?php  }  ?>
                                 
                             </select>
-                        </div>                        
+                        </div> 
+                        <div id="bank_ifsc_div" class="form-group col-md-6">
+                                    <label for="bank_ifsc">IFSC</label>
+                                    <input type="text" class="form-control desablecls" name="bank_ifsc" id="bank_ifsc" <?php if ($bodycontent['mode']=="EDIT"){ if ($bodycontent['vendorEditData']->bank_ifsc!=""){ echo "value='".$bodycontent['vendorEditData']->bank_ifsc."'";} }?>  placeholder="IFSC Code">
+                               </div>
+                               <div id="bank_ac_no_div" class="form-group col-md-6">
+                                    <label for="bank_ac_no">A/C No.</label>
+                                    <input type="text" class="form-control desablecls" name="bank_ac_no" id="bank_ac_no" <?php if ($bodycontent['mode']=="EDIT"){ if ($bodycontent['vendorEditData']->bank_ac_no!=""){ echo "value='".$bodycontent['vendorEditData']->bank_ac_no."'"; } }?>  placeholder="A/C No.">
+                               </div>
+                               <div id="bank_address_div" class="form-group col-md-6">
+                                    <label for="bank_address">Bank Address</label>
+                                    <input type="text" class="form-control desablecls" name="bank_address" id="bank_address" <?php if ($bodycontent['mode']=="EDIT"){ if ($bodycontent['vendorEditData']->bank_address!=""){  echo "value='".$bodycontent['vendorEditData']->bank_address."'"; } }?>  placeholder="Bank Address">
+                               </div>
+                               <div id="bank_branch_div" class="form-group col-md-6">
+                                    <label for="bank_branch">Branch</label>
+                                    <input type="text" class="form-control desablecls" name="bank_branch" id="bank_branch" <?php if ($bodycontent['mode']=="EDIT"){ if ($bodycontent['vendorEditData']->bank_branch!=""){ echo "value='".$bodycontent['vendorEditData']->bank_branch."'"; }}?>  placeholder="Bank Branch">
+                               </div>                       
                        
                         <div class="btnDiv col-md-12">
                         <button type="submit"  name="submit" id="vendorsavebtn" class="btn formBtn btn-primary"><?php echo $bodycontent['btnText'];?></button>

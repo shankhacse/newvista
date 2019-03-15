@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
 
+
 <script>
 $(document).ready(function() {
     var groupColumn = 0;
@@ -14,7 +15,7 @@ $(document).ready(function() {
         ],
         "dom": 'Bfrtip',
         "buttons": [
-            'print'
+          'excel', 'pdf', 'print'
         ],
         "order": [[ groupColumn, 'asc' ]],
         "displayLength": 10,

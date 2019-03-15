@@ -99,6 +99,21 @@ class Login_model extends CI_Model{
         }
         return $data;
     }
+    public function getAllAccountingYear(){
+    $data=array();   
+    $query = $this->db->select("*")
+                ->from("accounting_year_master")
+                ->order_by('id','DESC')
+                ->where('is_active','Y')
+             ->get();
+       
+        if($query->num_rows()>0){
+            foreach($query->result() as $row){
+                $data[]=$row;
+            }
+        }
+        return $data;
+    }
     
    
     

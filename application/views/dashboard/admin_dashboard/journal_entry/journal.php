@@ -5,8 +5,8 @@
     if($bodycontent['mode']=='EDIT')
     {
         // pre($bodycontent['JournalEditData']);
-        // pre($bodycontent['JournalDebitData']);
-        // pre($bodycontent['JournalCreditData']);
+        // pre($bodycontent['voucherDetailsData']);
+        // pre($bodycontent['voucherDetailsData']);
        
     }
 
@@ -30,6 +30,10 @@
     }
     textarea#narration{
         height: 54px !important;
+    }
+    .addmore .col-md-3{
+        padding-right: 8px !important;
+        padding-left: 8px !important;
     }
 </style>
 <section class="content-header">
@@ -115,65 +119,110 @@
                             </div>                        
                         </section>
                         <br>
-                        <section id="journalvoucher1">
+                        <section  id="journalvoucher1">
+                        <input type="hidden"  value="<?php if ($bodycontent['mode']=="EDIT"){ echo sizeof($bodycontent['voucherDetailsData'])-1;}else{ echo "0";}?>" name="serial_id" id="serial_id">
                             <div class="row">
-                                <div id="debit_ac_div" class="form-group col-md-6">                           
-                                    <label for="debit_ac">Debit*</label>
-                                    <select class="form-control selectpicker" data-show-subtext="true" name="debit_ac" id="debit_ac" data-live-search="true"  >
-                                        <option  value="">Select A/C</option>
-                                        <?php foreach ($bodycontent['AccountList'] as $value) { ?>
-                                            <option  value="<?php echo $value->account_id; ?>" 
-                                            <?php if ($bodycontent['mode']=="EDIT"){
-                                                // pre($bodycontent['JournalDebitData']);
-                                               if ($bodycontent['JournalDebitData']->account_master_id==$value->account_id) {
-                                                echo " selected";
-                                                }
-                                        } ?>
-                                            ><?php echo $value->account_name; ?></option>   
-                                    <?php  }  ?>
-                                        
+                                <div class="form-group col-md-2"> 
+                                    <label for="ac_tag">A/C Tag*</label>
+                                </div>                                
+                                <div class="form-group col-md-4"> 
+                                    <label for="account">Account*</label>
+                                </div>
+                                <div class="form-group col-md-4"> 
+                                 <label for="amount">Amount*</label>
+                                </div>
+                                <div class="form-group col-md-2"> 
+                                </div>
+                            </div>
+                            <div class="addmore" id="addmore">
+                            
+                                <?php if ($bodycontent['mode']=="EDIT") { 
+                                    $loop=sizeof($bodycontent['voucherDetailsData']);
+                                    for ($i=0; $i <$loop ; $i++) { 
+                                       $count=$i;                 
+                                    //  pre($bodycontent['voucherDetailsData']);                   
+                                    ?>
+                                    <!-- edit part -->
+                                    <div class="row findRow" id="row_<?php echo $count ?>">
+                                    <div id="ac_tag_div_<?php echo $count ?>" class="form-group ac_tag_div col-md-2">
+                                        <select class="form-control selectpicker ac_tag" data-id="<?php echo $count ?>" name="ac_tag[]" id="ac_tag_<?php echo $count ?>">
+                                            <option value="0">A/C Tag</option>
+                                            <option <?php if ($bodycontent['voucherDetailsData'][$i]->is_debit=="Y"){ echo "selected"; } ?> value="Dr">Dr</option>
+                                            <option <?php if ($bodycontent['voucherDetailsData'][$i]->is_debit=="N"){ echo "selected"; } ?> value="Cr">Cr</option>                                        
+                                        </select>
+                                    </div> 
+                                    <div id="account_div_<?php echo $count ?>" class="form-group account_div col-md-4">
+                                        <select class="form-control selectpicker account" data-id="<?php echo $count ?>" data-show-subtext="true" name="account[]" id="account_<?php echo $count ?>" data-live-search="true"  >
+                                            <option  value="">Select A/C</option>
+                                            <?php foreach ($bodycontent['AccountList'] as $value) { ?>
+                                                <option  value="<?php echo $value->account_id; ?>" 
+                                                <?php if ($bodycontent['mode']=="EDIT"){
+                                                if ($bodycontent['voucherDetailsData'][$i]->account_master_id==$value->account_id) {
+                                                    echo " selected";
+                                                    }
+                                                } ?>><?php echo $value->account_name; ?></option>   
+                                            <?php  }  ?>                                            
+                                        </select>
+                                    </div>
+
+                                    <div id="div_amount_<?php echo $count ?>" class="form-group div_amount col-md-4">
+                                        <input type="text" class="form-control amount" data-id="<?php echo $count ?>" name="amount[]" id="amount_<?php echo $count ?>" value="<?php 
+                                            if($bodycontent['mode']=='EDIT')  
+                                            {                                           
+                                                echo $bodycontent['voucherDetailsData'][$i]->voucher_amount;             
+                                            }?>" autocomplete="off" placeholder="Amount" >  
+                                    </div>
+                                    <?php if ($loop-1==$i) { ?>
+                                        <div id="div_add_btn" class="form-group col-md-2">                                
+                                            <button type="button" class="btn btn-primary" id="add">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </div>
+                                    <?php }else{ ?>
+                                    <div id="div_remove_btn_<?php echo $count ?>" class="form-group col-md-2"> 
+                                        <button type="button" class="btn btn-danger btn_remove" data-id="<?php echo $count ?>" id="remove_<?php echo $count ?>" name="remove">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </div>
+                                    </div>
+                                     <!-- edit part end -->
+                                <?php  } } }else{?>
+                             
+                                <div class="row findRow" id="row_0">
+                                <div id="ac_tag_div_0" class="ac_tag_div form-group col-md-2"> 
+                                    <select class="form-control selectpicker ac_tag" data-show-subtext="true" name="ac_tag[]" id="ac_tag_0" data-id="0" data-live-search="true"  >
+                                        <option  value="0">A/C Tag</option>
+                                        <option  value="Dr">Dr</option>
+                                        <option  value="Cr">Cr</option>                        
                                     </select>
                                 </div>
-                               
-                                <div id="div_debit_amount" class="form-group col-md-6">
-                                    <label for="debit_amount">Debit Amount*</label>
-                                    <input type="text" class="form-control" name="debit_amount" id="debit_amount" value="<?php 
-                                        if($bodycontent['mode']=='EDIT')  
-                                        {                                           
-                                            echo $bodycontent['JournalDebitData']->voucher_amount;             
-                                        }?>" autocomplete="off">  
-                                </div>
 
-                                <div id="credit_ac_div" class="form-group col-md-6">                          
-                                    <label for="credit_ac">Credit*</label>
-                                    <select class="form-control selectpicker" data-show-subtext="true" name="credit_ac" id="credit_ac" data-live-search="true"  >
+                                <div id="account_div_0" class="form-group account_div col-md-4">
+                                    <select class="form-control account selectpicker" data-show-subtext="true" name="account[]" id="account_0" data-live-search="true"  data-id="0" >
                                         <option  value="">Select A/C</option>
                                         <?php foreach ($bodycontent['AccountList'] as $value) { ?>
-                                            <option  value="<?php echo $value->account_id; ?>" 
-                                            <?php if ($bodycontent['mode']=="EDIT"){
-                                               if ($bodycontent['JournalCreditData']->account_master_id==$value->account_id) {
-                                                echo " selected";
-                                                }
-                                        } ?>
-                                            ><?php echo $value->account_name; ?></option>   
-                                    <?php  }  ?>
-                                        
+                                            <option  value="<?php echo $value->account_id; ?>"><?php echo $value->account_name; ?></option>   
+                                        <?php  }  ?>                                        
                                     </select>
                                 </div>
 
-                                <div id="div_credit_amount" class="form-group col-md-6">
-                                    <label for="credit_amount">Credit Amount*</label>
-                                    <input type="text" class="form-control" name="credit_amount" id="credit_amount" value="<?php 
-                                        if($bodycontent['mode']=='EDIT')  
-                                        {                                           
-                                            echo $bodycontent['JournalCreditData']->voucher_amount;             
-                                        }?>" autocomplete="off">  
+                                <div id="div_amount_0" class="div_amount form-group col-md-4"> 
+                                    <input type="text" class="form-control amount" data-id="0" name="amount[]" id="amount_0" autocomplete="off" placeholder="Amount" >  
                                 </div>
-                            </div>                        
+
+                                <div id="div_add_btn" class="form-group col-md-2">                                
+                                    <button type="button" class="btn btn-primary" id="add">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </div>
+                                </div>
+                                <?php } ?>
+                             
+                            </div>                          
                         </section>
                         <br>
                         <section id="journalvoucher1">
-                            <div class="row">
+                            <div class="row" id="tootal">
                                 <div class="form-group col-md-6">
                                     <label for="total_debit">Total Debit</label>
                                     <input type="text" readonly class="form-control" name="total_debit" id="total_debit" value="<?php 
@@ -189,14 +238,14 @@
                                         {                                           
                                             echo $bodycontent['JournalEditData']->total_credit;             
                                         }?>">  
-                                </div>                                
+                                </div>                             
                             </div> 
                         </section><br>
                                  
                        
                         <div class="btnDiv col-md-12">
-                        <button type="submit"  name="submit" id="journalsavebtn" class="btn formBtn btn-primary"><?php  echo $bodycontent['btnText'];?></button>
-                        <span class="btn btn-primary formBtn loaderbtn" id="loaderbtn" style="display:none;"><i class="fa fa-spinner rotating" aria-hidden="true"></i> <?php echo $bodycontent['btnTextLoader']; ?></span>
+                            <button type="submit"  name="submit" id="journalsavebtn" class="btn formBtn btn-primary"><?php  echo $bodycontent['btnText'];?></button>
+                            <span class="btn btn-primary formBtn loaderbtn" id="loaderbtn" style="display:none;"><i class="fa fa-spinner rotating" aria-hidden="true"></i> <?php echo $bodycontent['btnTextLoader']; ?></span>
                         </div> 
                     </form>
                     <div class="response_msg" id="cas_response_msg">

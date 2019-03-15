@@ -19,7 +19,7 @@ class Feesstructuremodel extends CI_Model{
                 ->where($where_sc)
                 ->order_by('fees_structure.id')
                 ->get();
-            #q();
+            // q();
             if($query->num_rows()> 0)
             {
               foreach($query->result() as $rows)

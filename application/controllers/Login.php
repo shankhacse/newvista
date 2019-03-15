@@ -14,6 +14,8 @@ class Login extends CI_Controller {
        $this->load->library('form_validation');
        $schoolList['schoollist']= $this->login->getAllSchool();
        $schoolList['acdsessionList']= $this->login->getAllAcademinSession();
+       $schoolList['acntYrList']= $this->login->getAllAccountingYear();
+    //    pre($schoolList['acntYrList']);exit;
      
        $page="login/login";
        $this->load->view($page,$schoolList);
@@ -27,6 +29,7 @@ class Login extends CI_Controller {
         $this->form_validation->set_rules('username', 'Username', 'required');
         $this->form_validation->set_rules('userpassword', 'Password', 'required');
         $this->form_validation->set_rules('acd_session_id', 'Academic Session ', 'required');
+        $this->form_validation->set_rules('accnt_year_id', 'Accounting Year', 'required');
         $this->form_validation->set_error_delimiters('<div class="error-login">', '</div>');
         
         if ($this->form_validation->run() == FALSE)
@@ -34,6 +37,7 @@ class Login extends CI_Controller {
                    //redirect('login');
                     $schoolList['schoollist']= $this->login->getAllSchool();
                     $schoolList['acdsessionList']= $this->login->getAllAcademinSession();
+                    $schoolList['acntYrList']= $this->login->getAllAccountingYear();
                     $page="login/login";
                     $this->load->view($page,$schoolList);    
            }
@@ -43,6 +47,7 @@ class Login extends CI_Controller {
                 $school = $this->input->post('school_id');
                 $password = $this->input->post('userpassword');
                 $acd_session_id = $this->input->post('acd_session_id');
+                $accnt_year_id = $this->input->post('accnt_year_id');
                 $user_id = $this->login->checkLogin($username,$password,$school);
                 if($user_id!=""){
                     $user = $this->login->get_user($user_id);
@@ -50,6 +55,7 @@ class Login extends CI_Controller {
                     "userid"=>$user->user_id,
                     "username"=>$user->username, 
                     "acd_session_id"=>$acd_session_id, 
+                    "accnt_year_id"=>$accnt_year_id, 
                     "school_id"=>$school 
                     
                 ];

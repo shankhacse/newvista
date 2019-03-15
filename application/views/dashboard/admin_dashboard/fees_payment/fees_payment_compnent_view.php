@@ -72,7 +72,7 @@
         
 
           <div class="col-sm-2 col-md-2 col-xs-12">
-            <label for="pdate">Payment Date</label> 
+            <label for="pdate">Receipt Date</label> 
             <input type="text"  class="form-control custom_frm_input datepicker"  name="payment_date" id="payment_date"  placeholder="" value="<?php echo $curr_dt;?>" style="width: 204px;" />
           </div>
           <div class="col-sm-2 col-md-2 col-xs-12"> </div>
@@ -86,7 +86,7 @@
 
           <div class="col-md-2 col-sm-2 col-xs-12">
             <div class="form-group">
-              <label for="mode">Payment mode</label>
+              <label for="mode">Receipt mode</label>
               <select id="payment_mode" name="payment_mode" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                 <option value="0">Select</option> 
                 <?php

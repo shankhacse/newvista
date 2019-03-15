@@ -17,11 +17,13 @@ if ( ! function_exists('createbody_method'))
 	 $left_menu = $CI->menumodel->getAllAdministrativeMenu('admin_menu_master');
 	 $acdsessionData= $CI->menumodel->getAcademicSessionData();
 	 $acdSessionList=$CI->login_model->getAllAcademinSession();
+	 $accntYearList=$CI->login_model->getAllAccountingYear();
 	 //$user_role = $CI->menumodel->getAllRoleById();
 
 	 $data['bodyview'] = $body_content_page;
 	 $data['leftmenusidebar'] = '';
 	 $data['headermenu'] = $body_content_header;
+	 $data['accntYearList'] = $accntYearList;// added by sandipan sarkar for change academic session modal on 08.03.2019
 	 $data['acdsessionData'] = $acdsessionData;
 	 $data['acdSessionList'] = $acdSessionList; // added by sandipan sarkar for change academic session modal on 01.02.2019
 	 //$data['web_user_role']=$user_role;

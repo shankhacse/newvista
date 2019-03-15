@@ -287,7 +287,65 @@ $(document).on('click', ".del", function() {
     });
     
 
+    $('.deleteBtn').click(function() {
+        var splitid=$(this).attr("id").split('_');
+        var id=splitid[1];
+        var voucher_id= $('#deleteBtn_'+id).data('text'); 
+       
+        // alert(fees_id); 
+        $.confirm({
+            title: 'Confirm!',
+            content: 'Are you Sure you want to delete ?',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: basepath+'generalvoucher/deleteVoucher',
+                        data: {voucher_id:voucher_id},
+                        dataType: 'json',
+                        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                        success: function(result) {
+                            if (result.msg_status == 200) {                 
+                                
+                                $("#modal-success").modal({
+                                    "backdrop": "static",
+                                    "keyboard": true,
+                                    "show": true
+                                });
+                                var addurl = basepath + "generalvoucher";
+                            
+                                $("#appendBody").text(result.msg_data);
+                                $("#redirectToListsuccess").attr("href", addurl);
 
+                            } 
+                            else {
+                                // alert(fees_id+" have data");                    
+                                $("#modal-danger").modal({
+                                    "backdrop": "static",
+                                    "keyboard": true,
+                                    "show": true
+                                });
+                                var addurl = basepath + "generalvoucher";
+                            
+                                $("#dengAppendBody").text(result.msg_data);
+                                $("#redirectToListerror").attr("href", addurl);
+                            
+                                
+                            }                
+                            
+                        },
+                        error: function(jqXHR, exception) {
+                            var msg = '';
+                        }
+                    });
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
+              
+    });
 
 
 
@@ -360,8 +418,7 @@ function getTotalAmt(){
      var tag=0;
      var table= '#voucherDtl tr';
      $(table).each(
-         function() {
-           
+         function() {           
            tag=$(this).find('.debitcredit option:selected').val();
            console.log("tag"+tag);
            if(tag=='Cr'){
@@ -372,8 +429,7 @@ function getTotalAmt(){
                var amt = $(this).find('.amountDtl').val()||0;
                debitDtlTotal = debitDtlTotal + parseFloat(amt);
            }
-           if(tag==0){creditDtlTotal=0;debitDtlTotal=0;}
-          
+           if(tag==0){creditDtlTotal=0;debitDtlTotal=0;}          
          }
          
        );

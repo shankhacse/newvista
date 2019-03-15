@@ -16,7 +16,7 @@ class Generalvoucher extends CI_Controller {
 		{
             $header="";              
                 $result['module']="List";               
-                $result['VoucherList'] = $this->generalvouchermodel->getAllGeneralVoucherList($session['school_id'],$session['acd_session_id']);
+                $result['VoucherList'] = $this->generalvouchermodel->getAllGeneralVoucherList($session['school_id'],$session['acd_session_id'],$session['accnt_year_id']);
 			$page ="dashboard/admin_dashboard/general_voucher/general_voucher_list.php";
 			createbody_method($result, $page, $header, $session);
 			
@@ -114,6 +114,7 @@ class Generalvoucher extends CI_Controller {
 		{
             $school_id=$session['school_id'];
             $acd_session_id=$session['acd_session_id'];
+            $accnt_year_id=$session['accnt_year_id'];
             $userid=$session['userid'];
             
             $paidto_rcv=$this->input->post('paidto_rcv');
@@ -170,7 +171,7 @@ class Generalvoucher extends CI_Controller {
                     "user_platform" => getUserPlatform()
 				 );
 				 $insert_arr=array(
-					 "voucher_number"=>$this->commondatamodel->createVoucherNumber($school_id,$acd_session_id,$Pay_Rc),
+					 "voucher_number"=>$this->commondatamodel->createVoucherNumber($school_id,$acd_session_id,$Pay_Rc,$accnt_year_id),
 					 "voucher_date"=>$voucher_date,
 					 "narration"=>$narration,
 					 "cheque_number"=>$cheque_no,
@@ -181,6 +182,7 @@ class Generalvoucher extends CI_Controller {
 					 "created_by"=>$userid,
 					 "school_id"=>$school_id,
 					 "acdm_session_id"=>$acd_session_id,
+					 "accnt_year_id"=>$accnt_year_id,
 					 "serial_number"=>"0",
 					 "vouchertype"=>"GV",
 					 "paid_to"=>$paidto_rcv,					
@@ -301,7 +303,46 @@ class Generalvoucher extends CI_Controller {
         }
     }
     
+    public function deleteVoucher()
+	{
+		$session = $this->session->userdata('user_data');
+		if($this->session->userdata('user_data'))
+		{
+			$voucher_id=$this->input->post('voucher_id');			
+			$this->commondatamodel->deleteTableData('voucher_detail',array("voucher_master_id"=>$voucher_id));
+			$this->commondatamodel->deleteTableData('voucher_master',array("id"=>$voucher_id));
 
+			$user_activity = array(
+				"activity_module" => 'generalvoucher',
+				"action" => 'Delete',
+				"from_method" => 'generalvoucher/deleteVoucher',
+				"user_id" => $session['userid'],
+				"ip_address" => getUserIPAddress(),
+				"user_browser" => getUserBrowserName(),
+				"user_platform" => getUserPlatform()
+			 );
+			 $insert=$this->commondatamodel->insertSingleTableData('activity_log',$user_activity);
+			 if($insert)
+             {
+                 $json_response = array(
+                     "msg_status" => HTTP_SUCCESS,
+                     "msg_data" => "Deleted successfully",
+                     
+                 );
+             }else{
+                 $json_response = array(
+                     "msg_status" => HTTP_FAIL,
+                     "msg_data" => "There is some problem.Try again"
+                 );
+             }
+             header('Content-Type: application/json');
+             echo json_encode( $json_response );
+             exit;
+
+		}else{
+			redirect('login','refresh');
+		}
+	}
 
 
 

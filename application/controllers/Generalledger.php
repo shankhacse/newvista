@@ -37,7 +37,7 @@ class Generalledger extends CI_Controller {
 		 
 		 
 		 $companyId = $session['school_id'];
-		 $yearid = $session['acd_session_id'];
+		 $yearid = $session['accnt_year_id'];
    
 		 
 		$this->load->library('pdf');

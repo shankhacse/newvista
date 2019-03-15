@@ -1,7 +1,6 @@
-<?php
-// pre($bodycontent['VoucherList']);
-
-?> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script> 
+<script src="<?php echo base_url(); ?>assets/js/adm_scripts/general_voucher.js"></script>   
 <style>
 #VoucherList td{
 vertical-align: inherit;
@@ -76,7 +75,10 @@ vertical-align: inherit;
             <td align="center">            
 							<a href="<?php echo base_url(); ?>generalvoucher/general/<?php echo $value['id']; ?>" class="btn btn-primary btn-xs" data-title="Edit">
 								<span class="glyphicon glyphicon-pencil"></span>
-							</a>         
+							</a>   
+              <a href="javascript:void(0);" id="deleteBtn_<?php echo $value['id']; ?>"  data-text="<?php echo $value['id'];?>" class="btn deleteBtn btn-danger btn-xs" data-title="Delete">
+								<span class="glyphicon glyphicon-trash"></span>
+							</a>       
 						</td>
 					</tr>              			
               	<?php

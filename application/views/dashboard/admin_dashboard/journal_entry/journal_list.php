@@ -1,7 +1,6 @@
-<?php
-// pre($bodycontent['journalList']);
-
-?> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script> 
+<script src="<?php echo base_url(); ?>assets/js/adm_scripts/journal.js"></script>   
 <style>
 #journalList td{
 vertical-align: inherit;
@@ -61,13 +60,13 @@ vertical-align: inherit;
                 <tr>
                   <th>A/C</th>
                   <th>Amount</th>
-                  <th>D/C</th>
+                  <th></th>
                 </tr>
                 <?php foreach ($value['voucher_ac_detail'] as $voucher_detail) {?>
                   <tr>
                     <td><?php echo $voucher_detail->account_name; ?></td>
                     <td><?php echo $voucher_detail->voucher_amount; ?></td>
-                    <td><?php if($voucher_detail->is_debit=='Y'){ echo "D"; }else{ echo "C"; }?></td>
+                    <td><?php if($voucher_detail->is_debit=='Y'){ echo "Dr"; }else{ echo "Cr"; }?></td>
                   </tr>
                <?php } ?>
               
@@ -76,7 +75,10 @@ vertical-align: inherit;
             <td align="center">            
 							<a href="<?php echo base_url(); ?>journal/journal/<?php echo $value['id']; ?>" class="btn btn-primary btn-xs" data-title="Edit">
 								<span class="glyphicon glyphicon-pencil"></span>
-							</a>         
+							</a>     
+              <a href="javascript:void(0);" id="deleteBtn_<?php echo $value['id']; ?>"  data-text="<?php echo $value['id'];?>" class="btn deleteBtn btn-danger btn-xs" data-title="Delete">
+								<span class="glyphicon glyphicon-trash"></span>
+							</a>     
 						</td>
 					</tr>              			
               	<?php

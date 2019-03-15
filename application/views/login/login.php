@@ -17,18 +17,18 @@ background: -webkit-linear-gradient(to bottom, #FFB88C, #DE6262);  /* Chrome 10-
 background: linear-gradient(to bottom, #FFB88C, #DE6262); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 float:left;
 width:100%;
-padding : 50px 0;
+padding : 30px 0;
 height:100%;
 }
 .banner-sec{background:url(<?php echo base_url();?>/assets/images/pexels-photo.jpg)  no-repeat left bottom; background-size:cover; min-height:500px; border-radius: 0 10px 10px 0; padding:0;}
 .container{background:#fff; border-radius: 10px; box-shadow:15px 20px 0px rgba(0,0,0,0.1);}
 .carousel-inner{border-radius:0 10px 10px 0;}
 .carousel-caption{text-align:left; left:5%;}
-.login-sec{padding: 50px 30px; position:relative;}
+.login-sec{padding: 23px 30px; position:relative;}
 .login-sec .copy-text{position:absolute; width:80%; bottom:20px; font-size:13px; text-align:center;}
 .login-sec .copy-text i{color:#FEB58A;}
 .login-sec .copy-text a{color:#E36262;}
-.login-sec h2{margin-bottom:30px; font-weight:800; font-size:30px; color: #DE6262;}
+.login-sec h2{margin-bottom:21px; font-weight:800; font-size:30px; color: #DE6262;}
 .login-sec h2:after{content:" "; width:100px; height:5px; background:#FEB58A; display:block; margin-top:20px; border-radius:3px; margin-left:auto;margin-right:auto}
 .btn-login{background: #DE6262; color:#fff; font-weight:600;}
 .banner-text{width:70%; position:absolute; bottom:40px; padding-left:20px;}
@@ -86,7 +86,7 @@ height:100%;
                         <?php echo form_error('userpassword'); ?>
                         </div>
 
-                          <div class="form-group">
+                      <div class="form-group">
                         
                         <label for="school" class="text-uppercase">Academic Session</label>
                         <select class="form-control" name="acd_session_id" id="acd_session_id">
@@ -103,6 +103,19 @@ height:100%;
                         </select>
                         <?php echo form_error('acd_session_id'); ?>
 
+                      </div>
+                      <div class="form-group">
+                        <label for="accnt_year_id" class="text-uppercase">Accounting Year</label>
+                        <select class="form-control" name="accnt_year_id" id="accnt_year_id">
+                        <option value="">Select</option>
+                          <?php
+                         foreach ($acntYrList as $acntYr) { ?>
+                           <option value="<?php echo $acntYr->id; ?>"><?php echo $acntYr->period; ?></option>
+                             
+                       <?php  }
+                        ?>                                               
+                        </select>
+                        <?php echo form_error('accnt_year_id'); ?>
                       </div>
 
 

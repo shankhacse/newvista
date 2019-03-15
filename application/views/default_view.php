@@ -1005,29 +1005,53 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header"> 
-      <span>Change Academic Session</span>      
+      <span>Change Academic Session & Accounting Year</span>      
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
       </div>
       <div class="modal-body">
-          <div class="row">                     
-          <div class="col-md-12">                     
-            <form class="form-inline" method="post" action="<?php echo base_url();?>Resetacdsession" id="AcademicSessionForm">
-            <div class="row">
-              <div class="form-group col-md-6 offset-md-6">
-                <label class="sr-only" for="AcademicSession">Academic Session</label>
-                <select class="form-control selectpicker" data-show-subtext="true" name="AcademicSession" id="AcademicSession" data-live-search="true">
-                  <option  value="0">Select Academic Session</option>
-                    <?php foreach ($acdSessionList as $value) { ?>
-                      <option  value="<?php echo $value->id; ?>"><?php echo $value->start_yr."-".$value->end_yr; ?></option>   
-                    <?php  }  ?>                   
-                </select>
+          <div class="row">    
+            <div class="col-md-12">
+              <div class="row">
+                <div id="AcademicSession_div" class="form-group col-md-4 offset-md-4">
+                  <label for="AcademicSession">Academic Session</label>
+                </div>                  
+                <div id="accnt_year_id_div" class="form-group col-md-4 offset-md-4">
+                  <label for="accnt_year_id">Accounting Year</label>
+                </div>                  
+              </div>                  
+            </div>                  
+            <div class="col-md-12">                     
+              <form class="form-inline" method="post" action="<?php echo base_url();?>Resetacdsession" id="AcademicSessionForm" onsubmit="return formValidateSessionChange();">
+              <div class="row">
+                <div id="AcademicSession_div" class="form-group col-md-4 offset-md-4">
+                  <!-- <label for="AcademicSession">Academic Session</label> -->
+                  <select class="form-control selectpicker" data-show-subtext="true" name="AcademicSession" id="AcademicSession" data-live-search="true">
+                    <!-- <option  value="">Academic Session</option> -->
+                      <?php foreach ($acdSessionList as $value) { ?>
+                        <option  value="<?php echo $value->id; ?>"><?php echo $value->start_yr."-".$value->end_yr; ?></option>   
+                      <?php  }  ?>                   
+                  </select>
+                </div>
+                <div id="accnt_year_id_div" class="form-group col-md-4 offset-md-4">
+                  <!-- <label for="accnt_year_id">Accounting Year</label> -->
+                  <select class="form-control selectpicker" data-show-subtext="true" name="accnt_year_id" id="accnt_year_id" data-live-search="true">
+                    <!-- <option  value="">Accounting Year</option> -->
+                      <?php foreach ($accntYearList as $value) { ?>
+                        <option  value="<?php echo $value->id; ?>"><?php echo $value->period; ?></option>   
+                      <?php  }  ?>                   
+                  </select>
+                </div>              
+                <div class="form-group col-md-4 offset-md-4">               
+                  <button type="submit"  id="su" class="btn btn-primary">Change</button>
+                </div>
               </div>
-              <button type="submit"  class="btn btn-primary">Change</button>
+              </form>          
             </div>
-            </form>          
-          </div>
+            <div class="col-md-12">
+              <p id="Resetacdsession" class="form_error"></p>
+            </div>
           </div>
       </div>
      
@@ -1113,6 +1137,34 @@ $('ul.treeview-menu a').filter(function() {
    return this.href == url;
 }).parentsUntil(".sidebar-menu > .treeview-menu").addClass('active');
 
+function formValidateSessionChange()
+{
+  $("#Resetacdsession").text("").css("dispaly", "none").removeClass("form_error");  
+  $("#AcademicSession_div").removeClass('has-error');
+  $("#accnt_year_id_div").removeClass('has-error');
+
+  if ($('#AcademicSession option:selected').val()=="") {
+    $("#AcademicSession_div").addClass('has-error');
+    $("#Resetacdsession")
+		.text("Error : Academic Session")
+		.addClass("form_error")
+        .css("display", "block");
+		return false;
+  }
+
+  if ($('#accnt_year_id option:selected').val()=="") {
+    $("#accnt_year_id_div").addClass('has-error');
+    $("#Resetacdsession")
+		.text("Error : Accounting Year")
+		.addClass("form_error")
+        .css("display", "block");
+		return false;
+    
+  }
+
+  return true;
+
+}
 </script>
 </body>
 </html>

@@ -11,15 +11,16 @@ class Contra extends CI_Controller {
 
     public function index()
 	{
-		$session = $this->session->userdata('user_data');
+		 $session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
 		{
 			$acd_session_id=$session['acd_session_id'];
+			$accnt_year_id=$session['accnt_year_id'];
 			$school_id=$session['school_id'];
 		  //  print_r("index");exit;
             $header = "";
             $result="";
-			$result['ContraList'] = $this->contramodel->getAllContraVoucherList($school_id,$acd_session_id); 
+			$result['ContraList'] = $this->contramodel->getAllContraVoucherList($school_id,$acd_session_id,$accnt_year_id); 
 			$page = "dashboard/admin_dashboard/contra/contra_list";
 			// $page = "dashboard/admin_dashboard/contra/add_edit_contra";
 			createbody_method($result, $page, $header, $session);
@@ -79,12 +80,12 @@ class Contra extends CI_Controller {
 		}
 	}
 
-	public function createVoucherNumber($school_id,$acd_session_id)
+	public function createVoucherNumber($school_id,$accnt_year_id,$acd_session_id)
 	{
 		$where=[
-			"id"=>$acd_session_id
+			"id"=>$accnt_year_id
 		];
-		$year=$this->commondatamodel->getSingleRowByWhereCls('academic_session_master',$where);
+		$year=$this->commondatamodel->getSingleRowByWhereCls('accounting_year_master',$where);
 		$start_yr=substr($year->start_yr,2);
 		$end_yr=substr($year->end_yr,2);
 		$serial=$this->contramodel->getSerialnumber($school_id,$acd_session_id);
@@ -101,6 +102,7 @@ class Contra extends CI_Controller {
 		{
 			
 			$acd_session_id=$session['acd_session_id'];
+			$accnt_year_id=$session['accnt_year_id'];
 			$school_id=$session['school_id'];
 			$userid=$session['userid'];
 
@@ -143,7 +145,7 @@ class Contra extends CI_Controller {
                     "user_platform" => getUserPlatform()
 				 );
 				 $insert_arr=array(
-					 "voucher_number"=>$this->createVoucherNumber($school_id,$acd_session_id),
+					 "voucher_number"=>$this->createVoucherNumber($school_id,$accnt_year_id,$acd_session_id),
 					 "voucher_date"=>$voucher_date,
 					 "narration"=>$narration,
 					 "cheque_number"=>$cheque_number,
@@ -154,6 +156,7 @@ class Contra extends CI_Controller {
 					 "created_by"=>$userid,
 					 "school_id"=>$school_id,
 					 "acdm_session_id"=>$acd_session_id,
+					 "accnt_year_id"=>$accnt_year_id,
 					 "serial_number"=>"0",
 					 "vouchertype"=>NULL,
 					 "paid_to"=>NULL,					
@@ -201,6 +204,7 @@ class Contra extends CI_Controller {
 					 "created_by"=>$userid,
 					 "school_id"=>$school_id,
 					 "acdm_session_id"=>$acd_session_id,					 					
+					 "accnt_year_id"=>$accnt_year_id,					 					
 					 "total_debit"=>$total_debit,					
 					 "total_credit"=>$total_credit					
 				 );	
@@ -252,6 +256,48 @@ class Contra extends CI_Controller {
              header('Content-Type: application/json');
              echo json_encode( $json_response );
              exit;
+		}else{
+			redirect('login','refresh');
+		}
+	}
+
+
+	public function deleteContraVoucher()
+	{
+		$session = $this->session->userdata('user_data');
+		if($this->session->userdata('user_data'))
+		{
+			$voucher_id=$this->input->post('voucher_id');			
+			$this->commondatamodel->deleteTableData('voucher_detail',array("voucher_master_id"=>$voucher_id));
+			$this->commondatamodel->deleteTableData('voucher_master',array("id"=>$voucher_id));
+
+			$user_activity = array(
+				"activity_module" => 'contra',
+				"action" => 'Delete',
+				"from_method" => 'contra/deleteContraVoucher',
+				"user_id" => $session['userid'],
+				"ip_address" => getUserIPAddress(),
+				"user_browser" => getUserBrowserName(),
+				"user_platform" => getUserPlatform()
+			 );
+			 $insert=$this->commondatamodel->insertSingleTableData('activity_log',$user_activity);
+			 if($insert)
+             {
+                 $json_response = array(
+                     "msg_status" => HTTP_SUCCESS,
+                     "msg_data" => "Deleted successfully",
+                     
+                 );
+             }else{
+                 $json_response = array(
+                     "msg_status" => HTTP_FAIL,
+                     "msg_data" => "There is some problem.Try again"
+                 );
+             }
+             header('Content-Type: application/json');
+             echo json_encode( $json_response );
+             exit;
+
 		}else{
 			redirect('login','refresh');
 		}

@@ -15,10 +15,12 @@ class Resetacdsession extends CI_Controller {
         if($this->session->userdata('user_data'))
 		{
             $acd_session_id=$this->input->post('AcademicSession');
+            $accnt_year_id=$this->input->post('accnt_year_id');
             $user_session_new = [
                 "userid"=>$session['userid'],
                 "username"=>$session['username'], 
                 "acd_session_id"=>$acd_session_id, 
+                "accnt_year_id"=>$accnt_year_id, 
                 "school_id"=>$session['school_id']
                 
             ];

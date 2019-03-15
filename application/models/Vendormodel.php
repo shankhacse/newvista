@@ -28,24 +28,7 @@ class Vendormodel extends CI_Model
         }
     }
     
-   
-    /* account master id */
-	public function accountMasterLastId($account_name,$Group_id,$created_by,$school_id)
-	{
-		$data=[
-			"account_name"=>$account_name,
-			"group_id"=>$Group_id,
-			"school_id"=>$school_id,
-			"is_special"=>"N",
-			"is_active"=>"Y",
-			"from_where"=>"O",
-			"created_By"=>$created_by
-		];
-		$this->db->insert('account_master', $data);
-		    $insert_ID = $this->db->insert_id();
-            return $insert_ID;
-	}
-
+ 
 
 
     
