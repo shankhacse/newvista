@@ -69,8 +69,12 @@ td{
                         <section id="journalvoucher">
                             <div class="row"> 
                                 <div id="voucher_date_div" class="form-group col-md-6">
+
+                                <input type="hidden" name="acnt_dt_start" id="acnt_dt_start" value="<?php echo $bodycontent['acnt_dt_start']; ?>" />
+                                <input type="hidden" name="acnt_dt_end" id="acnt_dt_end" value="<?php echo $bodycontent['acnt_dt_end']; ?>" /> 
+
                                     <label for="voucher_date">Voucher Date*</label>
-                                    <div class="input-group date" data-provide="datepicker">
+                                    <div class="input-group date" >
                                         <input type="text" class="form-control" name="voucher_date" id="voucher_date" value="<?php 
                                         if($bodycontent['mode']=='EDIT')  
                                          {  

@@ -72,13 +72,15 @@ vertical-align: inherit;
               
             </table>
             </td>
-            <td align="center">            
+            <td align="center">    
+            <?php if($value['is_frm_receipt']=='N'){ ?>           
 							<a href="<?php echo base_url(); ?>journal/journal/<?php echo $value['id']; ?>" class="btn btn-primary btn-xs" data-title="Edit">
 								<span class="glyphicon glyphicon-pencil"></span>
 							</a>     
               <a href="javascript:void(0);" id="deleteBtn_<?php echo $value['id']; ?>"  data-text="<?php echo $value['id'];?>" class="btn deleteBtn btn-danger btn-xs" data-title="Delete">
 								<span class="glyphicon glyphicon-trash"></span>
-							</a>     
+							</a>    
+              <?php } ?>  
 						</td>
 					</tr>              			
               	<?php

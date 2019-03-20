@@ -41,6 +41,13 @@ class Journal extends CI_Controller
 			$header = "";
 			$page ="";
 			$result['AccountList'] = $this->journalmodel->getAccountList($session['school_id']);
+
+			$accntYearData=$this->commondatamodel->getSingleRowByWhereCls('accounting_year_master',array("id"=>$session['accnt_year_id']));
+			$strtDt=str_replace('-','/',$accntYearData->start_date);
+			$endDt=str_replace('-','/',$accntYearData->end_date);
+			$result['acnt_dt_start']= date('m/d/Y',strtotime($strtDt));
+			$result['acnt_dt_end']= date('m/d/Y',strtotime($endDt));
+			
 			if (empty($this->uri->segment(3)))
 			{
                 $result['mode']="ADD";           
@@ -169,6 +176,7 @@ class Journal extends CI_Controller
 					 "acdm_session_id"=>$acd_session_id,
 					 "accnt_year_id"=>$accnt_year_id,
 					 "serial_number"=>"0",
+					 "is_frm_receipt"=>'N',
 					 "vouchertype"=>"JV",
 					 "paid_to"=>NULL,					
 					 "total_debit"=>$total_debit,					

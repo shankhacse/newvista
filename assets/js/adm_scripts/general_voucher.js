@@ -1,6 +1,14 @@
-$(window).on('load',function() {
-    
-    var basepath = $("#basepath").val();        
+$(window).on('load',function() {    
+    var basepath = $("#basepath").val();     
+    var acnt_dt_start=$('#acnt_dt_start').val();
+    var acnt_dt_end=$('#acnt_dt_end').val();
+   
+        $("#voucher_date").datepicker({
+          format: 'mm/dd/yyyy',
+          startDate: acnt_dt_start,
+          endDate: acnt_dt_end    
+        });
+           
         var account_id=$('#account_id option:selected').val();
         $.ajax({
             type: "POST",

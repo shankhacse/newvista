@@ -64,9 +64,11 @@
                            
                         <section id="contravoucher1">
                             <div class="row"> 
+                            <input type="hidden" name="acnt_dt_start" id="acnt_dt_start" value="<?php echo $bodycontent['acnt_dt_start']; ?>" />
+                            <input type="hidden" name="acnt_dt_end" id="acnt_dt_end" value="<?php echo $bodycontent['acnt_dt_end']; ?>" />       
                                 <div id="voucher_date_div" class="form-group col-md-6">
-                                    <label for="voucher_date">Voucher Date*</label>
-                                    <div class="input-group date" data-provide="datepicker">
+                                    <label for="voucher_date">Voucher Date*</label>                                    
+                                    <div class="input-group date" >
                                         <input type="text" class="form-control" name="voucher_date" id="voucher_date" value="<?php 
                                         if($bodycontent['mode']=='EDIT')  
                                         {  $voucherDate = str_replace('-', '/', trim($bodycontent['ContraEditData']->voucher_date));		

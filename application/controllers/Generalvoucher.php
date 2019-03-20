@@ -17,6 +17,7 @@ class Generalvoucher extends CI_Controller {
             $header="";              
                 $result['module']="List";               
                 $result['VoucherList'] = $this->generalvouchermodel->getAllGeneralVoucherList($session['school_id'],$session['acd_session_id'],$session['accnt_year_id']);
+                // pre( $result['VoucherList']);exit;
 			$page ="dashboard/admin_dashboard/general_voucher/general_voucher_list.php";
 			createbody_method($result, $page, $header, $session);
 			
@@ -29,7 +30,13 @@ class Generalvoucher extends CI_Controller {
     {
         $session = $this->session->userdata('user_data');
 		if($this->session->userdata('user_data'))
-		{            
+		{ 
+            $accntYearData=$this->commondatamodel->getSingleRowByWhereCls('accounting_year_master',array("id"=>$session['accnt_year_id']));
+			$strtDt=str_replace('-','/',$accntYearData->start_date);
+			$endDt=str_replace('-','/',$accntYearData->end_date);
+			$result['acnt_dt_start']= date('m/d/Y',strtotime($strtDt));
+            $result['acnt_dt_end']= date('m/d/Y',strtotime($endDt));
+                       
             if (empty($this->uri->segment(3))) {
                 $result['mode']="ADD";           
                 $result['module']="Add";
@@ -183,7 +190,8 @@ class Generalvoucher extends CI_Controller {
 					 "school_id"=>$school_id,
 					 "acdm_session_id"=>$acd_session_id,
 					 "accnt_year_id"=>$accnt_year_id,
-					 "serial_number"=>"0",
+                     "serial_number"=>"0",
+                     "is_frm_receipt"=>'N',
 					 "vouchertype"=>"GV",
 					 "paid_to"=>$paidto_rcv,					
 					 "total_debit"=>$total_debit,					

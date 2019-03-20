@@ -71,6 +71,7 @@ class Journalmodel extends CI_Model
                     "acdm_session_id"=>$rows->acdm_session_id,
                     "accnt_year_id"=>$rows->accnt_year_id,
                     "serial_number"=>$rows->serial_number,
+                    "is_frm_receipt"=>$rows->is_frm_receipt,
                     "vouchertype"=>$rows->vouchertype,
                     "paid_to"=>$rows->paid_to,
                     "total_debit"=>$rows->total_debit,					

@@ -1,12 +1,8 @@
 $(document).ready(function(){
    
     var basepath = $("#basepath").val();
-       $( ".datepicker" ).datepicker({
-       
-       changeMonth: true,
-       changeYear: true,
+       $( ".datepicker" ).datepicker({       
        format: 'dd/mm/yyyy'
-
     });
 
    
@@ -508,6 +504,8 @@ $(document).on('change', '#payment_mode', function(event){
    }
  
 });
+
+ 
 
 
  });// end of document ready

@@ -1,8 +1,11 @@
+  
 <hr>
 <center><button type="button" class="btn btn bg-maroon margin">Fees Details</button><br>
 <div class="datatalberes" >
   <input type="hidden" name="monthids" id="monthids" value="<?php echo $monthids_string; ?>" />
   <input type="hidden" name="studentid" id="studentid" value="<?php echo $studentid; ?>" />
+  <input type="hidden" name="acnt_dt_start" id="acnt_dt_start" value="<?php echo $acnt_dt_start; ?>" />
+  <input type="hidden" name="acnt_dt_end" id="acnt_dt_end" value="<?php echo $acnt_dt_end; ?>" />
 
    <input type="hidden" name="paymentID" id="paymentID" value="<?php if($mode=='EDIT'){echo $paymentID;}else{ echo "0";}?>" />
   
@@ -64,7 +67,7 @@
       <input type="hidden" name="total_pay_amount" id="total_pay_amount" value="<?php echo $total_amount;?>" />
       <input type="hidden" name="component_amount_total" id="component_amount_total" value='<?php echo base64_encode($fessComponentJson);?>'>
               <?php
-       $curr_dt = date('d-m-Y');     
+       $curr_dt = date('d/m/Y');     
 ?>
 
   <div  style="margin-top:50px;margin-left: 139px; ">
@@ -73,7 +76,7 @@
 
           <div class="col-sm-2 col-md-2 col-xs-12">
             <label for="pdate">Receipt Date</label> 
-            <input type="text"  class="form-control custom_frm_input datepicker"  name="payment_date" id="payment_date"  placeholder="" value="<?php echo $curr_dt;?>" style="width: 204px;" />
+            <input type="text"  class="form-control custom_frm_input "  name="payment_date" id="payment_date"  placeholder="" value="<?php echo $curr_dt;?>" style="width: 204px;" />
           </div>
           <div class="col-sm-2 col-md-2 col-xs-12"> </div>
           <div class="col-sm-2 col-md-2 col-xs-12">
@@ -167,5 +170,14 @@
               <button type="submit" class="btn btn-primary formBtn" id="paymentSave" style="display: inline-block;width:150px;"><?php echo $btnText;?></button></center>
             </div>
 <script type="text/javascript">
-    $(".datepicker").datepicker({format: 'dd-mm-yyyy'});
+$(document).ready(function() {
+var acnt_dt_start=$('#acnt_dt_start').val();
+var acnt_dt_end=$('#acnt_dt_end').val();
+// console.log(acnt_dt_start+" "+acnt_dt_end);
+    $("#payment_date").datepicker({
+      format: 'dd/mm/yyyy',
+      startDate: acnt_dt_start,
+      endDate:acnt_dt_end    
+    });
+});
 </script>   

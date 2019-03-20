@@ -29,6 +29,7 @@ class Generalvouchermodel extends CI_Model{
             "voucher_master.id"=>$voucherMaterId,
             "voucher_detail.is_master"=>'N'
         ];
+        $data=array();
 
 
         $query=$this->db->select('voucher_master.id AS voucherMastId,voucher_detail.id AS VoucherDtlId,voucher_detail.is_debit,account_master.account_name, account_master.account_id AS accountId,voucher_detail.voucher_amount')
@@ -65,7 +66,8 @@ class Generalvouchermodel extends CI_Model{
             "school_id"=>$school_id,
             "acdm_session_id"=>$acd_session_id,
             "accnt_year_id"=>$accnt_year_id,
-            "vouchertype"=>'GV'
+            // "vouchertype"=>'GV'
+            "transaction_type"=>'RC'
         ];
         $data = array();
         $query=$this->db->select('*')
@@ -92,7 +94,8 @@ class Generalvouchermodel extends CI_Model{
                     "school_id"=>$rows->school_id,
                     "acdm_session_id"=>$rows->acdm_session_id,
                     "accnt_year_id"=>$rows->accnt_year_id,
-                    "serial_number"=>$rows->serial_number,
+                    "serial_number"=>$rows->serial_number,                    
+                    "is_frm_receipt"=>$rows->is_frm_receipt,                    
                     "vouchertype"=>$rows->vouchertype,
                     "paid_to"=>$rows->paid_to,
                     "total_debit"=>$rows->total_debit,					
@@ -140,6 +143,7 @@ class Generalvouchermodel extends CI_Model{
                 "voucher_master.school_id"=>$school_id,
                 "voucher_detail.is_master"=>'Y'
             ];
+            $data="";
             $query=$this->db->select("voucher_master.voucher_number,DATE_FORMAT(voucher_master.voucher_date,'%m/%d/%Y') AS VoucherDate,voucher_master.vouchertype,voucher_master.transaction_type,voucher_master.paid_to,voucher_master.cheque_number,DATE_FORMAT(voucher_master.cheque_date,'%m/%d/%Y') AS checqueDate,voucher_master.narration,voucher_master.serial_number,voucher_detail.voucher_amount,account_master.account_id AS accountId,account_master.account_name,voucher_master.total_credit,voucher_master.total_debit")
                             ->from('voucher_detail')
                             ->join('voucher_master','voucher_detail.voucher_master_id=voucher_master.id','INNER')

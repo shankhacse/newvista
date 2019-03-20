@@ -6,7 +6,7 @@ class Feespayment extends CI_Controller {
 	    parent::__construct();
 		$this->load->library('session');
 		$this->load->model('Studentmodel','Studentmodel',TRUE);
-		$this->load->model('feespaymentmodel','feespaymentmodel',TRUE);
+		$this->load->model('feespaymentmodel','feespaymentmodel',TRUE);		
 	}
 
 
@@ -20,7 +20,7 @@ class Feespayment extends CI_Controller {
 				
 			$result['classList']=$this->commondatamodel->getAllDropdownData('class_master');
 			$result['sectionList']=$this->commondatamodel->getAllDropdownData('section_master');
-			$result['monthList']=$this->commondatamodel->getAllDropdownData('month_master');
+			$result['monthList']=$this->commondatamodel->getAllDropdownData('month_master');				
 			$page = "dashboard/admin_dashboard/fees_payment/fees_payment_view";
 			createbody_method($result, $page, $header, $session);
 			
@@ -48,6 +48,16 @@ class Feespayment extends CI_Controller {
 			$result['paymentMonthList']=$this->feespaymentmodel->getPaymentMonthbyPaymentId($paymentid);
 			$result['PaymentModeList']=$this->commondatamodel->getAllDropdownData('payment_mode_master');
 			$result['AccountList']=$this->commondatamodel->getOnlyBankAndCashAccountList($session['school_id']);
+// pre($result['studentinfo']);exit;
+
+			  
+			$accntYearData=$this->commondatamodel->getSingleRowByWhereCls('accounting_year_master',array("id"=>$session['accnt_year_id']));
+			$strtDt=str_replace('-','/',$accntYearData->start_date);
+			$endDt=str_replace('-','/',$accntYearData->end_date);
+			$result['acnt_dt_start']= date('d/m/Y',strtotime($strtDt));
+			$result['acnt_dt_end']= date('d/m/Y',strtotime($endDt));
+
+
 			// pre($result);exit;
 			foreach ($result['paymentMonthList'] as $key => $value) {
 				$sel_month[]=$value->month_id;
@@ -83,6 +93,11 @@ class Feespayment extends CI_Controller {
 			$result['classList']=$this->commondatamodel->getAllDropdownData('class_master');
 			$result['sectionList']=$this->commondatamodel->getAllDropdownData('section_master');
 			$result['monthList']=$this->commondatamodel->getAllDropdownData('month_master');
+			$where = array(						
+				'academic_details.school_id' =>$session['school_id'],
+				'academic_details.acdm_session_id' =>$session['acd_session_id'],
+			);
+			$result['studentList']=$this->feespaymentmodel->getStudentListbyAcademicSessionAndSchoolId($where);
 			$page = "dashboard/admin_dashboard/fees_payment/payment_history_list_view";
 			createbody_method($result, $page, $header, $session);
 			
@@ -114,7 +129,7 @@ public function getStudent()
 			$result['studentList']=$this->Studentmodel->getStudentListbyClass($classid);
 			}
 			else{
-			$result['studentList']=[];	
+				$result['studentList']=[];	
 			}
 
 
@@ -201,7 +216,7 @@ public function getStudent()
             $sel_month = $dataArry['sel_month'];
             $session['school_id'];
             $session['acd_session_id'];
-
+            
 
             foreach ($sel_month as  $value) {
             	$monthids[]=$value;
@@ -218,7 +233,15 @@ public function getStudent()
 			$result['AccountList']=$this->commondatamodel->getOnlyBankAndCashAccountList($session['school_id']);
           
           	$classid=$result['studentData']->class_id;
-          	
+			  
+			$accntYearData=$this->commondatamodel->getSingleRowByWhereCls('accounting_year_master',array("id"=>$session['accnt_year_id']));
+			$strtDt=str_replace('-','/',$accntYearData->start_date);
+			$endDt=str_replace('-','/',$accntYearData->end_date);
+			$result['acnt_dt_start']= date('d/m/Y',strtotime($strtDt));
+			$result['acnt_dt_end']= date('d/m/Y',strtotime($endDt));
+
+
+			// pre($accntYearData->start_date);
 
           	$result['fessComponentData']=$this->feespaymentmodel->getFeesComponentListbyClass($classid,$monthids,$session['acd_session_id']);
 
@@ -343,7 +366,7 @@ public function getPaymentComponentListPaymentEdit()
 			$monthids_array = explode(',', $monthids);
 
 			 if($payment_date!=""){
-				// $payment_date = str_replace('/', '-', $payment_date);
+				$payment_date = str_replace('/', '-', $payment_date);
 				$payment_date = date("Y-m-d",strtotime($payment_date));
 			 }
 			 else{
@@ -351,7 +374,7 @@ public function getPaymentComponentListPaymentEdit()
 			}
 			
 			if($cheque_date!=""){
-				// $cheque_date = str_replace('/', '-', $cheque_date);
+				$cheque_date = str_replace('/', '-', $cheque_date);
 				$cheque_date = date("Y-m-d",strtotime($cheque_date));
 			 }
 			 else{
@@ -452,6 +475,7 @@ public function getPaymentComponentListPaymentEdit()
 							"acdm_session_id"=>$acd_session_id,
 							"accnt_year_id"=>$accnt_year_id,
 							"serial_number"=>"0",
+							"is_frm_receipt"=>"Y",
 							"vouchertype"=>NULL,
 							"paid_to"=>NULL,					
 							"total_debit"=>$amount,					
@@ -697,6 +721,7 @@ public function getPaymentComponentListPaymentEdit()
 							"acdm_session_id"=>$acd_session_id,
 							"accnt_year_id"=>$accnt_year_id,
 							"serial_number"=>"0",
+							"is_frm_receipt"=>"Y",
 							"vouchertype"=>NULL,
 							"paid_to"=>NULL,					
 							"total_debit"=>$amount,					
@@ -948,21 +973,21 @@ public function updatePaymentMaster(){
 			$account_debit= $this->input->post('account_debit');
 
 			 if($payment_date!=""){
-				// $payment_date = str_replace('/', '-', $payment_date);
+				$payment_date = str_replace('/', '-', $payment_date);
 				$payment_date = date("Y-m-d",strtotime($payment_date));
 			 }
 			 else{
 				 $payment_date = NULL;
 		    }
 			 if($cheque_date!=""){
-				// $payment_date = str_replace('/', '-', $payment_date);
+				$cheque_date = str_replace('/', '-', $cheque_date);
 				$cheque_date = date("Y-m-d",strtotime($cheque_date));
 			 }
 			 else{
 				 $cheque_date = NULL;
 			}
 			
-			
+			$voucher_id=$this->feespaymentmodel->getVoucherIdByPaymentId($paymentID,'R');
 			
 			$update_array  = array(
 				"payment_date" => $payment_date,
@@ -972,34 +997,64 @@ public function updatePaymentMaster(){
 				"bank_name"=>$bank_name,
 				"cheque_date"=>$cheque_date,
 				"branch_name"=>$branch_name,
-				"narration"=>$narration,
+				"narration"=>$narration
 				);
 				
 			$where = array(
-				"payment_master.payment_id" => $paymentID
+				"payment_id" => $paymentID
 				);
 			
 			
 				$user_activity = array(
 								"activity_module" => 'Feespayment',
-								"action" => 'Insert',
+								"action" => 'Update',
 								"from_method" => 'Feespayment/updatePaymentMaster',
 								"user_id" => $session['userid'],
 								"ip_address" => getUserIPAddress(),
 								"user_browser" => getUserBrowserName(),
 								"user_platform" => getUserPlatform()
 								
-							 );				
+							 );		
+				// pre(array($update_array,$user_activity));exit;		
 				$update = $this->commondatamodel->updateData_WithUserActivity('payment_master',$update_array,$where,'activity_log',$user_activity);
-				$voucher_detail_id=$this->feespaymentmodel->getDebitAccountId($paymentID);
-				$wheres=[
-					"id"=>$voucher_detail_id->id
+				
+				
+				/****************voucher_master*******************/
+				$wherem=[
+					"id"=>$voucher_id
 				];
-				$datas=[
-					"account_master_id"=>$account_debit
+				$datam=[
+					"total_debit"=>$paid_amount,
+					"total_credit"=>$paid_amount
 				];
-				$this->commondatamodel->updateSingleTableData('voucher_detail',$datas,$wheres);
+				
+				$this->commondatamodel->updateSingleTableData('voucher_master',$datam,$wherem);
+				/****************voucher_master*******************/
 
+				/****************voucher_detail*******************/
+				
+				$where_D_1=[
+					"voucher_master_id"=>$voucher_id,
+					"is_debit"=>'N'
+				];
+				$data_D_1=[					
+					"voucher_amount"=>$paid_amount
+				];	
+				$this->commondatamodel->updateSingleTableData('voucher_detail',$data_D_1,$where_D_1);
+				$where_D_2=[
+					"voucher_master_id"=>$voucher_id,
+					"is_debit"=>'Y'
+				];
+				$data_D_2=[
+					"account_master_id"=>$account_debit,				
+					"voucher_amount"=>$paid_amount
+				];
+				// pre(array($where_D_2,$data_D_2));exit;
+				$this->commondatamodel->updateSingleTableData('voucher_detail',$data_D_2,$where_D_2);
+
+				/****************voucher_detail*******************/
+				
+				/****************payment_voucher_ref*******************/
 				$data_arr=array(
 					"payment_mode" => $payment_mode,
 					"paid_amount"=>$paid_amount,
@@ -1017,6 +1072,7 @@ public function updatePaymentMaster(){
 				];
 
 				$this->commondatamodel->updateSingleTableData('payment_voucher_ref',$data_arr,$where_data_arr);
+				/****************payment_voucher_ref*******************/
 
 			if($update)
 			{
@@ -1114,13 +1170,6 @@ public function updatePaymentMaster(){
 			$dueAmount=$paymentData->total_amount-$paymentData->paid_amount;
 			if ($dueAmount>0) {
 				
-				// $where=[
-				// 	"payment_id"=>$payment_id,
-				// 	"voucher_type"=>'C',
-				// 	"voucher_tag"=>'R'
-				// ];
-				// $duepayment=$this->commondatamodel->checkExistanceData('payment_voucher_ref',$where);
-				// if ($duepayment>0) {
 					$paidamnt_C=$this->feespaymentmodel->getSumOfPaidAmount($payment_id);
 					$totalPaidAmnt=$paymentData->paid_amount+$paidamnt_C;
 					$totalDueAmnt=$paymentData->total_amount-$totalPaidAmnt;					
@@ -1129,10 +1178,7 @@ public function updatePaymentMaster(){
 					$result['VoucherData']=$this->feespaymentmodel->getDuePaymentDataByPaymentId($payment_id);
 					$page = "dashboard/admin_dashboard/fees_payment/due_payment_list_partial_view.php";
 					$partial_view = $this->load->view($page, $result, TRUE);
-					// echo $partial_view;
-				// }else {
-				// 	$partial_view="<div class='row' style='text-align: center;'><div class='col-md-12'><button  class='btn btn-primary' id='payDue'>Pay Due</button></div></div>";
-				// }
+				
 				
 				if ($totalDueAmnt>0) {
 					$text= "( Total Due Amount - ".$totalDueAmnt." )";
@@ -1380,6 +1426,115 @@ public function updatePaymentMaster(){
 		}
 	}
 
+public function deleteFeesPayment()
+{
+	$session = $this->session->userdata('user_data');
+	if($this->session->userdata('user_data'))
+	{
+		$payment_id=$this->input->post('payment_id');
 
+		$voucherList=$this->commondatamodel->getAllRecordWhere('payment_voucher_ref',array('payment_id'=>$payment_id));	
+
+		//Delete from payment_month_dtl
+		$this->commondatamodel->deleteTableData('payment_month_dtl',array('payment_master_id'=>$payment_id));
+
+		//Delete from payment_details
+		$this->commondatamodel->deleteTableData('payment_details',array('payment_master_id'=>$payment_id));
+
+		// //Delete from payment_master
+		$this->commondatamodel->deleteTableData('payment_master',array('payment_id'=>$payment_id));
+
+		//Delete from payment_Voucher_ref
+		$this->commondatamodel->deleteTableData('payment_Voucher_ref',array('payment_id'=>$payment_id));
+
+		//Delete Voucher data
+		foreach ($voucherList as $value) {
+			$voucher_id=$value->voucher_id;
+
+			//Delete from voucher_detail
+			$this->commondatamodel->deleteTableData('voucher_detail',array('voucher_master_id'=>$voucher_id));
+
+			//Delete from voucher_master
+			$this->commondatamodel->deleteTableData('voucher_master',array('id'=>$voucher_id));
+		}
+
+		$user_activity = array(
+			"activity_module" => 'feespayment',
+			"action" => 'Delete',
+			"from_method" => 'feespayment/deleteFeesPayment',
+			"user_id" => $session['userid'],
+			"ip_address" => getUserIPAddress(),
+			"user_browser" => getUserBrowserName(),
+			"user_platform" => getUserPlatform()
+			
+		);
+		$insert=$this->commondatamodel->insertSingleTableData('activity_log',$user_activity);
+		if ($insert) {
+			$json_response = array(
+				"status" => 200,
+				"message"=>"Delete Successfully",
+			);
+		}else {
+			$json_response = array(
+				"status" => 201,
+				"message"=>'having difficulty in Delete',
+				);
+		}
+
+		header('Content-Type: application/json');
+		echo json_encode( $json_response );
+		exit;
+
+	}else{
+		redirect('login','refresh');
+	}
+}
+
+public function deleteDuePaymentVoucher()
+{
+	$session = $this->session->userdata('user_data');
+	if($this->session->userdata('user_data'))
+	{
+		$voucher_id=$this->input->post('voucher_id');
+
+		//Delete from voucher_detail
+		$this->commondatamodel->deleteTableData('voucher_detail',array('voucher_master_id'=>$voucher_id));
+
+		//Delete from payment_Voucher_ref
+		$this->commondatamodel->deleteTableData('payment_Voucher_ref',array('voucher_id'=>$voucher_id));
+
+		//Delete from voucher_master
+		$this->commondatamodel->deleteTableData('voucher_master',array('id'=>$voucher_id));
+
+		$user_activity = array(
+			"activity_module" => 'feespayment',
+			"action" => 'Delete',
+			"from_method" => 'feespayment/deleteDuePaymentVoucher',
+			"user_id" => $session['userid'],
+			"ip_address" => getUserIPAddress(),
+			"user_browser" => getUserBrowserName(),
+			"user_platform" => getUserPlatform()
+			
+		);
+		$insert=$this->commondatamodel->insertSingleTableData('activity_log',$user_activity);
+		if ($insert) {
+			$json_response = array(
+				"status" => 200,
+				"message"=>"Delete Successfully",
+			);
+		}else {
+			$json_response = array(
+				"status" => 201,
+				"message"=>'having difficulty in Delete',
+				);
+		}
+
+		header('Content-Type: application/json');
+		echo json_encode( $json_response );
+		exit;
+}else{
+		redirect('login','refresh');
+	}
+}
 
 }//end of class

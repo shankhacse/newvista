@@ -16,7 +16,7 @@ class Generalledger extends CI_Controller {
             $header = "";
             $result['module'] = "View";
             $result['btnText'] = "PDF";
-            $yearid = $session['acd_session_id'];
+            $yearid = $session['accnt_year_id'];
 			$fiscalStartDt = $this->generalmodel->getFiscalStartDt($yearid);
 			$result['fiscalStartDt'] = $fiscalStartDt; 
 			$result['Accountlist']=$this->commondatamodel->getAllRecordOrderBy('account_master','account_name','ASC'); 

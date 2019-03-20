@@ -512,4 +512,48 @@ class Feespaymentmodel extends CI_Model{
 	}
 
 
+	public function getStudentListbyAcademicSessionAndSchoolId($where){	
+		$data = [];		
+		$query = $this->db->select("student_master.*,academic_details.rollno")
+						->from('student_master')				
+						->join('academic_details','academic_details.student_id = student_master.student_id','INNER')				
+						->where($where)
+						->order_by('student_master.name')
+						->get();
+			
+			if($query->num_rows()> 0)
+			{
+	          foreach($query->result() as $rows)
+				{
+					$data[] = $rows;
+				}
+	             
+	        }
+			
+	        return $data;
+	       
+		
+	}
+
+	public function getVoucherIdByPaymentId($payment_id,$prefix)
+	{
+		$query = $this->db->select("*")
+						->from('payment_voucher_ref')	
+						->where(array('payment_id'=>$payment_id,"voucher_tag"=>$prefix,'voucher_type'=>'P'))
+						->get();
+			
+			if($query->num_rows()> 0)
+			{
+	          foreach($query->result() as $rows)
+				{
+					return $rows->voucher_id;
+				}
+	             
+	        }else {
+				return "";
+			}
+			
+	         
+	}
+	
 } //end of class

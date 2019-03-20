@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script> 
 <style>
 .modal-dialog {
     width: 80% !important;
@@ -22,7 +24,7 @@
                 <th>Roll</th>
                 <th>Receipt date</th>
                 <th>Amount</th>
-                <th>Paid</th>
+                <th>Receipt</th>
                 <th>Due</th>
                 <th>Action</th>                                                   
             </tr>
@@ -93,7 +95,7 @@
                     "columnDefs": [ {
                     "targets": -1,
                     "data": null,
-                    "defaultContent":"<button id='editData' class='btn btn-primary btn-xs'><span class='glyphicon glyphicon-pencil'></span></button>&nbsp;&nbsp;<button id='viewVoucher' class='btn btn-primary btn-xs'><span class='glyphicon glyphicon-file'></span></button>&nbsp;&nbsp;<button id='viewDuePayment' class='btn btn-primary btn-xs'><span class='glyphicon glyphicon-check'></span></button>"
+                    "defaultContent":"<button id='editData' class='btn btn-primary btn-xs'><span class='glyphicon glyphicon-pencil'></span></button>&nbsp;&nbsp;<button id='viewVoucher' class='btn btn-primary btn-xs'><span class='glyphicon glyphicon-file'></span></button>&nbsp;&nbsp;<button id='viewDuePayment' class='btn btn-primary btn-xs'><span class='glyphicon glyphicon-check'></span></button>&nbsp;&nbsp;<button id='DeletePayment' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-trash'></span></button>"
                     
                 } ]
                     
@@ -147,12 +149,12 @@
         $.ajax({
             type: "POST",
             url: basepath+'feespayment/checkDuePayment',
+            
             data: {payment_id:data[8]},           
             success: function (result) {
-                //  console.log(result);
+                // console.log(result.status);
                 $("#titleText").html(result.title);
-                $("#modalBody").html(result.modal); 
-                // $("#modalBody").append("<div class='row' style='text-align: center;'><div class='col-md-12'><button  class='btn btn-primary btn-lg' data-toggle='modal' href='#DuePaymentAddEdit'  data-text='"+data[6]+"' id='payDue'>Pay Due</button></div></div>"); 
+                $("#modalBody").html(result.modal);                 
                 $('#myModal').modal('show');            
             }, 
             error: function (jqXHR, exception) {
@@ -175,6 +177,75 @@
                    // alert(msg);  
             }
         }); /*end ajax call*/
+    });
+
+
+     // delete payment
+     $('#csvDatas tbody').on( 'click', '#DeletePayment', function () {
+        var data = table.row( $(this).parents('tr') ).data();  
+        var basepath = $("#basepath").val();  
+        $.confirm({
+            title: 'Confirm!',
+            content: 'Are you Sure you want to delete ?',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: "POST",
+                        url: basepath+'feespayment/deleteFeesPayment',
+                        data: {payment_id:data[8]},           
+                        success: function (result) {
+                            // console.log(result.status);
+                            if (result.status == 200) {                 
+                                
+                                $("#modal-success").modal({
+                                    "backdrop": "static",
+                                    "keyboard": true,
+                                    "show": true
+                                });
+                                var addurl = basepath + "feespayment/payment_history";
+                            
+                                $("#appendBody").text(result.message);
+                                $("#redirectToListsuccess").attr("href", addurl);
+
+                            }else {
+                                // alert(fees_id+" have data");                    
+                                $("#modal-danger").modal({
+                                    "backdrop": "static",
+                                    "keyboard": true,
+                                    "show": true
+                                });
+                                var addurl = basepath + "feespayment/payment_history";
+                            
+                                $("#dengAppendBody").text(result.message);
+                                $("#redirectToListerror").attr("href", addurl);
+                            }                       
+                        }, 
+                        error: function (jqXHR, exception) {
+                            var msg = '';
+                                if (jqXHR.status === 0) {
+                                    msg = 'Not connect.\n Verify Network.';
+                                } else if (jqXHR.status == 404) {
+                                    msg = 'Requested page not found. [404]';
+                                } else if (jqXHR.status == 500) {
+                                    msg = 'Internal Server Error [500].';
+                                } else if (exception === 'parsererror') {
+                                    msg = 'Requested JSON parse failed.';
+                                } else if (exception === 'timeout') {
+                                    msg = 'Time out error.';
+                                } else if (exception === 'abort') {
+                                    msg = 'Ajax request aborted.';
+                                } else {
+                                    msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                                }
+                            // alert(msg);  
+                        }
+                    }); /*end ajax call*/
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
     });
     
     $(".csvUplad").show();

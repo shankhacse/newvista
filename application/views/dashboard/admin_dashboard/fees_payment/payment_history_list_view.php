@@ -50,13 +50,13 @@
             <div class="col-md-4 "><!-- <label for="classList" class="searchby"> From Date </label> --> </div>
             <div class="col-md-2" style="">
                 <div class="form-group">
-                     <label for="reg_no">From Date<span class="req-star-mark">*</span></label>
+                     <label for="from_date">From Date<span class="req-star-mark">*</span></label>
                      <input type="text"  class="form-control custom_frm_input datepicker"  name="from_date" id="from_date"  placeholder="dd-mm-yy" value="" style="" />
                         </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                     <label for="reg_no">To Date<span class="req-star-mark">*</span></label>
+                     <label for="to_date">To Date<span class="req-star-mark">*</span></label>
                      <input type="text"  class="form-control custom_frm_input datepicker"  name="to_date" id="to_date"  placeholder="dd-mm-yy" value="" style="" />
                         </div>
             </div>
@@ -124,10 +124,16 @@
                    <div class="form-group">
                           
                         <div id="student_dropdown">
-                         <select id="studentid" name="studentid" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
+                         <!-- <select id="studentid" name="studentid" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
                          <option value="0">Select</option> 
-                         
-
+                        </select> -->
+                        <select id="studentid" name="studentid" class="form-control selectpicker" class="form-control selectpicker"
+                       data-show-subtext="true" data-actions-box="true" data-live-search="true"  >
+                          <option value="0">Select</option> 
+                            <?php
+                                foreach ($bodycontent['studentList'] as $key => $value) { ?>
+                                <option value="<?php echo $value->student_id; ?>"><?php echo $value->name."  [Roll-".$value->rollno."]"; ?></option>
+                            <?php	} ?>
                         </select>
                         </div>
 

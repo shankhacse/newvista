@@ -9,7 +9,7 @@
                   <th>Cheque No.</th>
                   <th>Cheque Date</th>
                   <th>Total Amount</th>
-                  <th>Paid Amount</th>
+                  <th>Receipt Amount</th>
                   <!-- <th>Due Amount</th> -->
                   <th>Account Details</th> 
                   <th>Action</th> 
@@ -52,7 +52,8 @@
             </table>
             </td>
             <td>
-              <button id='editDueData_<?php echo $value['voucher_id'];?>' data-pay="<?php echo $payment_id; ?>" data-text="<?php echo $value['voucher_id'];?>" class='btn btn-primary btn-xs editDueData'><span class='glyphicon glyphicon-pencil'></span></button>
+              <button id='editDueData_<?php echo $value['voucher_id'];?>' data-pay="<?php echo $payment_id; ?>" data-text="<?php echo $value['voucher_id'];?>" class='btn btn-primary btn-xs editDueData'><span class='glyphicon glyphicon-pencil'></span></button>  &nbsp;&nbsp;
+              <button id='deleteDueData_<?php echo $value['voucher_id'];?>' data-pay="<?php echo $payment_id; ?>" data-text="<?php echo $value['voucher_id'];?>" class='btn btn-danger btn-xs deleteDueData'><span class='glyphicon glyphicon-trash'></span></button>
             </td>
             
 					</tr>              			
@@ -68,7 +69,7 @@
               <br>
               <div class='row' style='text-align: center;'>
                 <div class='col-md-12'>
-                    <button  class='btn btn-primary btn-lg'  data-text="<?php echo $payment_id; ?>" id='payDue'>Pay Due</button>
+                    <button  class='btn btn-primary btn-lg'  data-text="<?php echo $payment_id; ?>" id='payDue'>Receipt Due</button>                  
                 </div>
               </div>
 
@@ -151,5 +152,75 @@ $('.editDueData').on('click',function(){
                    // alert(msg);  
                 }
             }); /*end ajax call*/
+});
+
+
+$('.deleteDueData').on('click',function(){  
+    var id=$(this).attr('id') ;
+        var voucherId=$('#'+id).attr('data-text'); 
+        var paymentId=$('#'+id).attr('data-pay'); 
+        // alert(paymentId);       
+        var basepath = $("#basepath").val(); 
+        $.confirm({
+            title: 'Confirm!',
+            content: 'Are you Sure you want to delete ?',
+            buttons: {
+                confirm: function () { 
+                    $.ajax({
+                            type: "POST",
+                            url: basepath+'feespayment/deleteDuePaymentVoucher',
+                            data: {voucher_id:voucherId},           
+                            success: function (result) {
+                                if (result.status == 200) {                 
+                                
+                                    $("#modal-success").modal({
+                                        "backdrop": "static",
+                                        "keyboard": true,
+                                        "show": true
+                                    });
+                                    var addurl = basepath + "feespayment/payment_history";
+                                
+                                    $("#appendBody").text(result.message);
+                                    $("#redirectToListsuccess").attr("href", addurl);
+
+                                }else {
+                                    // alert(fees_id+" have data");                    
+                                    $("#modal-danger").modal({
+                                        "backdrop": "static",
+                                        "keyboard": true,
+                                        "show": true
+                                    });
+                                    var addurl = basepath + "feespayment/payment_history";
+                                
+                                    $("#dengAppendBody").text(result.message);
+                                    $("#redirectToListerror").attr("href", addurl);
+                                }                                            
+                            }, 
+                            error: function (jqXHR, exception) {
+                                var msg = '';
+                                    if (jqXHR.status === 0) {
+                                        msg = 'Not connect.\n Verify Network.';
+                                    } else if (jqXHR.status == 404) {
+                                        msg = 'Requested page not found. [404]';
+                                    } else if (jqXHR.status == 500) {
+                                        msg = 'Internal Server Error [500].';
+                                    } else if (exception === 'parsererror') {
+                                        msg = 'Requested JSON parse failed.';
+                                    } else if (exception === 'timeout') {
+                                        msg = 'Time out error.';
+                                    } else if (exception === 'abort') {
+                                        msg = 'Ajax request aborted.';
+                                    } else {
+                                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                                    }
+                                // alert(msg);  
+                                }
+                            }); /*end ajax call*/
+                        },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
 });
 </script>

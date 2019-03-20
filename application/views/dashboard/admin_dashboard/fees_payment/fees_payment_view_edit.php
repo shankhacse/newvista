@@ -54,13 +54,15 @@
                         </div>
                       
                    </div>
- <input type="hidden" name="mode" id="mode" value="<?php echo $bodycontent['mode']; ?>" />
-<input type="hidden" id="selected_month_ids" name="selected_month_ids" value="<?php echo $bodycontent['monthids_string'] ;?>"/>
+                      <input type="hidden" name="mode" id="mode" value="<?php echo $bodycontent['mode']; ?>" />
+                      <input type="hidden" name="acnt_dt_start" id="acnt_dt_start" value="<?php echo $bodycontent['acnt_dt_start']; ?>" />
+                        <input type="hidden" name="acnt_dt_end" id="acnt_dt_end" value="<?php echo $bodycontent['acnt_dt_end']; ?>" />
+                        <input type="hidden" id="selected_month_ids" name="selected_month_ids" value="<?php echo $bodycontent['monthids_string'] ;?>"/>
                     <div class="col-md-3">
-<input type="hidden" name="paymentID" id="paymentID" value="<?php echo $bodycontent['studentinfo']->payment_id;?>" />
+                          <input type="hidden" name="paymentID" id="paymentID" value="<?php echo $bodycontent['studentinfo']->payment_id;?>" />
                          <div class="form-group">
                           <label for="reg_no">Student</label>
-<input type="hidden" class="form-control" name="studentid" id="studentid" value="<?php echo $bodycontent['studentinfo']->student_id;?>" readonly />
+                          <input type="hidden" class="form-control" name="studentid" id="studentid" value="<?php echo $bodycontent['studentinfo']->student_id;?>" readonly />
                           <input type="text" class="form-control" name="studentname" id="studentname" value="<?php echo $bodycontent['studentinfo']->student_name."   [Roll-".$bodycontent['studentinfo']->rollno."]";?>" readonly />
                         <!-- <div id="student_dropdown">
                          <select id="studentid" name="studentid" class="form-control selectpicker" data-show-subtext="true" data-live-search="true" >
@@ -171,7 +173,7 @@
 
       <div class="col-sm-2 col-md-2 col-xs-12">
       <label for="pdate">Receipt Date</label>      
-      <input type="text"  class="form-control custom_frm_input datepicker"  name="payment_date" id="payment_date"  placeholder="" value="<?php echo date("d-m-Y", strtotime($bodycontent['studentinfo']->payment_date));?>" style="width: 204px;" />
+      <input type="text"  class="form-control custom_frm_input "  name="payment_date" id="payment_date"  placeholder="" value="<?php echo date("d/m/Y", strtotime($bodycontent['studentinfo']->payment_date));?>" style="width: 204px;" />
         </div>
 <div class="col-sm-2 col-md-2 col-xs-12"> </div>
           <div class="col-sm-2 col-md-2 col-xs-12">
@@ -244,10 +246,10 @@
         <div style="display:none;" id="cheque_date_div" class="col-md-4">
           <div class="form-group">
             <label for="cheque_date">Cheque Date</label>
-            <input type="text"   class="form-control custom_frm_input datepicker" 
+            <input type="text"   class="form-control custom_frm_input" 
             <?php  if($bodycontent['studentinfo']->cheque_date!="")
             {
-              echo "value='".date("d-m-Y", strtotime($bodycontent['studentinfo']->cheque_date))."'";
+              echo "value='".date("d/m/Y", strtotime($bodycontent['studentinfo']->cheque_date))."'";
             }else{
               echo "";
             }
@@ -327,7 +329,18 @@
 </div>
 
 <script type="text/javascript">
-    $(".datepicker").datepicker({format: 'dd-mm-yyyy'});
+$(document).ready(function() {
+var acnt_dt_start=$('#acnt_dt_start').val();
+var acnt_dt_end=$('#acnt_dt_end').val();
+$("#cheque_date").datepicker({
+      format: 'dd/mm/yyyy'
+    });
+    $("#payment_date").datepicker({
+      format: 'dd/mm/yyyy',
+      startDate: acnt_dt_start,
+      endDate:acnt_dt_end  
+    });
+});
     $(window).on('load',function(){
       var mode=$('#payment_mode option:selected').text();
       if(mode=="Cheque"){

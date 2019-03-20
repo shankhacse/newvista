@@ -1,5 +1,13 @@
 $(document).ready(function(){
     var basepath = $("#basepath").val();
+    var acnt_dt_start=$('#acnt_dt_start').val();
+    var acnt_dt_end=$('#acnt_dt_end').val();
+   
+        $("#voucher_date").datepicker({
+          format: 'mm/dd/yyyy',
+          startDate: acnt_dt_start,
+          endDate: acnt_dt_end    
+        });
 
     $('.deleteBtn').click(function() {
         var splitid=$(this).attr("id").split('_');

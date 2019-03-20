@@ -39,6 +39,13 @@ class Contra extends CI_Controller {
 		{
 			$header = "";
 			$result['AccountList'] = $this->contramodel->getAccountList($session['school_id']);
+
+			$accntYearData=$this->commondatamodel->getSingleRowByWhereCls('accounting_year_master',array("id"=>$session['accnt_year_id']));
+			$strtDt=str_replace('-','/',$accntYearData->start_date);
+			$endDt=str_replace('-','/',$accntYearData->end_date);
+			$result['acnt_dt_start']= date('m/d/Y',strtotime($strtDt));
+			$result['acnt_dt_end']= date('m/d/Y',strtotime($endDt));
+			
 			if (empty($this->uri->segment(3)))
 			{
                 $result['mode']="ADD";           
@@ -65,6 +72,7 @@ class Contra extends CI_Controller {
 				$result['ContraEditData']=$this->commondatamodel->getSingleRowByWhereCls('voucher_master',$where);
 				$result['ContraDebitData']=$this->commondatamodel->getSingleRowByWhereCls('voucher_detail',$where1);
 				$result['ContraCreditData']=$this->commondatamodel->getSingleRowByWhereCls('voucher_detail',$where2);
+				// pre($result['ContraDebitData']);exit;
 			}
             
                  
@@ -211,14 +219,14 @@ class Contra extends CI_Controller {
 				 $arr_D=array(
 					"voucher_master_id"=>$voucher_id,
 					"account_master_id"=>$debit_ac,
-					"tran_type"=>'D',
+					"tran_type"=>null,
 					"voucher_amount"=>$debit_amount,
-					"is_debit"=>'N'
+					"is_debit"=>'Y'
 				);
 				$arr_C=array(
 					"voucher_master_id"=>$voucher_id,
 					"account_master_id"=>$credit_ac,
-					"tran_type"=>'C',
+					"tran_type"=>null,
 					"voucher_amount"=>$credit_amount,
 					"is_debit"=>'N'
 				);
